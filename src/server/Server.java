@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Observable;
+import java.util.Observer;
 
 import library.GameState;
 import library.Move;
@@ -21,10 +23,9 @@ public class Server {
 	private boolean isStopped = false;
 	private GameState gameState;
 	private ServerSocket socketConnection;
-
+	private GameHandler dealer; 
+	
 	public Server() throws IOException{
-
-		this.gameState = new GameState();
 		
 		String myLocation = Server.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		prop = new PropertyFile(myLocation);
@@ -32,39 +33,28 @@ public class Server {
 		address  = InetAddress.getByName(prop.getProperty("server.address"));
 		port = Integer.parseInt(prop.getProperty("port"));
 		
+		this.dealer = new GameHandler();
+		
+		
 	}
-	public void listen(){
-		try {
-
-	         socketConnection = new ServerSocket(this.port,Server.maxConnection,this.address);
-	         while (! isStopped()){
-	        	 Socket serverSocket = socketConnection.accept();
-	        	 
-	        	 System.out.println(this.gameState.makeMove());
-	        	 ObjectOutputStream serverOutputStream = new ObjectOutputStream(serverSocket.getOutputStream());
-	        	 
-	        	 //ObjectInputStream serverInputStream = new ObjectInputStream(pipe.getInputStream());
-	        	 GameState.PlayerToken token = this.gameState.addPlayer();
-	        	 
-	        	 if (token==null){
-	        		 System.out.println("three Players already connected");
-	        	 } else {
-	        		 System.out.println("writing Object");
-	        		 serverOutputStream.writeObject(token);
-	        		 serverOutputStream.flush();
-	        		 Connection connection = new Connection(serverSocket,gameState);
-	        		 connection.start();
-	        	 }
-	        	 
-	         }
-	         
-	    }  catch(Exception e) {
-	    	e.printStackTrace();
-	    
-	    }
-	      
+	public void startListen() throws IOException{
+		
+	     socketConnection = new ServerSocket(this.port,Server.maxConnection,this.address);
+	     while (! isStopped()){
+	    	 try{
+	    		 Socket serverSocket = socketConnection.accept();
+	    		 ClientHandler connection = new ClientHandler(serverSocket,dealer);
+	    		 connection.start();
+	    		 connection.initializeCLient(); 
+	    		 dealer.playerAdded();
+	    		 
+	    	 } catch( IOException e ){
+	    		 System.out.println("client died unexpectedly");
+	    	}
+	     }
+	    	 
 	}
-
+	
     private synchronized boolean isStopped() {
         return this.isStopped;
     }
@@ -78,7 +68,7 @@ public class Server {
 		
 		try {
 			Server server = new Server();
-			server.listen();
+			server.startListen();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,26 +76,7 @@ public class Server {
 		// TODO Auto-generated method stub
 
 	}
-	private class Connection extends Thread{
-		private Socket serverSocket;
-		private ObjectOutputStream out;
-		
-		public Connection(Socket serverSocket, GameState game){
-			this.serverSocket = serverSocket;
-		}
-		
-		public void run(){
-			
-		}
-		public void finalize(){
-			try {
-				this.serverSocket.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+
 		
 
 }

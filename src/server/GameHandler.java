@@ -1,0 +1,73 @@
+package server;
+
+import java.util.Observable;
+
+import library.GameState;
+import library.GameState.PlayerToken;
+import library.GameState.State;
+import library.Move;
+
+public class GameHandler extends Observable {
+	
+	private GameState gameState;
+	
+	public GameHandler(){
+		
+		this.gameState = new GameState();
+	}
+	
+	/**
+	 * FIXME some more logic will be needed here to start the game when enough players are connected. 
+	 * 
+	 */
+	public PlayerToken addPlayer(ClientHandler client) throws MaxPlayerException{ 
+		PlayerToken token = gameState.addPlayer();
+		addObserver(client);
+		return token;
+	}
+
+	private void startGame() {
+		if (gameState.getNumPlayers() >=2){
+			gameState.setActivePlayer(PlayerToken.one);
+			gameState.setState(GameState.State.running);
+			setChanged();
+			notifyObservers();
+			System.out.println("starting game");
+		}
+		
+	}
+	public synchronized GameState getGameState(){
+		return this.gameState;
+	}
+	public synchronized void makeMove(Move move) {
+		if ( move.getToken() == gameState.getActivePlayer() &&
+				gameState.getState() == State.running){
+			if( move.makeMove(gameState)){
+				gameState.setCounter(gameState.getCounter()+1);
+				setNextActivePlayer();
+				setChanged();
+				notifyObservers();
+			}	
+		}
+	}
+
+	private boolean setNextActivePlayer() {
+
+		if (gameState.getActivePlayer() == PlayerToken.one){
+			gameState.setActivePlayer( PlayerToken.two);
+			return true;
+		}
+		if ( gameState.getActivePlayer() == PlayerToken.two
+				&& gameState.getNumPlayers() > 2){
+			gameState.setActivePlayer(PlayerToken.three);
+			return true;	
+		}
+		gameState.setActivePlayer(PlayerToken.one);
+		return true;
+	}
+
+	public void playerAdded() {
+		System.out.println("player Added");
+		startGame();
+	}
+}

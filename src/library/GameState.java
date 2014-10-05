@@ -1,36 +1,111 @@
 package library;
 
-import library.Move.PlayerToken;
+import java.io.Serializable;
+
+import server.MaxPlayerException;
 
 
 
-public class GameState {
+public class GameState implements Serializable {
 
 	/**
 	 * 
 	 */
+	public static int MAX_PLAYERS =2;
 	public enum PlayerToken{ one,two,three };
+	public enum State { startup, running, end};
+	
+	private PlayerToken activePlayer;
+	private State state;
 	private int numPlayers;
+	private int counter;
+	private int number;
 	
 	public GameState(){
 		this.numPlayers = 0;
+		this.counter = 0;
+		this.number= 0;
+		this.activePlayer = PlayerToken.one;
+		this.state = State.startup;
 		
 	}
-	public PlayerToken addPlayer(){
-		switch(this.numPlayers++){
-			case 0:
-				return GameState.PlayerToken.one;
-			case 1: 
-				return GameState.PlayerToken.two;
-			case 2: 
-				return GameState.PlayerToken.three;
-			default:
-				return null;
-		}
-	}
-	public PlayerToken makeMove(){
-		return PlayerToken.one;
+	
+	
+	public int getCounter() {
+		return counter;
 	}
 
 	
+	public void setCounter(int counter) {
+		this.counter = counter;
+	}
+
+
+
+
+	
+	public State getState() {
+		return state;
+	}
+	public void setState(State state) {
+		this.state = state;
+	}
+
+	public int getNumber() {
+		return number;
+	}
+	public void setNumber(int number) {
+		this.number = number;
+	}
+	/**
+	 * 
+	 */
+	
+	public int getNumPlayers() {
+		return numPlayers;
+	}
+	public void setNumPlayers(int numPlayers) {
+		this.numPlayers = numPlayers;
+	}
+
+	public PlayerToken makeMove(){
+		return PlayerToken.one;
+	}
+	
+	/**
+	 * Allow max 3 players to join, return token for each player if the game is full a MaxPlayerException will be thrown 
+	 * @return PlayerToken
+	 * @throws MaxPlayerException 
+	 */
+	public PlayerToken addPlayer() throws MaxPlayerException{
+		
+		if (this.numPlayers == GameState.MAX_PLAYERS){
+			throw new MaxPlayerException();
+		}
+		PlayerToken token = null;
+		switch(this.numPlayers){
+			case 0:
+				token = GameState.PlayerToken.one;
+				break;
+			case 1: 
+				token = GameState.PlayerToken.two;
+				break;
+			case 2: 
+				token = GameState.PlayerToken.three;
+				break;
+			default:
+				return null;
+		}
+		System.out.printf("num Players:%s\n",numPlayers);
+		this.numPlayers = this.numPlayers+1;
+		return token;
+	}
+	public Object getActivePlayer() {
+		return activePlayer;
+	}
+	
+	public void setActivePlayer(PlayerToken token) {
+		activePlayer = token;
+		
+	}
 }

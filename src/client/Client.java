@@ -1,5 +1,6 @@
 package client;
 
+import java.awt.EventQueue;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,7 +15,9 @@ public class Client {
 	private PropertyFile prop;
 	private int port;
 	private InetAddress address;
-	private GameState gameState;
+	private ServerHandler handler;
+	private GuiController guiController;
+	private Gui window;
 	GameState.PlayerToken token;
 
 	public Client() throws IOException{
@@ -22,32 +25,42 @@ public class Client {
 		String myLocation = Client.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		prop = new PropertyFile(myLocation);
 		
-		address  = InetAddress.getByName(prop.getProperty("server.address"));
-		port = Integer.parseInt(prop.getProperty("port"));
-		Socket socket = new Socket(address,port);
-		ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-		System.out.println("client socket established");
-		try {
-			this.token = (GameState.PlayerToken) in.readObject();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	System.out.println(token);
-    	System.out.println("here");
-	}
+		this.address  = InetAddress.getByName(prop.getProperty("server.address"));
+		this.port = Integer.parseInt(prop.getProperty("port"));
 		
+	}
+	public void startup() throws IOException{
+		
+		Socket socket = new Socket(address,port);
+		this.handler = new ServerHandler(socket);
+		this.guiController = new GuiController(handler);
+		this.window = new Gui(guiController);
+		guiController.initialize();
+		handler.initialize();
+		new Thread(this.handler).start();
+		
+		
+		
+		
+	}
+	public static void startGui(){
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Client client = new Client();
+					client.startup();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		try {
-			Client client = new Client();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Client.startGui();
 
 	}
 
