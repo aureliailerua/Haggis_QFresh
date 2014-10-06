@@ -37,6 +37,10 @@ public class Server {
 		
 		
 	}
+	/**
+	 * @throws IOException
+	 * start a listener for every client which connects
+	 */
 	public void startListen() throws IOException{
 		
 	     socketConnection = new ServerSocket(this.port,Server.maxConnection,this.address);
@@ -55,10 +59,13 @@ public class Server {
 	    	 
 	}
 	
+    /**
+     * @return
+     * allow the server to be stopped gracefully, not implemented yet
+     */
     private synchronized boolean isStopped() {
         return this.isStopped;
     }
-    
     
 	/**
 	 * @param args

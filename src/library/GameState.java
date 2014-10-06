@@ -7,11 +7,13 @@ import server.MaxPlayerException;
 
 
 
+/**
+ * @author benjamin.indermuehle
+ * This is a prototype class and needs to be changed.
+ * in the current state it manages a number internally
+ */
 public class GameState extends Observable implements Serializable {
 
-	/**
-	 * 
-	 */
 	public static int MAX_PLAYERS =2;
 	public enum PlayerToken{ one,two,three };
 	public enum State { startup, running, end};
@@ -19,30 +21,14 @@ public class GameState extends Observable implements Serializable {
 	private PlayerToken activePlayer;
 	private State state;
 	private int numPlayers;
-	private int counter;
 	private int number;
 	
 	public GameState(){
 		this.numPlayers = 0;
-		this.counter = 0;
 		this.number= 0;
 		this.activePlayer = PlayerToken.one;
-		this.state = State.startup;
-		
+		this.state = State.startup;	
 	}
-	
-	
-	public int getCounter() {
-		return counter;
-	}
-
-	
-	public void setCounter(int counter) {
-		this.counter = counter;
-	}
-
-
-
 	
 	public State getState() {
 		return state;
@@ -59,10 +45,7 @@ public class GameState extends Observable implements Serializable {
 		this.number = number;
 		setChanged();
 	}
-	/**
-	 * 
-	 */
-	
+
 	public int getNumPlayers() {
 		return numPlayers;
 	}
@@ -102,6 +85,7 @@ public class GameState extends Observable implements Serializable {
 		this.numPlayers = this.numPlayers+1;
 		return token;
 	}
+	
 	public Object getActivePlayer() {
 		return activePlayer;
 	}

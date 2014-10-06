@@ -7,6 +7,22 @@ import library.GameState.PlayerToken;
 import library.GameState.State;
 import library.Move;
 
+/**
+ * @author benjamin.indermuehle
+ *
+ */
+/**
+ * @author benjamin.indermuehle
+ *
+ */
+/**
+ * @author benjamin.indermuehle
+ *
+ */
+/**
+ * @author benjamin.indermuehle
+ *
+ */
 public class GameHandler {
 	
 	private GameState gameState;
@@ -26,6 +42,10 @@ public class GameHandler {
 		return token;
 	}
 
+	/**
+	 * checks if enough players are joined and starts the game.
+	 * #FIXME this function should be renamed
+	 */
 	private void startGame() {
 		if (gameState.getNumPlayers() >=2){
 			gameState.setActivePlayer(PlayerToken.one);
@@ -38,11 +58,15 @@ public class GameHandler {
 	public synchronized GameState getGameState(){
 		return this.gameState;
 	}
+	
+	/**
+	 * @param move
+	 * Applies move Object to the GameState Object
+	 */
 	public synchronized void makeMove(Move move) {
 		if ( move.getToken() == gameState.getActivePlayer() &&
 				gameState.getState() == State.running){
 			if( move.makeMove(gameState)){
-				gameState.setCounter(gameState.getCounter()+1);
 				setNextActivePlayer();
 				gameState.notifyObservers();
 			}	
@@ -64,6 +88,10 @@ public class GameHandler {
 		return true;
 	}
 
+	/**
+	 * this function will be called after player initialization is finished to check if game
+	 * should be started
+	 */
 	public void playerAdded() {
 		System.out.println("player Added");
 		startGame();

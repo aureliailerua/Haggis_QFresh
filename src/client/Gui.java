@@ -1,16 +1,11 @@
 package client;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
@@ -28,6 +23,7 @@ public class Gui {
 	/**
 	 * Create the application.
 	 */
+
 	public Gui(GuiController controller) {
 		this.controller = controller;
 		controller.setGui(this);
@@ -35,8 +31,10 @@ public class Gui {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * We need to create the instance variables of the GUI before drawing it so the GuiController can
+	 * fill them with content.
 	 * @wbp.parser.entryPoint
+	 * 
 	 */
 	protected void initialize() {
 		
@@ -87,13 +85,22 @@ public class Gui {
 		panel.add(btnPlay);
 	}
 
+	
+	/**
+	 * the gui will be set visible at the end after everything else is done 
+	 */
 	public void setVisible(){
 		this.frame.setVisible(true);
 	}
+	
+	/**
+	 * Getter and Setter methods for fields which will be updated or read by the controller
+	 *
+	 */
+	
 	public String getAddition() {
 		return txtfAddition.getText();
 	}
-	
 	public void setAddition(String string){
 		txtfAddition.setText(string);
 	}
@@ -107,6 +114,9 @@ public class Gui {
 		lblCurrentPlayer.setText(string);
 	}
 
+	/**
+	 * redraw the gui
+	 */
 	public void redraw() {
 		// TODO Auto-generated method stub
 		this.frame.revalidate();

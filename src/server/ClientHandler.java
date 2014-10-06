@@ -10,6 +10,14 @@ import java.util.Observer;
 import library.GameState;
 import library.Move;
 
+/**
+ * @author benjamin.indermuehle
+ *
+ */
+/**
+ * @author benjamin.indermuehle
+ *
+ */
 public class ClientHandler extends Thread implements Observer {
 		private Socket socket;
 		private GameState.PlayerToken token;
@@ -64,6 +72,11 @@ public class ClientHandler extends Thread implements Observer {
 		}
 	}
 	
+	/**
+	 * @throws IOException
+	 * listen to client input, add the playertoken to the move.
+	 * hand move to dealer.
+	 */
 	public void readInput() throws IOException{
 		while (true){
 			Move move;
@@ -79,6 +92,10 @@ public class ClientHandler extends Thread implements Observer {
     		}
 		}
 	}
+	
+	/**
+	 * send GameState to Client 
+	 */
 	private void sendGameState (){
 		try {
 		
@@ -94,6 +111,10 @@ public class ClientHandler extends Thread implements Observer {
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 * this method will be called when the GameState object changes
+	 */
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		System.out.println("sending new Gamestate");

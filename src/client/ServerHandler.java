@@ -25,6 +25,10 @@ public class ServerHandler extends Observable implements Runnable {
 		this.socket = socket;
 	}
 	
+	/**
+	 * @throws IOException
+	 * open connections and retrieve player token
+	 */
 	public void initialize() throws IOException{
 		
 		in = new ObjectInputStream(socket.getInputStream());
@@ -39,6 +43,12 @@ public class ServerHandler extends Observable implements Runnable {
 	}
 
  
+    /**
+     * @throws IOException
+     * watch input socket for new gamestate object 
+     * update the gamestate object
+     * notify observers
+     */
     private void watchInput() throws IOException{
     	System.out.println("listening for GameState");
   		try{
@@ -64,6 +74,10 @@ public class ServerHandler extends Observable implements Runnable {
 		
 	}
 	
+	/**
+	 * @param move
+	 * send move object to the server
+	 */
 	public void send(Move move){	
 		try {
 			this.out.writeObject(move);

@@ -10,6 +10,10 @@ import java.net.Socket;
 import library.GameState;
 import library.PropertyFile;
 
+/**
+ * @author benjamin.indermuehle
+ * Client CLass is responsible for starting up the Client
+ */
 public class Client {
 
 	private PropertyFile prop;
@@ -54,9 +58,6 @@ public class Client {
 		});
 	}
 	
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		Client.startGui();
 

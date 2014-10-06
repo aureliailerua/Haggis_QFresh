@@ -4,11 +4,14 @@ import java.io.Serializable;
 
 import library.GameState.PlayerToken;
 
+
+/**
+ * @author benjamin.indermuehle
+ * Simple prototype of a implementation.  
+ *
+ */
 public class Move implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2245261864373794436L;
 
 	private int addition;
