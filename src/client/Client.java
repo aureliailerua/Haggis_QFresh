@@ -35,12 +35,10 @@ public class Client {
 		this.handler = new ServerHandler(socket);
 		this.guiController = new GuiController(handler);
 		this.window = new Gui(guiController);
-		guiController.initialize();
 		handler.initialize();
+		guiController.initialize();
 		new Thread(this.handler).start();
-		
-		
-		
+		this.window.setVisible();
 		
 	}
 	public static void startGui(){

@@ -22,7 +22,7 @@ public class GuiController implements Observer,ActionListener{
 	}
 	public void initialize(){
 		gui.initialize();
-		gui.setPlayer(String.format("You are Player %s",handler.token));
+		gui.setPlayer(String.format("You are Player %s",handler.token.toString()));
 		updateTable();
 		
 	}
@@ -31,11 +31,10 @@ public class GuiController implements Observer,ActionListener{
 		if (handler.gameState.getState() == GameState.State.startup){
 			activePlayer = "Game has not started yet";
 		}else{
-			//activePlayer = (String.format("It's player %s's  turn",handler.gameState.getActivePlayer().toString()));
-			activePlayer="we have a bug here";
+			activePlayer = (String.format("It's player %s's  turn",handler.gameState.getActivePlayer().toString()));
 		}
 		gui.setCurrentPlayer(activePlayer);
-		gui.setAddition(String.valueOf(handler.gameState.getNumber()));
+		gui.setLblAddition(String.valueOf(handler.gameState.getNumber()));
 		gui.redraw();
 	}
 	@Override

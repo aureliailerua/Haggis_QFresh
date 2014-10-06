@@ -85,16 +85,20 @@ public class Gui {
 		JButton btnPlay = new JButton("Play");
 		btnPlay.addActionListener(controller);
 		panel.add(btnPlay);
-		
-		this.frame.setVisible(true);
 	}
 
+	public void setVisible(){
+		this.frame.setVisible(true);
+	}
 	public String getAddition() {
 		return txtfAddition.getText();
 	}
 	
 	public void setAddition(String string){
 		txtfAddition.setText(string);
+	}
+	public void setLblAddition(String string){
+		lblAddition.setText(string);
 	}
 	public void setPlayer(String string){
 		lblPlayerID.setText(string);

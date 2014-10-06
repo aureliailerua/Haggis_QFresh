@@ -1,12 +1,13 @@
 package library;
 
 import java.io.Serializable;
+import java.util.Observable;
 
 import server.MaxPlayerException;
 
 
 
-public class GameState implements Serializable {
+public class GameState extends Observable implements Serializable {
 
 	/**
 	 * 
@@ -42,13 +43,13 @@ public class GameState implements Serializable {
 
 
 
-
 	
 	public State getState() {
 		return state;
 	}
 	public void setState(State state) {
 		this.state = state;
+		setChanged();
 	}
 
 	public int getNumber() {
@@ -56,6 +57,7 @@ public class GameState implements Serializable {
 	}
 	public void setNumber(int number) {
 		this.number = number;
+		setChanged();
 	}
 	/**
 	 * 

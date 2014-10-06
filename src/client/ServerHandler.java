@@ -18,9 +18,7 @@ public class ServerHandler extends Observable implements Runnable {
 	private ObjectOutputStream out;
 	public GameState.PlayerToken token;
 	public GameState gameState;
-	private boolean isStopped = false;
 	private final Object lock = new Object();
-	private Move testmove;
 	
 	public ServerHandler (Socket socket){
 		this.gameState = new GameState();
@@ -29,43 +27,34 @@ public class ServerHandler extends Observable implements Runnable {
 	
 	public void initialize() throws IOException{
 		
+		in = new ObjectInputStream(socket.getInputStream());
 		out = new ObjectOutputStream(socket.getOutputStream());
-		token = PlayerToken.one;
 		System.out.println("client socket established");
-		//try {
-		//	this.token = (GameState.PlayerToken) in.readObject();
-		//} catch (ClassNotFoundException e) {
+		try {
+			this.token = (GameState.PlayerToken) in.readObject();
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-		//	e.printStackTrace();
-	//	}
+			e.printStackTrace();
+		}
 	}
 
-    
-	private synchronized boolean isStopped() {
-        return this.isStopped;
-    }
+ 
     private void watchInput() throws IOException{
-		in = new ObjectInputStream(socket.getInputStream());
     	System.out.println("listening for GameState");
-    	while (!this.isStopped( )){
-    		try{
-    			//GameState newGameState = (GameState) this.in.readObject();
-    			testmove = (Move) in.readObject();
-    			System.out.println(testmove.getAddition());
-    			//int counter =(Integer) this.in.readObject();
-    			//System.out.println(counter);
-    			//System.out.println("recieved new GameState");
-    		//	System.out.println(newGameState.getNumber());
-        		//this.gameState = newGameState;
+  		try{
+  			GameState newGameState;
+    		while ( (newGameState = (GameState)in.readObject()) != null){        		
+    			this.gameState = newGameState;
         		this.setChanged();
         		this.notifyObservers();
+    		}
         		
-    		} catch (ClassNotFoundException e) {
-    			//TODO Auto-generated catch block
-    			e.printStackTrace();
-    			//System.exit(1);	
-    		} 
-    	}
+		} catch (ClassNotFoundException e) {
+			//TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);	
+		} 
+
     }
     
 	public GameState getGameState() {

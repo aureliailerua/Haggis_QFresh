@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
 
-import library.Counter;
 import library.GameState;
 import library.Move;
 
@@ -17,14 +16,13 @@ public class ClientHandler extends Thread implements Observer {
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
 		private GameHandler dealer;
-		private Move testMove;
+
 		
 	public ClientHandler (Socket socket, GameHandler dealer){
 		this.socket = socket;
 		this.dealer = dealer;
-		this.testMove = new Move();
-	}
 
+	}
 	
 	/**
 	 * we need to open a connection to the client and give it a token so we can identify it in the future
@@ -40,9 +38,10 @@ public class ClientHandler extends Thread implements Observer {
 			System.out.println(e.getMessage());
 			this.finalize();
 		}
-		//System.out.println("sending token");
-		//out.writeObject(token);
-		//out.flush();
+		System.out.println("sending token");
+		out.writeObject(token);
+		out.flush();
+		out.reset();
 	}
 	
 	public void run(){
@@ -76,7 +75,7 @@ public class ClientHandler extends Thread implements Observer {
     		} catch (ClassNotFoundException e) {
     			//TODO Auto-generated catch block
     			e.printStackTrace();
-    			//System.exit(1);	
+    			System.exit(1);	
     		}
 		}
 	}
@@ -84,11 +83,9 @@ public class ClientHandler extends Thread implements Observer {
 		try {
 		
 			GameState gameState = dealer.getGameState();
-			out.writeObject(testMove);
+			out.writeObject(gameState);
 			out.flush();
-			testMove.setAddition(testMove.getAddition()+1);
-			//this.out.writeObject(gameState);
-			System.out.println(testMove.getAddition());
+			out.reset();
 			
 		} catch (IOException e){
 			e.printStackTrace();

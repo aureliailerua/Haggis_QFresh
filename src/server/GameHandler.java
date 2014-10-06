@@ -7,7 +7,7 @@ import library.GameState.PlayerToken;
 import library.GameState.State;
 import library.Move;
 
-public class GameHandler extends Observable {
+public class GameHandler {
 	
 	private GameState gameState;
 	
@@ -22,7 +22,7 @@ public class GameHandler extends Observable {
 	 */
 	public PlayerToken addPlayer(ClientHandler client) throws MaxPlayerException{ 
 		PlayerToken token = gameState.addPlayer();
-		addObserver(client);
+		gameState.addObserver(client);
 		return token;
 	}
 
@@ -30,8 +30,7 @@ public class GameHandler extends Observable {
 		if (gameState.getNumPlayers() >=2){
 			gameState.setActivePlayer(PlayerToken.one);
 			gameState.setState(GameState.State.running);
-			setChanged();
-			notifyObservers();
+			gameState.notifyObservers();
 			System.out.println("starting game");
 		}
 		
@@ -45,8 +44,7 @@ public class GameHandler extends Observable {
 			if( move.makeMove(gameState)){
 				gameState.setCounter(gameState.getCounter()+1);
 				setNextActivePlayer();
-				setChanged();
-				notifyObservers();
+				gameState.notifyObservers();
 			}	
 		}
 	}
