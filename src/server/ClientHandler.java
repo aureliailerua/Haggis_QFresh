@@ -24,19 +24,18 @@ public class ClientHandler extends Thread implements Observer {
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
 		private GameHandler dealer;
+		private boolean isStopped = false;
 
 		
 	public ClientHandler (Socket socket, GameHandler dealer){
 		this.socket = socket;
 		this.dealer = dealer;
-
 	}
 	
 	/**
 	 * we need to open a connection to the client and give it a token so we can identify it in the future
 	 */
-	public void initializeCLient() throws IOException{
-		System.out.println("initializing Client");		
+	public void initializeCLient() throws IOException{	
 		this.out = new ObjectOutputStream(this.socket.getOutputStream());		
 		try {
 	
@@ -78,7 +77,7 @@ public class ClientHandler extends Thread implements Observer {
 	 * hand move to dealer.
 	 */
 	public void readInput() throws IOException{
-		while (true){
+		while (!isStopped()){
 			Move move;
     		try{
     			 move = (Move) this.in.readObject();
@@ -120,5 +119,13 @@ public class ClientHandler extends Thread implements Observer {
 		System.out.println("sending new Gamestate");
 		sendGameState();
 		
+	}
+	private boolean isStopped(){
+		return isStopped;
+	}
+
+	public void stopListen() throws IOException {
+		isStopped = true;
+		socket.close();
 	}
 }
