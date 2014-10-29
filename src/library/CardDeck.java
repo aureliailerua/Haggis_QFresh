@@ -11,19 +11,31 @@ import java.util.Collections;
  */
 public class CardDeck {
 	ArrayList<Card> cardDeck;
-
-	public ArrayList<Card> giveCards() {
-		ArrayList<Card> lvCards = this.cardDeck;
-		return lvCards;
-	}//giveCards
 	
-	public ArrayList<Card> giveJokers() {
-		ArrayList<Card> lvCards = this.cardDeck;
+	public void setcardDeck(ArrayList<Card> cardDeck) {
+		this.cardDeck = cardDeck;
+	}
+
+	public ArrayList<Card> give14Cards() {
+		ArrayList<Card> lvCards = new ArrayList<Card>();
+		for (int i=0; i < 14; i++){
+			lvCards.add(this.cardDeck.get(0));
+			this.cardDeck.remove(0);
+		}
+		return lvCards;
+	}//give14Cards
+	
+	public ArrayList<Card> give3Jokers() {
+		ArrayList<Card> lvCards = new ArrayList<Card>();
+		for (int i=0; i < 3; i++){
+			lvCards.add(this.cardDeck.get(this.cardDeck.size()-1));
+			this.cardDeck.remove(this.cardDeck.size()-1);
+		}
 		return lvCards;
 	}//giveJokers
 
 
-	public void buildDeck(Integer numPlayers){
+	public ArrayList<Card> buildDeck(Integer numPlayers){
 		// local var's
 		int lvSuitCount;
 		int lvCardId = 0;
@@ -50,7 +62,7 @@ public class CardDeck {
 			}
 		}
 		
-		//shuffle Numbered Cards using Knuth shuffle
+		//shuffle numbered Cards using Knuth shuffle
 		int lvDeckSize = lvNewCardDeck.size(); 
 		for (int i=0; i<lvDeckSize; i++){
 			int rand = i + (int) (Math.random() * (lvDeckSize-i));
@@ -70,7 +82,7 @@ public class CardDeck {
 				lvCardId++;
 			}
 		}
-		// I realise now, that the cardID is utterly useless. And Beni called it.
-		this.cardDeck = lvNewCardDeck;
+		// I realise now, that the cardID is utterly useless. And Beni knew it.
+		return lvNewCardDeck;
 	}//buildDeck
 }//CardDeck

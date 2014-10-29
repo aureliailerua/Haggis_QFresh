@@ -10,7 +10,7 @@ public class CardDeckTestDrive {
 		System.out.println("***********************");
 		
 		CardDeck deck2 = new CardDeck();
-		deck2.buildDeck(2);
+		deck2.cardDeck = deck2.buildDeck(2);
 		
 		for (Card card : deck2.cardDeck){
 			System.out.print("ID: "+card.getCardID());
@@ -24,7 +24,7 @@ public class CardDeckTestDrive {
 		System.out.println("***********************");
 		
 		CardDeck deck3 = new CardDeck();
-		deck3.buildDeck(3);
+		deck3.cardDeck = deck3.buildDeck(3);
 		
 		for (Card card : deck3.cardDeck){
 			System.out.print("ID: "+card.getCardID());
