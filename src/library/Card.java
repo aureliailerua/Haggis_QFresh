@@ -2,7 +2,8 @@ package library;
 
 /**
  * @author andreas.denger
- *
+ * This class provides the structure for all cards and will eventually
+ * provide some helper-methods to aid in validating moves and comparing Cards
  */
 public class Card {
 
@@ -31,6 +32,11 @@ public class Card {
 		this.cardPoint = cardPoint;
 	}
 	
+	/**
+	 * Set the Suit of a card, provided it is in SUITS[].  
+	 * @param suit in lowercase-String {"green", "yellow", "grey", "black", "orange", "joker"}
+	 * @throws IllegalArgumentException 
+	 */
 	public void setCardSuit(String s){
 		for (String suit : Card.SUITS){
 			if(suit.equals(s)) {
