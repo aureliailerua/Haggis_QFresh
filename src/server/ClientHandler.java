@@ -23,23 +23,24 @@ public class ClientHandler extends Thread implements Observer {
 		private GameState.PlayerToken token;
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
-		private GameHandler dealer;
-		private boolean isStopped = false;
+		private GameHandler gameHandler;
 
 		
 	public ClientHandler (Socket socket, GameHandler dealer){
 		this.socket = socket;
-		this.dealer = dealer;
+		this.gameHandler = dealer;
+
 	}
 	
 	/**
 	 * we need to open a connection to the client and give it a token so we can identify it in the future
 	 */
-	public void initializeCLient() throws IOException{	
+	public void initializeCLient() throws IOException{
+		System.out.println("initializing Client");		
 		this.out = new ObjectOutputStream(this.socket.getOutputStream());		
 		try {
 	
-			token = dealer.addPlayer(this);
+			token = gameHandler.addPlayer(this);
 			
 		} catch (MaxPlayerException e){
 			System.out.println(e.getMessage());
@@ -74,16 +75,16 @@ public class ClientHandler extends Thread implements Observer {
 	/**
 	 * @throws IOException
 	 * listen to client input, add the playertoken to the move.
-	 * hand move to dealer.
+	 * hand move to gameHandler.
 	 */
 	public void readInput() throws IOException{
-		while (!isStopped()){
+		while (true){
 			Move move;
     		try{
     			 move = (Move) this.in.readObject();
     			 System.out.println("recieved new Move");
     			 move.setToken(this.token);
-    	    	this.dealer.makeMove(move);
+    	    	this.gameHandler.makeMove(move);
     		} catch (ClassNotFoundException e) {
     			//TODO Auto-generated catch block
     			e.printStackTrace();
@@ -98,7 +99,7 @@ public class ClientHandler extends Thread implements Observer {
 	private void sendGameState (){
 		try {
 		
-			GameState gameState = dealer.getGameState();
+			GameState gameState = gameHandler.getGameState();
 			out.writeObject(gameState);
 			out.flush();
 			out.reset();
@@ -119,13 +120,5 @@ public class ClientHandler extends Thread implements Observer {
 		System.out.println("sending new Gamestate");
 		sendGameState();
 		
-	}
-	private boolean isStopped(){
-		return isStopped;
-	}
-
-	public void stopListen() throws IOException {
-		isStopped = true;
-		socket.close();
 	}
 }

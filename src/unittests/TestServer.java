@@ -23,7 +23,7 @@ public class TestServer {
 	private Server instantiateServer() throws IOException{
 		
 		Server server = new Server();
-		server.start();
+		server.run();
 		try {
 			Thread.sleep(5);
 		} catch (InterruptedException e) {
@@ -37,8 +37,8 @@ public class TestServer {
 	public void testInitalization() throws IOException {
 		
 		Server server = instantiateServer();
-		PropertyFile prop = new PropertyFile();
 		assertNotNull(server);
+		PropertyFile prop = new PropertyFile();
 		Socket socket = new Socket(prop.getServerAddress(), prop.getPort());
 		assertNotNull(socket);
 		server.stopListen();
