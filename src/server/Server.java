@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
+import org.apache.logging.log4j.*;
 
 import library.GameState;
 import library.Move;
@@ -23,20 +24,22 @@ public class Server {
 	private boolean isStopped = false;
 	private GameState gameState;
 	private ServerSocket socketConnection;
-	private GameHandler dealer; 
+	private GameHandler dealer;
+	private static final Logger log = LogManager.getLogger( Server.class.getName() );
 	
+			
 	public Server() throws IOException{
 		
+	
 		String myLocation = Server.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		prop = new PropertyFile(myLocation);
 		
 		address  = InetAddress.getByName(prop.getProperty("server.address"));
 		port = Integer.parseInt(prop.getProperty("port"));
 		
-		this.dealer = new GameHandler();
-		
-		
+		this.dealer = new GameHandler();		
 	}
+	
 	/**
 	 * @throws IOException
 	 * start a listener for every client which connects
@@ -53,10 +56,9 @@ public class Server {
 	    		 dealer.playerAdded();
 	    		 
 	    	 } catch( IOException e ){
-	    		 System.out.println("client died unexpectedly");
+	    		 log.debug("client died unexpectedly");
 	    	}
 	     }
-	    	 
 	}
 	
     /**
@@ -83,7 +85,4 @@ public class Server {
 		// TODO Auto-generated method stub
 
 	}
-
-		
-
 }

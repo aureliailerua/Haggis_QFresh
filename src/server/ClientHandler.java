@@ -7,6 +7,9 @@ import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import library.GameState;
 import library.Move;
 
@@ -24,6 +27,8 @@ public class ClientHandler extends Thread implements Observer {
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
 		private GameHandler dealer;
+		private static final Logger log = LogManager.getLogger( Server.class.getName() );
+
 
 		
 	public ClientHandler (Socket socket, GameHandler dealer){
@@ -36,7 +41,7 @@ public class ClientHandler extends Thread implements Observer {
 	 * we need to open a connection to the client and give it a token so we can identify it in the future
 	 */
 	public void initializeCLient() throws IOException{
-		System.out.println("initializing Client");		
+		log.debug("initializing Client");		
 		this.out = new ObjectOutputStream(this.socket.getOutputStream());		
 		try {
 	
@@ -58,7 +63,7 @@ public class ClientHandler extends Thread implements Observer {
 			this.readInput();
 		}catch(IOException e){
 			e.printStackTrace();
-			System.out.println("Could not establish client connection;");
+			log.debug("Could not establish client connection;");
 			this.finalize();
 		}
 	}
@@ -82,7 +87,7 @@ public class ClientHandler extends Thread implements Observer {
 			Move move;
     		try{
     			 move = (Move) this.in.readObject();
-    			 System.out.println("recieved new Move");
+    			 log.debug("recieved new Move");
     			 move.setToken(this.token);
     	    	this.dealer.makeMove(move);
     		} catch (ClassNotFoundException e) {
@@ -117,7 +122,7 @@ public class ClientHandler extends Thread implements Observer {
 	 */
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		System.out.println("sending new Gamestate");
+		log.debug("sending new Gamestate");
 		sendGameState();
 		
 	}
