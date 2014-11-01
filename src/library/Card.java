@@ -12,24 +12,27 @@ public class Card {
 	private int cardPoint;
 	private String cardSuit;
 	protected static final String[] SUITS = {"green", "yellow", "grey", "black", "orange", "joker"};
+	protected enum Suits { Green, Yellow, Grey, Black, Orange, Joker };
+	//public enum[] SuitList = { Suits.Green, Suits.Yellow, Suits.Grey, Suits.Black, Suits.Orange, Suits.Joker };
 	
+	public Card(int lvCardId, int lvCardRank, String lvCardSuit, int lvCardPoint) {
+		//System.out.println(Suits.values().length);
+		this.cardID = lvCardId;
+		this.cardRank = lvCardRank;
+		this.cardSuit = lvCardSuit;
+		this.cardPoint = cardRank % 2;
+	}
 	public int getCardID() {
 		return cardID;
-	}
-	public void setCardID(int cardID) {
-		this.cardID = cardID;
 	}
 	public int getCardRank() {
 		return cardRank;
 	}
-	public void setCardRank(int cardRank) {
-		this.cardRank = cardRank;
-	}
 	public int getCardPoint() {
 		return cardPoint;
 	}
-	public void setCardPoint(int cardPoint) {
-		this.cardPoint = cardPoint;
+	public String getCardSuit() {
+		return cardSuit;
 	}
 	
 	/**
@@ -47,8 +50,6 @@ public class Card {
 		throw new IllegalArgumentException("illegal cardSuit ... not in SUITS[]");
 	}
 	
-	public String getCardSuit() {
-		return cardSuit;
-	}
+
 }	
 

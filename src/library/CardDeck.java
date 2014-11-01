@@ -75,11 +75,7 @@ public class CardDeck {
 		//build numbered Cards based on suitCount i.e. numPlayers and Haggis-rulebook;
 		for (int suitNumber=0; suitNumber < lvSuitCount; suitNumber++){
 			for (int cardRank=2; cardRank <= 10; cardRank++){
-				lvNewCard = new Card();
-				lvNewCard.setCardID(lvCardId);
-				lvNewCard.setCardRank(cardRank);
-				lvNewCard.setCardSuit(Card.SUITS[suitNumber]);
-				lvNewCard.setCardPoint(cardRank % 2);
+				lvNewCard = new Card(lvCardId, cardRank, Card.SUITS[suitNumber], cardRank % 2);
 				lvNewCardDeck.add(lvNewCard);
 				lvCardId++;
 			}
@@ -96,11 +92,7 @@ public class CardDeck {
 		final int[] fibonacci = {1,1,2,3,5,7};
 		for (int i=0; i < numPlayers; i++){
 			for (int ii = 0; ii < 3; ii++){
-				lvNewCard = new Card();
-				lvNewCard.setCardID(lvCardId);
-				lvNewCard.setCardRank(ii + 11);
-				lvNewCard.setCardSuit(Card.SUITS[5]);
-				lvNewCard.setCardPoint(fibonacci[ii+2]);
+				lvNewCard = new Card(lvCardId, ii + 11, Card.SUITS[5], fibonacci[ii+2]);
 				lvNewCardDeck.add(lvNewCard);
 				lvCardId++;
 			}
