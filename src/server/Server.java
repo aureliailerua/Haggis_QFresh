@@ -14,9 +14,8 @@ import library.GameState;
 import library.Move;
 import library.PropertyFile;
 
-public class Server {
-	
-	
+public class Server extends Thread{
+		
 	private PropertyFile prop;
 	private int port;
 	private InetAddress address;
@@ -27,19 +26,20 @@ public class Server {
 	private GameHandler dealer;
 	private static final Logger log = LogManager.getLogger( Server.class.getName() );
 	
-			
-	public Server() throws IOException{
+	/**
+	 * @throws IOException
+	 */
+	public Server() throws IOException {
 		
-	
-		String myLocation = Server.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		prop = new PropertyFile(myLocation);
+		prop = new PropertyFile();
 		
 		address  = InetAddress.getByName(prop.getProperty("server.address"));
 		port = Integer.parseInt(prop.getProperty("port"));
 		
-		this.dealer = new GameHandler();		
+		this.dealer = new GameHandler();
+		
+		
 	}
-	
 	/**
 	 * @throws IOException
 	 * start a listener for every client which connects
@@ -60,7 +60,18 @@ public class Server {
 	    	}
 	     }
 	}
-	
+	public void run(){
+		try {
+			startListen();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void stopListen(){
+		isStopped = true;
+		System.out.println("here");
+	}
     /**
      * @return
      * allow the server to be stopped gracefully, not implemented yet
@@ -68,21 +79,23 @@ public class Server {
     private synchronized boolean isStopped() {
         return this.isStopped;
     }
-    
+  
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 
-		
 		try {
 			Server server = new Server();
-			server.startListen();
+			server.run();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// TODO Auto-generated method stub
+		
 
 	}
+
+		
+
 }

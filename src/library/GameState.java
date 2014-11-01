@@ -6,7 +6,6 @@ import java.util.Observable;
 import server.MaxPlayerException;
 
 
-
 /**
  * @author benjamin.indermuehle
  * This is a prototype class and needs to be changed.
@@ -81,7 +80,6 @@ public class GameState extends Observable implements Serializable {
 			default:
 				return null;
 		}
-		System.out.printf("num Players:%s\n",numPlayers);
 		this.numPlayers = this.numPlayers+1;
 		return token;
 	}
@@ -92,6 +90,11 @@ public class GameState extends Observable implements Serializable {
 	
 	public void setActivePlayer(PlayerToken token) {
 		activePlayer = token;
+		
+	}
+	
+	public void removePlayer(){
+		numPlayers = numPlayers-1;
 		
 	}
 }
