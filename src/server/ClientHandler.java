@@ -7,6 +7,9 @@ import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import library.GameState;
 import library.Move;
 
@@ -23,12 +26,14 @@ public class ClientHandler extends Thread implements Observer {
 		private GameState.PlayerToken token;
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
-		private GameHandler gameHandler;
+		private GameHandler dealer;
+		private static final Logger log = LogManager.getLogger( Server.class.getName() );
+
 
 		
 	public ClientHandler (Socket socket, GameHandler dealer){
 		this.socket = socket;
-		this.gameHandler = dealer;
+		this.dealer = dealer;
 
 	}
 	
@@ -36,11 +41,11 @@ public class ClientHandler extends Thread implements Observer {
 	 * we need to open a connection to the client and give it a token so we can identify it in the future
 	 */
 	public void initializeCLient() throws IOException{
-		System.out.println("initializing Client");		
+		log.debug("initializing Client");		
 		this.out = new ObjectOutputStream(this.socket.getOutputStream());		
 		try {
 	
-			token = gameHandler.addPlayer(this);
+			token = dealer.addPlayer(this);
 			
 		} catch (MaxPlayerException e){
 			System.out.println(e.getMessage());
@@ -58,7 +63,7 @@ public class ClientHandler extends Thread implements Observer {
 			this.readInput();
 		}catch(IOException e){
 			e.printStackTrace();
-			System.out.println("Could not establish client connection;");
+			log.debug("Could not establish client connection;");
 			this.finalize();
 		}
 	}
@@ -75,16 +80,16 @@ public class ClientHandler extends Thread implements Observer {
 	/**
 	 * @throws IOException
 	 * listen to client input, add the playertoken to the move.
-	 * hand move to gameHandler.
+	 * hand move to dealer.
 	 */
 	public void readInput() throws IOException{
 		while (true){
 			Move move;
     		try{
     			 move = (Move) this.in.readObject();
-    			 System.out.println("recieved new Move");
+    			 log.debug("recieved new Move");
     			 move.setToken(this.token);
-    	    	this.gameHandler.makeMove(move);
+    	    	this.dealer.makeMove(move);
     		} catch (ClassNotFoundException e) {
     			//TODO Auto-generated catch block
     			e.printStackTrace();
@@ -99,7 +104,7 @@ public class ClientHandler extends Thread implements Observer {
 	private void sendGameState (){
 		try {
 		
-			GameState gameState = gameHandler.getGameState();
+			GameState gameState = dealer.getGameState();
 			out.writeObject(gameState);
 			out.flush();
 			out.reset();
@@ -117,7 +122,7 @@ public class ClientHandler extends Thread implements Observer {
 	 */
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		System.out.println("sending new Gamestate");
+		log.debug("sending new Gamestate");
 		sendGameState();
 		
 	}

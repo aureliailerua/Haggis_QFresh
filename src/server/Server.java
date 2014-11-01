@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
+import org.apache.logging.log4j.*;
 
 import library.GameState;
 import library.Move;
@@ -22,7 +23,8 @@ public class Server extends Thread{
 	private boolean isStopped = false;
 	private GameState gameState;
 	private ServerSocket socketConnection;
-	private GameHandler dealer; 
+	private GameHandler dealer;
+	private static final Logger log = LogManager.getLogger( Server.class.getName() );
 	
 	/**
 	 * @throws IOException
@@ -54,10 +56,9 @@ public class Server extends Thread{
 	    		 dealer.playerAdded();
 	    		 
 	    	 } catch( IOException e ){
-	    		 System.out.println("client died unexpectedly");
+	    		 log.debug("client died unexpectedly");
 	    	}
 	     }
-	    	 
 	}
 	public void run(){
 		try {

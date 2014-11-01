@@ -6,7 +6,6 @@ import java.util.Observable;
 import server.MaxPlayerException;
 
 
-
 /**
  * @author benjamin.indermuehle
  * This is a prototype class and needs to be changed.
