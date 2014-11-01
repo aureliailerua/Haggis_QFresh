@@ -20,7 +20,7 @@ public class Card {
 		this.cardID = lvCardId;
 		this.cardRank = lvCardRank;
 		this.cardSuit = lvCardSuit;
-		this.cardPoint = cardRank % 2;
+		this.cardPoint = lvCardPoint;
 	}
 	public int getCardID() {
 		return cardID;
