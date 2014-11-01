@@ -8,12 +8,16 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.nio.file.Paths;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import server.Server;
 
 public class PropertyFile extends Properties{
 	
 	private static String propFileName = "config.properties";
 	private InputStream inputStream;
+	private static final Logger log = LogManager.getLogger( Server.class.getName() );
 	
 	/**
 	 * @param args
@@ -24,9 +28,12 @@ public class PropertyFile extends Properties{
 	public PropertyFile() throws IOException{
 		super();
 		try {
-			String myLocation = Paths.get(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI()).toString();
-			String configFile = myLocation+ PropertyFile.propFileName ;	
+			File myLocation = Paths.get(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI()).toFile();
+			File configFile = new File(myLocation,PropertyFile.propFileName);
+			log.debug("propertyFileName:" + configFile.toString());
 			this.inputStream =  new FileInputStream(configFile);
+			
+			
 			this.load(this.inputStream);
 	        if (inputStream == null) {
 	            throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
