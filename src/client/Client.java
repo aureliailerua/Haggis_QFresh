@@ -26,13 +26,18 @@ public class Client {
 
 	public Client() throws IOException{
 	
-		String myLocation = Client.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		prop = new PropertyFile(myLocation);
+		prop = new PropertyFile();
 		
 		this.address  = InetAddress.getByName(prop.getProperty("server.address"));
 		this.port = Integer.parseInt(prop.getProperty("port"));
 		
 	}
+	
+	/**
+	 * Starts connection to client, instantiates GUI and supporting classes.
+	 * @throws IOException is thrown when client cannot connect to server.
+	 * 
+	 */
 	public void startup() throws IOException{
 		
 		Socket socket = new Socket(address,port);
@@ -45,6 +50,7 @@ public class Client {
 		this.window.setVisible();
 		
 	}
+	
 	public static void startGui(){
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
