@@ -1,11 +1,10 @@
 package server;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
-import library.GameState;
-import library.GameState.PlayerToken;
-import library.GameState.State;
-import library.Move;
+import library.GameState.*;
+import library.*;
 
 /**
  * @author benjamin.indermuehle
@@ -39,6 +38,9 @@ public class GameHandler {
 	public PlayerToken addPlayer(ClientHandler client) throws MaxPlayerException{ 
 		PlayerToken token = gameState.addPlayer();
 		gameState.addObserver(client);
+		Player newPlayer = new Player(token);
+		gameState.playerList.add(newPlayer);
+		
 		return token;
 	}
 
@@ -47,11 +49,17 @@ public class GameHandler {
 	 * #FIXME this function should be renamed
 	 */
 	private void startGame() {
-		if (gameState.getNumPlayers() >=2){
+		if (gameState.getNumPlayers() >=2) {
 			gameState.setActivePlayer(PlayerToken.one);
 			gameState.setState(GameState.State.running);
 			gameState.notifyObservers();
 			System.out.println("starting game");
+			gameState.activeCardDeck = new CardDeck(gameState.getNumPlayers());
+			
+			for (Player player : gameState.playerList){
+				player.setPlayerCards(gameState.activeCardDeck.give14Cards());
+				player.setPlayerCards(gameState.activeCardDeck.give3Jokers());
+			}
 		}
 		
 	}

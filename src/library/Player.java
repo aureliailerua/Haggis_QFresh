@@ -5,6 +5,8 @@ package library;
 
 import java.util.ArrayList;
 
+import library.GameState.PlayerToken;
+
 /**
  * @author andreas.denger
  * This class will be instantiated for each Player in the game.
@@ -14,6 +16,11 @@ public class Player {
 	ArrayList<Card> playerCards;
 	ArrayList<Card> playerJokers;
 	private int playerPoints;
+	PlayerToken token;
+	
+	public Player(PlayerToken lvToken){
+		this.token = lvToken;
+	}
 	
 	/**
 	 * @return Points of Player

@@ -1,6 +1,7 @@
 package library;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Observable;
 
 import server.MaxPlayerException;
@@ -21,6 +22,9 @@ public class GameState extends Observable implements Serializable {
 	private State state;
 	private int numPlayers;
 	private int number;
+	
+	public ArrayList<Player> playerList;
+	public CardDeck activeCardDeck;
 	
 	public GameState(){
 		this.numPlayers = 0;

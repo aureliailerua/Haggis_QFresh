@@ -2,6 +2,7 @@ package library;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import library.GameState.*;
 
 /**
  * @author andreas.denger
@@ -12,7 +13,11 @@ import java.util.Collections;
  * the Haggis Cards remain.
  */
 public class CardDeck {
-	ArrayList<Card> cardDeck;
+	public ArrayList<Card> cardDeck;
+	
+	public CardDeck (int lvNumPlayers){
+		this.cardDeck = buildDeck(lvNumPlayers);
+	}
 	
 	public void setcardDeck(ArrayList<Card> cardDeck) {
 		this.cardDeck = cardDeck;
