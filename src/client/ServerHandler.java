@@ -8,7 +8,7 @@ import java.util.Observable;
 
 
 import library.GameState;
-import library.Move;
+import library.Container;
 import library.GameState.PlayerToken;
 
 public class ServerHandler extends Observable implements Runnable {
@@ -78,7 +78,7 @@ public class ServerHandler extends Observable implements Runnable {
 	 * @param move
 	 * send move object to the server
 	 */
-	public void send(Move move){	
+	public void send(Container move){	
 		try {
 			this.out.writeObject(move);
 			this.out.flush();

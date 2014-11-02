@@ -10,7 +10,7 @@ import library.GameState.PlayerToken;
  * Simple prototype of a implementation.  
  *
  */
-public class Move implements Serializable{
+public class Container implements Serializable{
 	
 	private static final long serialVersionUID = 2245261864373794436L;
 
@@ -25,7 +25,7 @@ public class Move implements Serializable{
 		this.addition = add;
 	}
 
-	public Move(){
+	public Container(){
 		
 	}
 
