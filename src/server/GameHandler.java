@@ -5,7 +5,7 @@ import java.util.Observable;
 import library.GameState;
 import library.GameState.PlayerToken;
 import library.GameState.State;
-import library.Move;
+import library.Container;
 
 /**
  * @author benjamin.indermuehle
@@ -63,7 +63,7 @@ public class GameHandler {
 	 * @param move
 	 * Applies move Object to the GameState Object
 	 */
-	public synchronized void makeMove(Move move) {
+	public synchronized void makeMove(Container move) {
 		if ( move.getToken() == gameState.getActivePlayer() &&
 				gameState.getState() == State.running){
 			if( move.makeMove(gameState)){

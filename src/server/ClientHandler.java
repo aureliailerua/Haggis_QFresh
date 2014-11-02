@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import library.GameState;
-import library.Move;
+import library.Container;
 
 /**
  * @author benjamin.indermuehle
@@ -84,10 +84,10 @@ public class ClientHandler extends Thread implements Observer {
 	 */
 	public void readInput() throws IOException{
 		while (true){
-			Move move;
+			Container move;
     		try{
-    			 move = (Move) this.in.readObject();
-    			 log.debug("recieved new Move");
+    			 move = (Container) this.in.readObject();
+    			 log.debug("recieved new Container");
     			 move.setToken(this.token);
     	    	this.dealer.makeMove(move);
     		} catch (ClassNotFoundException e) {
