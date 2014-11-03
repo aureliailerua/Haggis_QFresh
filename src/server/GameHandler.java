@@ -3,8 +3,11 @@ package server;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import library.GameState.*;
-import library.*;
+import library.CardDeck;
+import library.GameState;
+import library.GameState.PlayerToken;
+import library.GameState.State;
+import library.Player;
 
 /**
  * @author benjamin.indermuehle
