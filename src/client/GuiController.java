@@ -6,7 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import library.GameState;
-import library.Move;
+import library.Container;
 
 public class GuiController implements Observer,ActionListener{
 	private Gui gui;
@@ -67,7 +67,7 @@ public class GuiController implements Observer,ActionListener{
 		String additionString = gui.getAddition();
 		try {
 			int addition = Integer.valueOf(additionString);
-			Move move = new Move();
+			Container move = new Container();
 			move.setAddition(addition);
 			handler.send(move);
 		} catch(NumberFormatException ex){
