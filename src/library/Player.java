@@ -16,10 +16,10 @@ public class Player {
 	ArrayList<Card> playerCards;
 	ArrayList<Card> playerJokers;
 	private int playerPoints;
-	PlayerToken token;
+	private PlayerToken token;
 	
 	public Player(PlayerToken lvToken){
-		this.token = lvToken;
+		this.setToken(lvToken);
 	}
 	
 	/**
@@ -63,5 +63,19 @@ public class Player {
 	 */
 	public void setPlayerJokers(ArrayList<Card> playerJokers) {
 		this.playerJokers = playerJokers;
+	}
+
+	/**
+	 * @return the token
+	 */
+	public PlayerToken getToken() {
+		return token;
+	}
+
+	/**
+	 * @param token the token to set
+	 */
+	public void setToken(PlayerToken token) {
+		this.token = token;
 	}
 }//Player
