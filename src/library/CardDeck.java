@@ -1,7 +1,9 @@
 package library;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+
 import library.GameState.*;
 
 /**
@@ -12,7 +14,7 @@ import library.GameState.*;
  * After distributing the Cards to the Players, 
  * the Haggis Cards remain.
  */
-public class CardDeck {
+public class CardDeck implements Serializable {
 	public ArrayList<Card> cardDeck;
 	
 	public CardDeck (int lvNumPlayers){

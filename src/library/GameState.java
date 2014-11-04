@@ -3,6 +3,7 @@ package library;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
+import org.apache.logging.log4j.*;
 
 import server.MaxPlayerException;
 
@@ -26,11 +27,14 @@ public class GameState extends Observable implements Serializable {
 	public ArrayList<Player> playerList;
 	public CardDeck activeCardDeck;
 	
+	private static final Logger log = LogManager.getLogger( GameState.class.getName() );
+	
 	public GameState(){
 		this.numPlayers = 0;
 		this.number= 0;
 		this.activePlayer = PlayerToken.one;
 		this.state = State.startup;	
+		this.playerList = new ArrayList<Player>();
 	}
 	
 	public State getState() {
@@ -84,6 +88,8 @@ public class GameState extends Observable implements Serializable {
 			default:
 				return null;
 		}
+		this.playerList.add(new Player(token));
+		System.out.println("Player created: "+playerList.get(playerList.size()-1).getToken());
 		this.numPlayers = this.numPlayers+1;
 		return token;
 	}

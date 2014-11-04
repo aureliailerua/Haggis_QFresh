@@ -30,8 +30,6 @@ public class GameHandler {
 	public PlayerToken addPlayer(ClientHandler client) throws MaxPlayerException{ 
 		PlayerToken token = gameState.addPlayer();
 		gameState.addObserver(client);
-		Player newPlayer = new Player(token);
-		gameState.playerList.add(newPlayer);
 		
 		return token;
 	}
