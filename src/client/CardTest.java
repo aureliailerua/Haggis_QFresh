@@ -18,6 +18,10 @@ public class CardTest {
 		return cardID;
 	}
 
+	public int getcardRank() {
+		return cardRank;
+	}
+	
 	public String getSuit() {
 		return cardSuit;
 	}

@@ -64,44 +64,39 @@ public class TableView {
 		JPanel panelCardHand = new JPanel();
 		frame.getContentPane().add(panelCardHand, BorderLayout.SOUTH);
 		
-		JButton[] btnCardHand = new JButton[14];
+		// TEST Class CardTest
+		CardTest[] cardHand = new CardTest[4];
+  		cardHand[0] = new CardTest(2, 3, 1, "green");
+  		cardHand[1] = new CardTest(1, 3, 1, "red");
+  		cardHand[2] = new CardTest(3, 4, 1, "green");
+  		cardHand[3] = new CardTest(0, 3, 1, "green");
 
-		ImageIcon[] myIcon = new ImageIcon[14];
-		String[] cardName = new String[14];
-		for(int i=0; i<cardName.length; i++){
-			cardName[i]= ("ID" + i);
+		
+		
+		JButton[] btnCardHand = new JButton[cardHand.length];
+		// Icon building
+		// ! ImageIcon[] myIcon = new ImageIcon[14];
+		// Icon generation
+		// ! for(int i=0; i<cardName.length; i++){
 			//myIcon[i]= new ImageIcon("Bilder/karte"+(i+1)+".jpg");
-			//myIcon[i]= new ImageIcon("gameContent/gruen03.jpg");
-			myIcon[i] = new ImageIcon(TableView.class.getResource("/gameContent/gruen03.jpg"));
-		}
+			// ! myIcon[i] = new ImageIcon(TableView.class.getResource("/gameContent/gruen03.jpg"));
+		//}
 		
 	    for(int i = 0; i<btnCardHand.length; i++){
-    		btnCardHand[i] = new JButton();
-    		btnCardHand[i].setIcon(myIcon[i]);
+    		btnCardHand[i] = new JButton(cardHand[i].getcardRank() + cardHand[i].getSuit());
+    		// ! btnCardHand[i].setIcon(myIcon[i]);
     		btnCardHand[i].setPreferredSize(new Dimension(200,313));
     		btnCardHand[i].setOpaque(false);
-    		btnCardHand[i].setBorderPainted(false);
+    		btnCardHand[i].setBorderPainted(true);
     		btnCardHand[i].setContentAreaFilled(false);
     		panelCardHand.add(btnCardHand[i]);
     	}
 		
-		JButton[] buttons = new JButton[5];  
-	    String[] names = {"One", "Two", "Three", "Four", "Five"};  
-	    for (int i = 0; i < buttons.length; i++) {  
-	       buttons[i] = new JButton(names[i]);  
-	       //buttons[i].addActionListener(this);  
-	       panelCardHand.add(buttons[i]);
-	    }  
 		
 		/**
 		 * Initialize the Hand
 		 */
 		
-		//CardTest[] cardHand = new CardTest[3];
-		//cardHand[0] = new CardTest(2, 3, 1, "green");
-		//cardHand[1] = new CardTest(1, 3, 1, "red");
-		//cardHand[3] = new CardTest(3, 4, 1, "green");
-		//cardHand[4] = new CardTest(0, 3, 1, "green");
 
 		
 		//http://www.coderanch.com/t/340584/GUI/java/create-JButton-Array
