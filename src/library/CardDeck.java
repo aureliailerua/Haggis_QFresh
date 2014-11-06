@@ -80,11 +80,10 @@ public class CardDeck implements Serializable {
 		}
 		
 		//build numbered Cards based on suitCount i.e. numPlayers and Haggis-rulebook;
-		for (int suitNumber=0; suitNumber < lvSuitCount; suitNumber++){
-			for (int cardRank=2; cardRank <= 10; cardRank++){
-				lvNewCard = new Card(lvCardId, cardRank, Card.SUITS[suitNumber], cardRank % 2);
+		for (int cardRank=2; cardRank <= 10; cardRank++){
+			for (int suitNumber=0; suitNumber < lvSuitCount; suitNumber++){
+				lvNewCard = new Card(cardRank*10+suitNumber, cardRank, Card.SUITS[suitNumber], cardRank % 2);
 				lvNewCardDeck.add(lvNewCard);
-				lvCardId++;
 			}
 		}
 		
@@ -96,14 +95,15 @@ public class CardDeck implements Serializable {
 		}
 		
 		//build JokerCards based on numPlayers
-		final int[] fibonacci = {1,1,2,3,5,8};
+		final int[] fibo = {2,3,5};
+		int jokerSuit = 5;
 		for (int i=0; i < numPlayers; i++){
-			for (int ii = 0; ii < 3; ii++){
-				lvNewCard = new Card(lvCardId, ii + 11, Card.SUITS[5], fibonacci[ii+2]);
+			for (int ii = 11; ii < 14; ii++){
+				lvNewCard = new Card(ii*10+jokerSuit, ii , Card.SUITS[jokerSuit], fibo[ii-11]);
 				lvNewCardDeck.add(lvNewCard);
-				lvCardId++;
 			}
 		}
+
 		// I realise now, that the cardID is utterly useless. And Beni knew it.
 		return lvNewCardDeck;
 	}//buildDeck

@@ -10,6 +10,7 @@ import org.junit.Test;
 import library.*;
 import library.GameState.PlayerToken;
 import server.MaxPlayerException;
+import server.GameHandler;
 
 /**
  * @author andreas.denger
@@ -39,6 +40,15 @@ public class TestGameState {
 			player.setPlayerCards(gameState.activeCardDeck.give14Cards());
 			player.setPlayerJokers(gameState.activeCardDeck.give3Jokers());
 		}
+		
+		//sort Player cards
+		ArrayList<Card> sortedCards = GameHandler.bubbleSort(gameState.playerList.get(0).getPlayerCards());
+		int lastID = 0;
+		for (Card card : sortedCards){
+			assertTrue("Mistake in Sort-by-ID operation", card.getCardID()>lastID);
+			lastID = card.getCardID();
+		}
+
 		
 		//check if successful
 		assertEquals("Number of player in playerList wrong", 3, gameState.playerList.size());
