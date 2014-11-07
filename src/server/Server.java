@@ -8,14 +8,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
+import org.apache.logging.log4j.*;
 
 import library.GameState;
-import library.Move;
+import library.Container;
 import library.PropertyFile;
 
-public class Server {
-	
-	
+public class Server extends Thread{
+		
 	private PropertyFile prop;
 	private int port;
 	private InetAddress address;
@@ -23,12 +23,15 @@ public class Server {
 	private boolean isStopped = false;
 	private GameState gameState;
 	private ServerSocket socketConnection;
-	private GameHandler dealer; 
+	private GameHandler dealer;
+	private static final Logger log = LogManager.getLogger( Server.class.getName() );
 	
-	public Server() throws IOException{
+	/**
+	 * @throws IOException
+	 */
+	public Server() throws IOException {
 		
-		String myLocation = Server.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		prop = new PropertyFile(myLocation);
+		prop = new PropertyFile();
 		
 		address  = InetAddress.getByName(prop.getProperty("server.address"));
 		port = Integer.parseInt(prop.getProperty("port"));
@@ -53,12 +56,22 @@ public class Server {
 	    		 dealer.playerAdded();
 	    		 
 	    	 } catch( IOException e ){
-	    		 System.out.println("client died unexpectedly");
+	    		 log.debug("client died unexpectedly");
 	    	}
 	     }
-	    	 
 	}
-	
+	public void run(){
+		try {
+			startListen();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void stopListen(){
+		isStopped = true;
+		System.out.println("here");
+	}
     /**
      * @return
      * allow the server to be stopped gracefully, not implemented yet
@@ -66,21 +79,20 @@ public class Server {
     private synchronized boolean isStopped() {
         return this.isStopped;
     }
-    
+  
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 
-		
 		try {
 			Server server = new Server();
-			server.startListen();
+			server.run();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// TODO Auto-generated method stub
+		
 
 	}
 
