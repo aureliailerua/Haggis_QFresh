@@ -1,7 +1,12 @@
 package client;
 
 import java.awt.Dimension;
+import java.awt.*;
+
+import javafx.scene.paint.Color;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import library.Card;
 
@@ -29,16 +34,17 @@ public class BtnCard extends JButton{
 	}
 
 	private void drawUnselected() {
-		setPreferredSize(new Dimension(200,313));
+		setPreferredSize(new Dimension(80,127));
 		setOpaque(false);
 		setBorderPainted(true);
 		setContentAreaFilled(false);
+		//setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		// ! myIcon[i] = new ImageIcon(TableView.class.getResource("/gameContent/gruen03.jpg"));
 		// ! btnCardHand[i].setIcon(myIcon[i]);
 	}
 	
 	private void drawSelected() {
-		setPreferredSize(new Dimension(200,313));
+		setPreferredSize(new Dimension(80,127));
 		setOpaque(false);
 		setBorderPainted(true);
 		setContentAreaFilled(false);
