@@ -2,6 +2,8 @@ package library;
 
 import java.io.Serializable;
 
+import javax.swing.Icon;
+
 /**
  * @author andreas.denger
  * This class provides the structure for all cards and will eventually
@@ -36,6 +38,10 @@ public class Card implements Serializable {
 	public String getCardSuit() {
 		return cardSuit;
 	}
+	public String getCardName() {
+		return cardSuit + cardRank;
+	}
+	
 	
 	/**
 	 * Set the Suit of a card, provided it is in SUITS[].  

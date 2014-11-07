@@ -7,10 +7,10 @@ import library.Card;
 
 public class BtnCard extends JButton{
 
-	private CardTest card;
+	private Card card;
 	public boolean selected;
 	
-	public BtnCard(CardTest card) {
+	public BtnCard(Card card) {
 		super(card.getCardName());
 		this.card = card;
 		drawUnselected();	

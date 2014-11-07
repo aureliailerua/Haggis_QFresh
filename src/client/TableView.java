@@ -17,11 +17,18 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import server.Server;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 
 import library.Card;
+import library.GameState;
+import library.Player;
 
 public class TableView extends JFrame implements ActionListener{
 
@@ -37,6 +44,8 @@ public class TableView extends JFrame implements ActionListener{
 	ArrayList<BtnCard> btnCardHand = new ArrayList<BtnCard>();
 	JButton btnCardTable = new JButton();
 	JButton[] btnJocker	= new JButton[3];
+	TableController controller;
+	private static final Logger log = LogManager.getLogger( Server.class.getName() );
 	
 	/**
 	 * Launch the application.
@@ -80,25 +89,14 @@ public class TableView extends JFrame implements ActionListener{
 
 		// ---- TEST Class CardTest -----
 
-  		
-
-		
-		
-		// Icon building
+  				// Icon building
 		// ! ImageIcon[] myIcon = new ImageIcon[14];
 		// Icon generation
 		// ! for(int i=0; i<cardName.length; i++){
 			//myIcon[i]= new ImageIcon("Bilder/karte"+(i+1)+".jpg");
 			// ! myIcon[i] = new ImageIcon(TableView.class.getResource("/gameContent/gruen03.jpg"));
 		//}
-		
-	    for( CardTest card : cardHand){
-			BtnCard btnCard = new BtnCard(card);
-			btnCard.addActionListener(this);
-			btnCardHand.add(btnCard);
-			panelCardHand.add(btnCard);	    	
-    	}
-		
+				
 	    btnPlay.setText("Play");
 		btnPlay.setBackground(Color.GREEN);
 		btnPlay.setPreferredSize(new Dimension(100,30));
@@ -132,9 +130,21 @@ public class TableView extends JFrame implements ActionListener{
 		}
 		**/
     }
-
-
-	public void drawGameState() {
+	
+	public void setController(TableController controller){
+		this.controller = controller;	
+	}
+	
+	public void drawGameState(GameState gameState) {
+		log.debug(controller.getToken());
+		Player player = gameState.getPlayer(controller.getToken());
+		
+		for( Card card : player.getPlayerCards()){
+			BtnCard btnCard = new BtnCard(card);
+			btnCard.addActionListener(this);
+			btnCardHand.add(btnCard);
+			panelCardHand.add(btnCard);	    	
+    	}
 		
 	}
 	

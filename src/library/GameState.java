@@ -1,4 +1,4 @@
-package library;
+	package library;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -106,5 +106,13 @@ public class GameState extends Observable implements Serializable {
 	public void removePlayer(){
 		numPlayers = numPlayers-1;
 		
+	}
+	public Player getPlayer( PlayerToken token){
+		for (Player player: playerList){
+			if( player.getToken() == token){
+				return player;
+			}
+		}
+		return null;
 	}
 }
