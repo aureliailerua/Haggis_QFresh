@@ -13,6 +13,9 @@ public class CardTest {
 		cardPoint = point;
 		cardSuit = suit;
 	}
+	public String getCardName() {
+		return cardSuit + cardRank;
+	}
 	
 	public int getcardID() {
 		return cardID;
@@ -25,13 +28,8 @@ public class CardTest {
 	public String getSuit() {
 		return cardSuit;
 	}
-	//public String getFilename() {
-	//	String filename = Integer.toString(cardRank);
-	//	String cardFilename = filename + cardSuit;
-	//	return cardFilename;
-	//}
 	
-	//public String[] getFilename() {
-	//	return (String)cardRank + cardSuit;
-	//}
+	public String getName() {
+		return cardSuit + cardRank;
+	}
 }

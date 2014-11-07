@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Insets;
 import java.net.URL;  
+import java.util.ArrayList;
 import java.awt.Dimension;  
 
 import javax.swing.JFrame;
@@ -20,6 +21,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 
+import library.Card;
+
 public class TableView extends JFrame implements ActionListener{
 
 	private JFrame frame;
@@ -31,7 +34,7 @@ public class TableView extends JFrame implements ActionListener{
     JButton btnPlay = new JButton();
     JButton btnPass = new JButton();
 	CardTest[] cardHand = new CardTest[4];
-	JButton[] btnCardHand = new JButton[cardHand.length];
+	ArrayList<BtnCard> btnCardHand = new ArrayList<BtnCard>();
 	JButton btnCardTable = new JButton();
 	JButton[] btnJocker	= new JButton[3];
 	
@@ -42,8 +45,10 @@ public class TableView extends JFrame implements ActionListener{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TableView window = new TableView();
-					window.frame.setVisible(true);
+					TableView view = new TableView();
+					TableController controller = new TableController(view);
+
+					view.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -57,7 +62,6 @@ public class TableView extends JFrame implements ActionListener{
 	public TableView() {
 
 		frame = new JFrame();
-		//frame.setSize(new Dimension(1500,1000));
 		frame.setBounds(100, 100, 1500, 900); // x-Position, y-Position, breite und höhe des Fenster
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -76,13 +80,6 @@ public class TableView extends JFrame implements ActionListener{
 
 		// ---- TEST Class CardTest -----
 
-  		cardHand[0] = new CardTest(2, 3, 1, "green");
-  		cardHand[1] = new CardTest(1, 3, 1, "red");
-  		cardHand[2] = new CardTest(3, 4, 1, "green");
-  		cardHand[3] = new CardTest(0, 3, 1, "green");
-  		cardHand[3] = new CardTest(0, 3, 1, "jocker");
-  		
-  		
   		
 
 		
@@ -95,27 +92,11 @@ public class TableView extends JFrame implements ActionListener{
 			// ! myIcon[i] = new ImageIcon(TableView.class.getResource("/gameContent/gruen03.jpg"));
 		//}
 		
-	    for(int i = 0; i<btnCardHand.length; i++){
-    		//if (cardHand[i].getSuit() != "jocker"){
-    			btnCardHand[i] = new JButton(cardHand[i].getcardRank() + cardHand[i].getSuit());
-        		// ! btnCardHand[i].setIcon(myIcon[i]);
-        		btnCardHand[i].setPreferredSize(new Dimension(200,313));
-        		btnCardHand[i].setOpaque(false);
-        		btnCardHand[i].setBorderPainted(true);
-        		btnCardHand[i].setContentAreaFilled(false);
-        		btnCardHand[i].addActionListener(this);
-        		panelCardHand.add(btnCardHand[i]);
-    		/*} else {
-    			btnJocker[i] = new JButton(cardHand[i].getSuit());
-        		// ! btnCardHand[i].setIcon(myIcon[i]);
-        		btnJocker[i].setPreferredSize(new Dimension(200,313));
-        		btnJocker[i].setOpaque(false);
-        		btnJocker[i].setBorderPainted(true);
-        		btnJocker[i].setContentAreaFilled(false);
-        		btnJocker[i].addActionListener(this);
-        		panelCardHand.add(btnJocker[i]);
-    		}*/
-	    	
+	    for( CardTest card : cardHand){
+			BtnCard btnCard = new BtnCard(card);
+			btnCard.addActionListener(this);
+			btnCardHand.add(btnCard);
+			panelCardHand.add(btnCard);	    	
     	}
 		
 	    btnPlay.setText("Play");
@@ -141,7 +122,7 @@ public class TableView extends JFrame implements ActionListener{
             System.out.println("Button geklickt!");   
         }
         
-        for(int i=0; i<12; i++){
+        /**for(int i=0; i<12; i++){
 			if (btnCardHand[i].equals(e.getSource())){
 				//System.out.println("btnCard "+ i +" gedrückts");
 	        	btnCardTable.setText(btnCardHand[i].getText());
@@ -149,9 +130,14 @@ public class TableView extends JFrame implements ActionListener{
 				
 			}
 		}
+		**/
     }
 
 
+	public void drawGameState() {
+		
+	}
+	
 } //class end
 	
 

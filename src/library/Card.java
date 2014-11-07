@@ -31,7 +31,9 @@ public class Card {
 	public void setCardPoint(int cardPoint) {
 		this.cardPoint = cardPoint;
 	}
-	
+	public String getCardName() {
+		return cardSuit + cardRank;
+	}
 	/**
 	 * Set the Suit of a card, provided it is in SUITS[].  
 	 * @param suit in lowercase-String {"green", "yellow", "grey", "black", "orange", "joker"}
