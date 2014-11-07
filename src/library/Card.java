@@ -1,39 +1,42 @@
 package library;
 
+import java.io.Serializable;
+
 /**
  * @author andreas.denger
  * This class provides the structure for all cards and will eventually
  * provide some helper-methods to aid in validating moves and comparing Cards
  */
-public class Card {
+public class Card implements Serializable {
 
 	protected int cardID;
 	private int cardRank;
 	private int cardPoint;
 	private String cardSuit;
 	protected static final String[] SUITS = {"green", "yellow", "grey", "black", "orange", "joker"};
+	protected enum Suits { Green, Yellow, Grey, Black, Orange, Joker };
+	//public enum[] SuitList = { Suits.Green, Suits.Yellow, Suits.Grey, Suits.Black, Suits.Orange, Suits.Joker };
 	
+	public Card(int lvCardId, int lvCardRank, String lvCardSuit, int lvCardPoint) {
+		//System.out.println(Suits.values().length);
+		this.cardID = lvCardId;
+		this.cardRank = lvCardRank;
+		this.cardSuit = lvCardSuit;
+		this.cardPoint = lvCardPoint;
+	}
 	public int getCardID() {
 		return cardID;
-	}
-	public void setCardID(int cardID) {
-		this.cardID = cardID;
 	}
 	public int getCardRank() {
 		return cardRank;
 	}
-	public void setCardRank(int cardRank) {
-		this.cardRank = cardRank;
-	}
 	public int getCardPoint() {
 		return cardPoint;
 	}
-	public void setCardPoint(int cardPoint) {
-		this.cardPoint = cardPoint;
+	public String getCardSuit() {
+		return cardSuit;
 	}
-	public String getCardName() {
-		return cardSuit + cardRank;
-	}
+	
 	/**
 	 * Set the Suit of a card, provided it is in SUITS[].  
 	 * @param suit in lowercase-String {"green", "yellow", "grey", "black", "orange", "joker"}
@@ -49,8 +52,5 @@ public class Card {
 		throw new IllegalArgumentException("illegal cardSuit ... not in SUITS[]");
 	}
 	
-	public String getCardSuit() {
-		return cardSuit;
-	}
-}	
 
+}	

@@ -1,24 +1,18 @@
 package server;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Observable;
 
+import library.Card;
+import library.CardContainer;
+import library.CardDeck;
 import library.GameState;
 import library.GameState.PlayerToken;
 import library.GameState.State;
 import library.Container;
+import library.Player;
 
-/**
- * @author benjamin.indermuehle
- *
- */
-/**
- * @author benjamin.indermuehle
- *
- */
-/**
- * @author benjamin.indermuehle
- *
- */
 /**
  * @author benjamin.indermuehle
  *
@@ -39,6 +33,7 @@ public class GameHandler {
 	public PlayerToken addPlayer(ClientHandler client) throws MaxPlayerException{ 
 		PlayerToken token = gameState.addPlayer();
 		gameState.addObserver(client);
+		
 		return token;
 	}
 
@@ -47,13 +42,18 @@ public class GameHandler {
 	 * #FIXME this function should be renamed
 	 */
 	private void startGame() {
-		if (gameState.getNumPlayers() >=2){
+		if (gameState.getNumPlayers() >=2) {
 			gameState.setActivePlayer(PlayerToken.one);
 			gameState.setState(GameState.State.running);
 			gameState.notifyObservers();
 			System.out.println("starting game");
+			gameState.activeCardDeck = new CardDeck(gameState.getNumPlayers());
+			
+			for (Player player : gameState.playerList){
+				player.setPlayerCards(gameState.activeCardDeck.give14Cards());
+				player.setPlayerJokers(gameState.activeCardDeck.give3Jokers());
+			}
 		}
-		
 	}
 	public synchronized GameState getGameState(){
 		return this.gameState;
@@ -71,6 +71,31 @@ public class GameHandler {
 				gameState.notifyObservers();
 			}	
 		}
+	}
+	
+	
+	public void checkMove(CardContainer lvContainer) {
+		
+		ArrayList<Card> cards = lvContainer.getPlayCards();
+		// rough evaluation of the move
+		int cardCount = cards.size();
+		int minimum = 14;
+		for (Card c : cards ) {
+			minimum = Math.min (minimum,  c.getCardRank());		
+		}
+		//if minimum <= round.tick.Cards.getLowestCard();
+		//if cards.size()<= round.tick.Cards.size();
+		
+		
+		
+		// fine-grain evaluation of the move
+		//int[] suitCount = {0,0,0,0,0,0};
+		
+		/*
+		int[] rankCount = new int[14]; 
+		for (Card c : cards ) {
+			rankCount[c.getCardRank()]++;
+		}*/ 
 	}
 
 	private boolean setNextActivePlayer() {
@@ -96,4 +121,24 @@ public class GameHandler {
 		System.out.println("player Added");
 		startGame();
 	}
+	
+	/**
+	 * This method sorts an array by CardID using bubbleSort
+	 * @param ArrayList<Card> unsorted Cards
+	 * @return ArrayList<Card> sorted by cardID
+	 */
+	public static ArrayList<Card> bubbleSort( ArrayList<Card> cards ) {
+		boolean swapFlag = true; 
+		while (swapFlag) {
+			swapFlag= false;   
+			for( int j=0;  j < cards.size()-1;  j++ ){
+				if ( cards.get(j).getCardID() > cards.get(j+1).getCardID() ) {
+					Collections.swap(cards, j, j+1);
+					swapFlag = true;
+				}
+			} 
+		} 
+		return cards;
+	}
+
 }

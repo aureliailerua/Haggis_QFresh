@@ -3,17 +3,25 @@
  */
 package library;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+
+import library.GameState.PlayerToken;
 
 /**
  * @author andreas.denger
  * This class will be instantiated for each Player in the game.
  * It holds their numbered Cards, Jokers and the points.
  */
-public class Player {
+public class Player implements Serializable {
 	ArrayList<Card> playerCards;
 	ArrayList<Card> playerJokers;
 	private int playerPoints;
+	private PlayerToken token;
+	
+	public Player(PlayerToken lvToken){
+		this.setToken(lvToken);
+	}
 	
 	/**
 	 * @return Points of Player
@@ -56,5 +64,19 @@ public class Player {
 	 */
 	public void setPlayerJokers(ArrayList<Card> playerJokers) {
 		this.playerJokers = playerJokers;
+	}
+
+	/**
+	 * @return the token
+	 */
+	public PlayerToken getToken() {
+		return token;
+	}
+
+	/**
+	 * @param token the token to set
+	 */
+	public void setToken(PlayerToken token) {
+		this.token = token;
 	}
 }//Player

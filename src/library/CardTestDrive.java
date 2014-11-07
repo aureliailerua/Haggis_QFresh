@@ -6,12 +6,7 @@ public class CardTestDrive {
 		// TODO Auto-generated method stub
 		
 		
-		Card firstcard = new Card();
-		
-		firstcard.setCardID(1);
-		firstcard.setCardPoint(2);
-		firstcard.setCardRank(7);
-		firstcard.setCardSuit("yellow");
+		Card firstcard = new Card(5, 8, Card.SUITS[3], 7 % 2);
 		
 		System.out.println("ID : "+firstcard.getCardID());
 		System.out.println("Point : "+firstcard.getCardPoint());

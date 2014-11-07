@@ -1,7 +1,10 @@
 package library;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import library.GameState.*;
 
 /**
  * @author andreas.denger
@@ -11,8 +14,12 @@ import java.util.Collections;
  * After distributing the Cards to the Players, 
  * the Haggis Cards remain.
  */
-public class CardDeck {
-	ArrayList<Card> cardDeck;
+public class CardDeck implements Serializable {
+	public ArrayList<Card> cardDeck;
+	
+	public CardDeck (int lvNumPlayers){
+		this.cardDeck = buildDeck(lvNumPlayers);
+	}
 	
 	public void setcardDeck(ArrayList<Card> cardDeck) {
 		this.cardDeck = cardDeck;
@@ -73,15 +80,10 @@ public class CardDeck {
 		}
 		
 		//build numbered Cards based on suitCount i.e. numPlayers and Haggis-rulebook;
-		for (int suitNumber=0; suitNumber < lvSuitCount; suitNumber++){
-			for (int cardRank=2; cardRank <= 10; cardRank++){
-				lvNewCard = new Card();
-				lvNewCard.setCardID(lvCardId);
-				lvNewCard.setCardRank(cardRank);
-				lvNewCard.setCardSuit(Card.SUITS[suitNumber]);
-				lvNewCard.setCardPoint(cardRank % 2);
+		for (int cardRank=2; cardRank <= 10; cardRank++){
+			for (int suitNumber=0; suitNumber < lvSuitCount; suitNumber++){
+				lvNewCard = new Card(cardRank*10+suitNumber, cardRank, Card.SUITS[suitNumber], cardRank % 2);
 				lvNewCardDeck.add(lvNewCard);
-				lvCardId++;
 			}
 		}
 		
@@ -93,18 +95,15 @@ public class CardDeck {
 		}
 		
 		//build JokerCards based on numPlayers
-		final int[] fibonacci = {1,1,2,3,5,7};
+		final int[] fibo = {2,3,5};
+		int jokerSuit = 5;
 		for (int i=0; i < numPlayers; i++){
-			for (int ii = 0; ii < 3; ii++){
-				lvNewCard = new Card();
-				lvNewCard.setCardID(lvCardId);
-				lvNewCard.setCardRank(ii + 11);
-				lvNewCard.setCardSuit(Card.SUITS[5]);
-				lvNewCard.setCardPoint(fibonacci[ii+2]);
+			for (int ii = 11; ii < 14; ii++){
+				lvNewCard = new Card(ii*10+jokerSuit, ii , Card.SUITS[jokerSuit], fibo[ii-11]);
 				lvNewCardDeck.add(lvNewCard);
-				lvCardId++;
 			}
 		}
+
 		// I realise now, that the cardID is utterly useless. And Beni knew it.
 		return lvNewCardDeck;
 	}//buildDeck
