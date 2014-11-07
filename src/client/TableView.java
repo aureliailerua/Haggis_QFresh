@@ -26,12 +26,14 @@ public class TableView extends JFrame implements ActionListener{
 	JLabel lblGameTable = new JLabel();
 	JPanel panelCardTable = new JPanel();
 	JPanel panelCardHand = new JPanel();
+	JPanel panelJoker = new JPanel();
 	
     JButton btnPlay = new JButton();
     JButton btnPass = new JButton();
 	CardTest[] cardHand = new CardTest[4];
 	JButton[] btnCardHand = new JButton[cardHand.length];
 	JButton btnCardTable = new JButton();
+	JButton[] btnJocker	= new JButton[3];
 	
 	/**
 	 * Launch the application.
@@ -69,6 +71,8 @@ public class TableView extends JFrame implements ActionListener{
 		panelCardTable.add(btnCardTable);
 		
 		frame.getContentPane().add(panelCardHand, BorderLayout.SOUTH);
+		
+		frame.getContentPane().add(panelJoker, BorderLayout.WEST);
 
 		// ---- TEST Class CardTest -----
 
@@ -76,6 +80,10 @@ public class TableView extends JFrame implements ActionListener{
   		cardHand[1] = new CardTest(1, 3, 1, "red");
   		cardHand[2] = new CardTest(3, 4, 1, "green");
   		cardHand[3] = new CardTest(0, 3, 1, "green");
+  		cardHand[3] = new CardTest(0, 3, 1, "jocker");
+  		
+  		
+  		
 
 		
 		
@@ -88,14 +96,26 @@ public class TableView extends JFrame implements ActionListener{
 		//}
 		
 	    for(int i = 0; i<btnCardHand.length; i++){
-    		btnCardHand[i] = new JButton(cardHand[i].getcardRank() + cardHand[i].getSuit());
-    		// ! btnCardHand[i].setIcon(myIcon[i]);
-    		btnCardHand[i].setPreferredSize(new Dimension(200,313));
-    		btnCardHand[i].setOpaque(false);
-    		btnCardHand[i].setBorderPainted(true);
-    		btnCardHand[i].setContentAreaFilled(false);
-    		btnCardHand[i].addActionListener(this);
-    		panelCardHand.add(btnCardHand[i]);
+    		//if (cardHand[i].getSuit() != "jocker"){
+    			btnCardHand[i] = new JButton(cardHand[i].getcardRank() + cardHand[i].getSuit());
+        		// ! btnCardHand[i].setIcon(myIcon[i]);
+        		btnCardHand[i].setPreferredSize(new Dimension(200,313));
+        		btnCardHand[i].setOpaque(false);
+        		btnCardHand[i].setBorderPainted(true);
+        		btnCardHand[i].setContentAreaFilled(false);
+        		btnCardHand[i].addActionListener(this);
+        		panelCardHand.add(btnCardHand[i]);
+    		/*} else {
+    			btnJocker[i] = new JButton(cardHand[i].getSuit());
+        		// ! btnCardHand[i].setIcon(myIcon[i]);
+        		btnJocker[i].setPreferredSize(new Dimension(200,313));
+        		btnJocker[i].setOpaque(false);
+        		btnJocker[i].setBorderPainted(true);
+        		btnJocker[i].setContentAreaFilled(false);
+        		btnJocker[i].addActionListener(this);
+        		panelCardHand.add(btnJocker[i]);
+    		}*/
+	    	
     	}
 		
 	    btnPlay.setText("Play");
