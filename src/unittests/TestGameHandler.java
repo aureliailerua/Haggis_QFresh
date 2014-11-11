@@ -6,6 +6,7 @@ package unittests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,20 +31,36 @@ public class TestGameHandler {
 	}
 
 	@Test
-	public void testPlayerCreation() throws IOException, MaxPlayerException {
-		// create carddeck
-		CardDeck lvCardDeck = new CardDeck(3);
+         public void testLogic() throws IOException, MaxPlayerException {
+        // create carddeck
+        CardDeck lvCardDeck = new CardDeck(3);
+        ArrayList<Card> lvCardList = new ArrayList<Card>();
+        for (Card c : lvCardDeck.cardDeck) {
+            if (c.getCardID() == 30 ||
+                c.getCardID() == 50 ||
+                c.getCardID() == 90
+            ) {
+                lvCardList.add(c);
+                System.out.println(c.getCardSuit());
+            }
+        }
 
-		// create cardlist for test
-		ArrayList<Card> lvCardList = new ArrayList<Card>();
-		lvCardList.add(lvCardDeck.cardDeck.get(0));
-		lvCardList.add(lvCardDeck.cardDeck.get(0));
-		lvCardList.add(lvCardDeck.cardDeck.get(0));
+        int cardCount = lvCardList.size();
+        boolean allSameSuit    = GameHandler.allSameSuit(lvCardList);
+        boolean allSameRank    = GameHandler.allSameRank(lvCardList);
+        boolean allInSequence  = GameHandler.allInSequence(lvCardList);
 
-		// sort to be sure
-		GameHandler.bubbleSort(lvCardList);
+        assertTrue("same Suit wrong", allSameSuit);
+        assertFalse("same Rank wrong", allSameRank);
+        assertFalse("same Sequence wrong", allInSequence);
 
-		// tests
+        // sort to be sure
+        // GameHandler.bubbleSort(lvCardList);
 
-	}
+        // tests
+
+
+    }
+
+
 }

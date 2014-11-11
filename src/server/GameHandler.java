@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Observable;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import library.Card;
 import library.CardContainer;
 import library.CardDeck;
@@ -17,6 +18,7 @@ import library.Player;
  * @author benjamin.indermuehle
  *
  */
+@SuppressWarnings("JavadocReference")
 public class GameHandler {
 	
 	private GameState gameState;
@@ -25,8 +27,11 @@ public class GameHandler {
 		
 		this.gameState = new GameState();
 	}
-	
-	/**
+
+
+
+
+    /**
 	 * FIXME some more logic will be needed here to start the game when enough players are connected. 
 	 * 
 	 */
@@ -73,7 +78,9 @@ public class GameHandler {
 		}
 	}
 	
-	
+
+
+
 	public void checkMove(CardContainer lvContainer) {
 		
 		ArrayList<Card> cards = lvContainer.getPlayCards();
@@ -98,8 +105,82 @@ public class GameHandler {
 		}*/ 
 	}
 
-	private boolean setNextActivePlayer() {
 
+
+
+    public static boolean allSameSuit (ArrayList<Card> cards) {
+        boolean sameSuit = true;
+        String comparableSuit = cards.get(0).getCardSuit();
+        for (Card c : cards) {
+            if (!c.getCardSuit().equals(comparableSuit)) {
+                sameSuit = false;
+                break;
+            }
+        }
+        return sameSuit;
+    }
+
+
+    public static boolean allSameRank (ArrayList<Card> cards){
+        boolean sameRank = true;
+        int comparableRank = cards.get(0).getCardRank();
+        for (Card c : cards) {
+            if (c.getCardRank() != comparableRank) {
+                sameRank = false;
+                break;
+            }
+        }
+        return sameRank;
+    }
+
+    public static boolean allInSequence (ArrayList<Card> cards){
+        boolean inSequence = true;
+        int sequenceBase = cards.get(0).getCardRank();
+        int i = 0;
+        for (Card c : cards) {
+            if (c.getCardRank()   != sequenceBase + i) {
+                inSequence = false;
+                i++;
+                break;
+            }
+        }
+        return inSequence;
+    }
+
+     //the pattern might be set in the gamestate - as current pattern
+    public enum Pattern  { single, pair, threeOfAKind, fourOfAKind, fiveOfAKind, sixOfAKind,
+        runOfThreeSingles, runOfFiveSingles, runOfTwoPairs, runOfThreePairs, runOfTwoOfAKind };
+     public Pattern currentPattern;
+
+    public void getPattern(ArrayList<Card> cards) {
+        int cardCount = cards.size();
+        boolean allSameSuit = allSameSuit(cards);
+        boolean allSameRank = allSameRank(cards);
+        boolean allInSequence = allInSequence(cards);
+
+        //depending on Card count, checks could be defined accordingly
+
+        //__________Set Patterns___________________________________
+        if (cardCount == 1)                      currentPattern = Pattern.single;
+        if (cardCount == 2 && allSameRank)       currentPattern = Pattern.pair;
+        if (cardCount == 3 && allSameRank)       currentPattern = Pattern.threeOfAKind;
+        if (cardCount == 4 && allSameRank)       currentPattern = Pattern.fourOfAKind;
+        if (cardCount == 5 && allSameRank)       currentPattern = Pattern.fiveOfAKind;
+        if (cardCount == 6 && allSameRank)       currentPattern = Pattern.sixOfAKind;
+
+        //__________Sequence Patterns___________________________________
+
+        if (cardCount == 3 && allSameSuit && allInSequence)      currentPattern = Pattern.runOfThreeSingles;
+        if (cardCount == 5 && allSameSuit && allInSequence)      currentPattern = Pattern.runOfFiveSingles;
+
+        //__________Combo Patterns___________________________________
+        // need own checkMethods - run of Two Pairs - run of Three Pairs etc..-
+        //return Pattern; or set Pattern.Pair in the Card Container instance Variables.
+    }
+
+
+
+    private boolean setNextActivePlayer() {
 		if (gameState.getActivePlayer() == PlayerToken.one){
 			gameState.setActivePlayer( PlayerToken.two);
 			return true;
