@@ -63,8 +63,9 @@ public class TableView extends JFrame implements ActionListener{
 	JButton btnBet15;
 	JButton btnBet30;
 	
-	JLabel lbCardNr;
+	JLabel lbCardCount;
 	JLabel lbPoint;
+	JLabel lbPlayerName;
 
 	
 	ArrayList<BtnCard> btnJocker;
@@ -176,6 +177,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelPlayerKit = new JPanel();
 		panelPlayer.add(panelPlayerKit, BorderLayout.CENTER);
 		panelPlayerKit.setLayout(new BorderLayout(0, 0));
+		panelPlayerKit.setSize(new Dimension(50,200));
 		
 
 		
@@ -187,6 +189,7 @@ public class TableView extends JFrame implements ActionListener{
 		// --- Pass Area (3.3.2.W)
 		panelBtnPass = new JPanel();
 		panelPlayerKit.add(panelBtnPass, BorderLayout.WEST);
+		panelBtnPass.setSize(new Dimension(650,50));
 		btnPass = new JButton();
 		btnPass.setText("Passen");
 		btnPass.setBackground(Color.GREEN);
@@ -203,44 +206,59 @@ public class TableView extends JFrame implements ActionListener{
 		GridBagLayout gbl_panelStatusBar = new GridBagLayout();
 		GridBagConstraints cStatusBar = new GridBagConstraints();	//GridBag Grenzen erstellen
 		panelStatusBar.setLayout(gbl_panelStatusBar); 		//Layout dem Panelzuweisen!!
-
+		panelStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		panelStatusBar.setBackground(Color.GREEN);
 		
 		JLabel imgLabelCard = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/rueckseite_klein.jpg")));
 		imgLabelCard.setPreferredSize(new Dimension(22,35));
-		cStatusBar.gridx = 1;		//x-Koordinate im Grid
+		cStatusBar.gridx = 0;		//x-Koordinate im Grid
 		cStatusBar.gridy = 0;		//y-Koordinate im Grid
+		cStatusBar.ipady = 10;
 		cStatusBar.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
 		panelStatusBar.add(imgLabelCard, cStatusBar);
 	
 		
-		lbCardNr= new JLabel("6");
-		lbCardNr.setPreferredSize(new Dimension(50,50));
+		lbCardCount= new JLabel("6"); //!! Anpassen!!
+		lbCardCount.setPreferredSize(new Dimension(50,50));
 		cStatusBar.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
-		cStatusBar.gridx = 2;		//x-Koordinate im Grid
+		cStatusBar.gridx = 1;		//x-Koordinate im Grid
 		cStatusBar.gridy = 0;		//y-Koordinate im Grid
 		cStatusBar.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
-		panelStatusBar.add(lbCardNr, cStatusBar);
+		panelStatusBar.add(lbCardCount, cStatusBar);
 		
 		JLabel imgLabelCrown = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/krone_klein.png")));
 		imgLabelCrown.setPreferredSize(new Dimension(20,16));
-		cStatusBar.gridx = 3;		//x-Koordinate im Grid
-		cStatusBar.gridy = 0;		//y-Koordinate im Grid
-		cStatusBar.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
+		cStatusBar.gridx = 2;		
+		cStatusBar.gridy = 0;		
+		cStatusBar.insets = new Insets(5,5,5,5);
 		panelStatusBar.add(imgLabelCrown, cStatusBar);
 		
 		lbPoint= new JLabel("30");
 		lbPoint.setPreferredSize(new Dimension(50,50));
-		cStatusBar.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
+		cStatusBar.fill = GridBagConstraints.BOTH;
 		//c.weightx = 0.5;
 		//c.gridwidth = 1;
-		cStatusBar.gridx = 4;		//x-Koordinate im Grid
-		cStatusBar.gridy = 0;		//y-Koordinate im Grid
-		cStatusBar.insets = new Insets(5,0,0,10); //Padding vom Displayrand (top, left, bottom, right)
+		cStatusBar.gridx = 3;
+		cStatusBar.gridy = 0;
+		cStatusBar.insets = new Insets(5,0,0,10);
 		panelStatusBar.add(lbPoint, cStatusBar);
+		
+		lbPlayerName= new JLabel("Player 1", JLabel.CENTER);
+		lbPlayerName.setPreferredSize(new Dimension(50,50));
+		lbPlayerName.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+		cStatusBar.fill = GridBagConstraints.BOTH;
+		cStatusBar.ipady = 10;
+		cStatusBar.weightx = 0.0;
+		cStatusBar.gridwidth = 4;
+		cStatusBar.gridx = 0;
+		cStatusBar.gridy = 1;
+		cStatusBar.insets = new Insets(5,0,0,10);
+		panelStatusBar.add(lbPlayerName, cStatusBar);
 		 
 		// --- Play Area (3.3.4.E)
 		panelBtnPlay = new JPanel();
 		panelPlayerKit.add(panelBtnPlay, BorderLayout.EAST);
+		panelBtnPlay.setSize(new Dimension(650,50));
 		btnPlay = new JButton();
 		btnPlay.setText("Play");
 		btnPlay.setBackground(Color.GREEN);
@@ -254,7 +272,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelControlContainer = new JPanel();
 		panelPlayer.add(panelControlContainer, BorderLayout.EAST);
 		GridBagLayout gbl_panelControlContainer = new GridBagLayout(); 
-		GridBagConstraints c = new GridBagConstraints();	//GridBag Grenzen erstellen
+		GridBagConstraints cContainer = new GridBagConstraints();	//GridBag Grenzen erstellen
 		panelControlContainer.setLayout(gbl_panelControlContainer); 		//Layout dem Panelzuweisen!!
 
 		//panelControlContainer.setBorder( BorderFactory.createEmptyBorder( 2, 2, 2, 2 ) );
@@ -265,23 +283,23 @@ public class TableView extends JFrame implements ActionListener{
 		btnSort= new JButton("Sort");
 		btnSort.setPreferredSize(new Dimension(50,50));
 		btnSort.addActionListener(this);
-		c.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
+		cContainer.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
 		//c.weightx = 0.5;
 		//c.gridwidth = 1;
-		c.gridx = 1;		//x-Koordinate im Grid
-		c.gridy = 0;		//y-Koordinate im Grid
-		c.insets = new Insets(5,0,0,10); //Padding vom Displayrand (top, left, bottom, right)
-		panelControlContainer.add(btnSort, c);
+		cContainer.gridx = 1;		//x-Koordinate im Grid
+		cContainer.gridy = 0;		//y-Koordinate im Grid
+		cContainer.insets = new Insets(5,0,0,10); //Padding vom Displayrand (top, left, bottom, right)
+		panelControlContainer.add(btnSort, cContainer);
 		
 		btnRules = new JButton("Help");
 		btnRules.setPreferredSize(new Dimension(50,50));
 		btnRules.addActionListener(this);
-		c.fill = GridBagConstraints.HORIZONTAL;
+		cContainer.fill = GridBagConstraints.HORIZONTAL;
 		//c.weightx= 0.5;
-		c.gridx = 2;
-		c.gridy = 0;
-		c.insets = new Insets(5,0,0,5);; //Abstand vom Displayrand (top, left, bottom, right)
-		panelControlContainer.add(btnRules,c);
+		cContainer.gridx = 2;
+		cContainer.gridy = 0;
+		cContainer.insets = new Insets(5,0,0,5);; //Abstand vom Displayrand (top, left, bottom, right)
+		panelControlContainer.add(btnRules,cContainer);
 
 		
 		btnBet30 = new JButton("30");
@@ -289,30 +307,30 @@ public class TableView extends JFrame implements ActionListener{
 		btnBet30.addActionListener(this);
 		//c.fill = GridBagConstraints.HORIZONTAL;
 		//c.weightx = 0.5;
-		c.gridx = 0;
-		c.gridy = 1;
-		c.insets = new Insets(10,10,10,0);; //Abstand vom Displayrand (top, left, bottom, right)
-		c.anchor = GridBagConstraints.LINE_END;
-		panelControlContainer.add(btnBet30, c);
+		cContainer.gridx = 0;
+		cContainer.gridy = 1;
+		cContainer.insets = new Insets(10,10,10,0);; //Abstand vom Displayrand (top, left, bottom, right)
+		cContainer.anchor = GridBagConstraints.LINE_END;
+		panelControlContainer.add(btnBet30, cContainer);
 		
 		btnBet15 = new JButton("15");
 		btnBet15.setPreferredSize(new Dimension(40,40));
 		btnBet15.addActionListener(this);
-		c.fill = GridBagConstraints.BOTH;
-		c.gridx = 1;
-		c.gridy = 1;
-		c.insets = new Insets(10,0,10,20); //Abstand vom Displayrand (top, left, bottom, right)
-		c.anchor = GridBagConstraints.LINE_START;
-		panelControlContainer.add(btnBet15,c);
+		cContainer.fill = GridBagConstraints.BOTH;
+		cContainer.gridx = 1;
+		cContainer.gridy = 1;
+		cContainer.insets = new Insets(10,0,10,20); //Abstand vom Displayrand (top, left, bottom, right)
+		cContainer.anchor = GridBagConstraints.LINE_START;
+		panelControlContainer.add(btnBet15,cContainer);
 		
 		btnExit = new JButton("Exit");
 		btnExit.setPreferredSize(new Dimension(50,50));
 		btnExit.addActionListener(this);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 2;
-		c.gridy = 1;
-		c.insets = new Insets(0,0,5,5); //Abstand vom Displayrand (top, left, bottom, right)
-		panelControlContainer.add(btnExit,c);
+		cContainer.fill = GridBagConstraints.HORIZONTAL;
+		cContainer.gridx = 2;
+		cContainer.gridy = 1;
+		cContainer.insets = new Insets(0,0,5,5); //Abstand vom Displayrand (top, left, bottom, right)
+		panelControlContainer.add(btnExit,cContainer);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
