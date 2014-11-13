@@ -1,12 +1,11 @@
 package client;
 
-import java.awt.Dimension;
 import java.awt.*;
-
-import javafx.scene.paint.Color;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+import javax.swing.BorderFactory;
 
 import library.Card;
 
@@ -38,7 +37,8 @@ public class BtnCard extends JButton{
 		setOpaque(false);
 		setBorderPainted(true);
 		setContentAreaFilled(false);
-		//setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
+		setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, Color.BLACK, Color.GRAY));
 		// ! myIcon[i] = new ImageIcon(TableView.class.getResource("/gameContent/gruen03.jpg"));
 		// ! btnCardHand[i].setIcon(myIcon[i]);
 	}
@@ -48,6 +48,8 @@ public class BtnCard extends JButton{
 		setOpaque(false);
 		setBorderPainted(true);
 		setContentAreaFilled(false);
+		setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+
 		// ! myIcon[i] = new ImageIcon(TableView.class.getResource("/gameContent/gruen03.jpg"));
 		// ! btnCardHand[i].setIcon(myIcon[i]);
 	}

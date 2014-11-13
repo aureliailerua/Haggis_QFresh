@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.net.URL;  
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.awt.Dimension;  
 
 import javax.swing.JFrame;
@@ -53,34 +54,41 @@ public class TableView extends JFrame implements ActionListener{
 	JPanel panelStatusBar;			//3.2.3
 	JPanel panelBtnPlay;			//3.2.4
 
+	
+	JPanel panelEmpty_2;			//1.1
+	JPanel panelFirstOpposite;		//1.2
+	JPanel panelSecondOpposite;		//1.3
+	
+	JPanel panelOppositeInfo;		//1.1.1
+	JPanel panelOppositeJocker;		//1.1.2
+	JPanel panelOppositeCardBack;	//1.1.3
+	
+	
 	ArrayList<BtnCard> btnCardHand;
+	ArrayList<BtnCard> btnJocker;
+	ArrayList<BtnCard> btnCardTable;
+	
 	JButton btnPlay;
     JButton btnPass; 
-	JButton btnCardTable;
 	JButton btnSort;
 	JButton btnExit;
 	JButton btnRules;
 	JButton btnBet15;
 	JButton btnBet30;
+	JButton btnEmptyButton;
+
 	
 	JLabel lbCardCount;
 	JLabel lbPoint;
 	JLabel lbPlayerName;
-
-	
-	ArrayList<BtnCard> btnJocker;
+	JLabel imgLabelCard;
+	JLabel imgLabelCrown;
+	JLabel imgLabelRules;
 	
 	TableController controller;
 
 	private static final Logger log = LogManager.getLogger( Server.class.getName() );
-	
-	private JPanel panelEmpty_2;
-	private JPanel panelFirstOpposite;
-	private JPanel panelSecondOpposite;
-	private JPanel panelOppositeInfo;
-	private JPanel panelOppositeJocker;
-	private JPanel panelOppositeCardBack;
-	private JButton btnEmptyButton;
+
 	
 
 	/**
@@ -121,34 +129,92 @@ public class TableView extends JFrame implements ActionListener{
 		frame.getContentPane().add(panelOpposition, BorderLayout.NORTH);
 		panelOpposition.setLayout(new BorderLayout(0, 0));
 		
+		// - 1. Opposite Player (1.1.W)
 		panelFirstOpposite = new JPanel();
 		panelOpposition.add(panelFirstOpposite, BorderLayout.WEST);
 		panelFirstOpposite.setLayout(new BorderLayout(0, 0));
 		
+		// -- StatusBar (1.1.1N)
 		panelOppositeInfo = new JPanel();
 		panelFirstOpposite.add(panelOppositeInfo, BorderLayout.NORTH);
+				
+		GridBagLayout gbl_OppositeInfo = new GridBagLayout();
+		GridBagConstraints cOppositeInfo = new GridBagConstraints();	//GridBag Grenzen erstellen
+		panelOppositeInfo.setLayout(gbl_OppositeInfo); 		//Layout dem Panelzuweisen!!
+		panelOppositeInfo.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		panelOppositeInfo.setBackground(Color.RED);
 		
+		JLabel imgLabelCard = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/rueckseite_klein.jpg")));
+		imgLabelCard.setPreferredSize(new Dimension(22,35));
+		cOppositeInfo.gridx = 0;		//x-Koordinate im Grid
+		cOppositeInfo.gridy = 0;		//y-Koordinate im Grid
+		cOppositeInfo.ipady = 10;
+		cOppositeInfo.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
+		panelOppositeInfo.add(imgLabelCard, cOppositeInfo);
+	
+		
+		lbCardCount= new JLabel("6"); //!! Anpassen!!
+		lbCardCount.setPreferredSize(new Dimension(50,50));
+		cOppositeInfo.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
+		cOppositeInfo.gridx = 1;		//x-Koordinate im Grid
+		cOppositeInfo.gridy = 0;		//y-Koordinate im Grid
+		cOppositeInfo.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
+		panelOppositeInfo.add(lbCardCount, cOppositeInfo);
+		
+		JLabel imgLabelCrown = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/krone_klein.png")));
+		imgLabelCrown.setPreferredSize(new Dimension(20,16));
+		cOppositeInfo.gridx = 2;		
+		cOppositeInfo.gridy = 0;		
+		cOppositeInfo.insets = new Insets(5,5,5,5);
+		panelOppositeInfo.add(imgLabelCrown, cOppositeInfo);
+		
+		lbPoint= new JLabel("30");
+		lbPoint.setPreferredSize(new Dimension(50,50));
+		cOppositeInfo.fill = GridBagConstraints.BOTH;
+		//c.weightx = 0.5;
+		//c.gridwidth = 1;
+		cOppositeInfo.gridx = 3;
+		cOppositeInfo.gridy = 0;
+		cOppositeInfo.insets = new Insets(5,0,0,10);
+		panelOppositeInfo.add(lbPoint, cOppositeInfo);
+		
+		lbPlayerName= new JLabel("Player 2", JLabel.CENTER);
+		lbPlayerName.setPreferredSize(new Dimension(50,50));
+		lbPlayerName.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+		cOppositeInfo.fill = GridBagConstraints.BOTH;
+		cOppositeInfo.ipady = 10;
+		cOppositeInfo.weightx = 0.0;
+		cOppositeInfo.gridwidth = 4;
+		cOppositeInfo.gridx = 0;
+		cOppositeInfo.gridy = 1;
+		cOppositeInfo.insets = new Insets(5,0,0,10);
+		panelOppositeInfo.add(lbPlayerName, cOppositeInfo);
+		
+		// -- CardBack (1.1.2.C)
 		panelOppositeCardBack = new JPanel();
 		panelFirstOpposite.add(panelOppositeCardBack, BorderLayout.CENTER);
 		
+		// -- Jocker (1.1.3.S)
 		panelOppositeJocker = new JPanel();
+		//btnJocker	= new ArrayList<BtnCard>();
 		panelFirstOpposite.add(panelOppositeJocker, BorderLayout.SOUTH);
 		
+		// - Empty Space (1.2.C)
 		panelEmpty_2 = new JPanel();
 		panelOpposition.add(panelEmpty_2, BorderLayout.CENTER);
 		
+		// - 2. Opposite Player (1.3.E)
 		panelSecondOpposite = new JPanel();
 		panelOpposition.add(panelSecondOpposite, BorderLayout.EAST);
+		
 		
 		/** 
 		 * Card Desk (2)
 		 */
 		panelTable = new JPanel();
+		btnCardTable = new ArrayList<BtnCard>();
 		frame.getContentPane().add(panelTable, BorderLayout.WEST);
-		btnCardTable = new JButton();
-		btnCardTable.setPreferredSize(new Dimension(80,127));
-		btnCardTable.setVisible(false);
-		panelTable.add(btnCardTable);
+		
 		
 		/**
 		 * Player (3)
@@ -179,7 +245,6 @@ public class TableView extends JFrame implements ActionListener{
 		panelPlayerKit.setLayout(new BorderLayout(0, 0));
 		panelPlayerKit.setSize(new Dimension(50,200));
 		
-
 		
 		// -- Jocker's (3.3.1.C)
 		panelJocker = new JPanel();
@@ -209,7 +274,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelStatusBar.setBackground(Color.GREEN);
 		
-		JLabel imgLabelCard = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/rueckseite_klein.jpg")));
+		imgLabelCard = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/rueckseite_klein.jpg")));
 		imgLabelCard.setPreferredSize(new Dimension(22,35));
 		cStatusBar.gridx = 0;		//x-Koordinate im Grid
 		cStatusBar.gridy = 0;		//y-Koordinate im Grid
@@ -226,7 +291,7 @@ public class TableView extends JFrame implements ActionListener{
 		cStatusBar.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
 		panelStatusBar.add(lbCardCount, cStatusBar);
 		
-		JLabel imgLabelCrown = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/krone_klein.png")));
+		imgLabelCrown = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/krone_klein.png")));
 		imgLabelCrown.setPreferredSize(new Dimension(20,16));
 		cStatusBar.gridx = 2;		
 		cStatusBar.gridy = 0;		
@@ -280,8 +345,9 @@ public class TableView extends JFrame implements ActionListener{
 		//panelControlContainer.setBackground( Color.WHITE );
 		//c.gridwidth = c.REMAINDER;		//comp be last on in its row	
 		
-		btnSort= new JButton("Sort");
-		btnSort.setPreferredSize(new Dimension(50,50));
+		btnSort = new JButton();
+		btnSort.setIcon(new ImageIcon(StatusBar.class.getResource("/gameContent/sort.png")));
+		btnSort.setPreferredSize(new Dimension(83,83));
 		btnSort.addActionListener(this);
 		cContainer.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
 		//c.weightx = 0.5;
@@ -291,8 +357,9 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.insets = new Insets(5,0,0,10); //Padding vom Displayrand (top, left, bottom, right)
 		panelControlContainer.add(btnSort, cContainer);
 		
-		btnRules = new JButton("Help");
-		btnRules.setPreferredSize(new Dimension(50,50));
+		btnRules = new JButton();
+		btnRules.setIcon(new ImageIcon(StatusBar.class.getResource("/gameContent/rules.png")));
+		btnRules.setPreferredSize(new Dimension(83,83));
 		btnRules.addActionListener(this);
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
 		//c.weightx= 0.5;
@@ -323,8 +390,9 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.anchor = GridBagConstraints.LINE_START;
 		panelControlContainer.add(btnBet15,cContainer);
 		
-		btnExit = new JButton("Exit");
-		btnExit.setPreferredSize(new Dimension(50,50));
+		btnExit = new JButton();
+		btnExit.setIcon(new ImageIcon(StatusBar.class.getResource("/gameContent/home.png")));
+		btnExit.setPreferredSize(new Dimension(83,83));
 		btnExit.addActionListener(this);
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
 		cContainer.gridx = 2;
@@ -333,10 +401,75 @@ public class TableView extends JFrame implements ActionListener{
 		panelControlContainer.add(btnExit,cContainer);
 	}
 	
+	
 	public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == btnPlay){
-            System.out.println("Button geklickt!");   
+        
+        for( BtnCard btnSelected : btnCardHand){
+        	if(e.getSource() == btnSelected) {
+        		if (btnSelected.isSelected() == false){
+        			btnSelected.setSelected();
+        		}   else if (btnSelected.isSelected() == true) {
+        			btnSelected.setUnselected();
+        		}
+        	}
         }
+        
+        for( BtnCard btnSelected : btnJocker){
+        	if(e.getSource() == btnSelected) {
+        		if (btnSelected.isSelected() == false){
+        			btnSelected.setSelected();
+        		}   else if (btnSelected.isSelected() == true) {
+        			btnSelected.setUnselected();
+        		}
+        	}
+        }
+        
+        if(e.getSource() == btnPlay){
+        	for (BtnCard btnSelected : btnCardHand) {
+        		if(btnSelected.isSelected() == true) {
+            		System.out.print("Yeah you selected something");
+        			btnCardTable.add(btnSelected);
+            		//panelTable.add(btnSelected);
+        		}
+        	}
+        	for (BtnCard btnSelected : btnJocker) {
+        		if(btnSelected.isSelected() == true) {
+            		System.out.print("Yeah you selected Jocker");
+        			btnCardTable.add(btnSelected);
+        		}
+        	}
+        	
+        	for (BtnCard btnChoice : btnCardTable) {
+        		//btnChoice.setVisible(true);
+        		panelTable.add(btnChoice);
+        	}
+        }
+        
+        if(e.getSource() == btnPass){
+        	for (BtnCard btnSelected : btnCardHand) {
+        		if(btnSelected.isSelected() == true) {
+        			btnSelected.setUnselected();
+        		}
+        	}
+        	
+        }
+        
+        if(e.getSource() == btnExit) {
+    		System.exit(0);
+        }
+        
+        if (e.getSource() == btnRules) {
+        	JFrame frameRules = new JFrame ("Haggis Rules");
+        	frameRules.setBounds(200, 200, 510, 326); // x-Position, y-Position, breite und höhe des Fenster
+            frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+            imgLabelRules = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/Kombinationen.jpg")));
+    		imgLabelRules.setPreferredSize(new Dimension(510,326));
+            frameRules.add(imgLabelRules);
+            frameRules.pack();
+            frameRules.setVisible(true);
+        }
+        
+   
 	}
 	
 	public void setController(TableController controller){
