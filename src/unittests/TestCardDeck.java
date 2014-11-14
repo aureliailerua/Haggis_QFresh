@@ -3,6 +3,7 @@ package unittests;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
@@ -60,6 +61,16 @@ public class TestCardDeck {
 				numJoker++;
 			}
 		}
+		
+		ArrayList<Card> lvSingleCards = new ArrayList<Card>();
+		lvSingleCards.add(deck3.getCardById(43));
+		lvSingleCards.add(deck3.getCardById(54));
+		lvSingleCards.add(deck3.getCardById(60));
+		
+		//checks on 3-Player deck
+		assertEquals("wrong CardById", 43, lvSingleCards.get(0).getCardID());
+		assertEquals("wrong CardById", 54, lvSingleCards.get(1).getCardID());
+		assertEquals("wrong CardById", 60, lvSingleCards.get(2).getCardID());
 		
 		//checks on 3-Player deck
 		assertNotNull("3-Player deck created", deck3);
