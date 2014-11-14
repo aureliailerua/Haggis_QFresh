@@ -33,6 +33,18 @@ public class CardDeck implements Serializable {
 		}
 		throw new IllegalArgumentException("Card ID does not exist in CardDeck.cardDdeck");
 	}
+	
+	public ArrayList<Card> getCardListById (int[] lvCardId){
+		ArrayList<Card> lvCardList = new ArrayList<Card>();
+		for (Card lvCard : this.cardDeck){
+			for (int i : lvCardId){
+				if (lvCard.getCardID() == i){
+					lvCardList.add(lvCard);
+				}
+			}
+		}
+		return lvCardList;
+	}
 
 	/**
 	 * Since all Haggis-Players get 14 numbered cards, regardless of numPlayer,
