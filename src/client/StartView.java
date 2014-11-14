@@ -5,11 +5,11 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Insets;
-
-import javax.swing.JFrame;
-
 import java.awt.BorderLayout;
+import java.awt.Dimension;  
 
+import javax.swing.*;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -126,7 +126,8 @@ public class StartView {
 			}
 		});
 		
-		btnRules.setIcon(new ImageIcon(StartView.class.getResource("/icons/btnRules.png")));
+		btnRules.setIcon(new ImageIcon(StartView.class.getResource("/icons/rules.png")));
+		btnRules.setPreferredSize(new Dimension (64,64));
 		panelButtonContainer.add(btnRules);
 		
 		JButton btnExit = new JButton("Exit");

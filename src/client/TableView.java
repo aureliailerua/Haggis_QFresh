@@ -346,7 +346,7 @@ public class TableView extends JFrame implements ActionListener{
 		//c.gridwidth = c.REMAINDER;		//comp be last on in its row	
 		
 		btnSort = new JButton();
-		btnSort.setIcon(new ImageIcon(TableView.class.getResource("/gameContent/sort.png")));
+		btnSort.setIcon(new ImageIcon(TableView.class.getResource("/icons/sort.png")));
 		btnSort.setPreferredSize(new Dimension(68,68));
 		btnSort.addActionListener(this);
 		cContainer.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
@@ -358,7 +358,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelControlContainer.add(btnSort, cContainer);
 		
 		btnRules = new JButton();
-		btnRules.setIcon(new ImageIcon(TableView.class.getResource("/gameContent/rules.png")));
+		btnRules.setIcon(new ImageIcon(TableView.class.getResource("/icons/rules.png")));
 		btnRules.setPreferredSize(new Dimension (68,68));
 		btnRules.addActionListener(this);
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
@@ -391,7 +391,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelControlContainer.add(btnBet15,cContainer);
 		
 		btnExit = new JButton();
-		btnExit.setIcon(new ImageIcon(TableView.class.getResource("/gameContent/home.png")));
+		btnExit.setIcon(new ImageIcon(TableView.class.getResource("/icons/home.png")));
 		btnExit.setPreferredSize(new Dimension(68,68));
 		btnExit.addActionListener(this);
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
