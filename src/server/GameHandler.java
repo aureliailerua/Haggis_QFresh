@@ -134,49 +134,67 @@ public class GameHandler {
     }
 
     public static boolean allInSequence (ArrayList<Card> cards){
+        bubbleSort(cards);
         boolean inSequence = true;
         int sequenceBase = cards.get(0).getCardRank();
         int i = 0;
         for (Card c : cards) {
             if (c.getCardRank()   != sequenceBase + i) {
                 inSequence = false;
-                i++;
                 break;
             }
+            i++;
         }
         return inSequence;
     }
 
-     //the pattern might be set in the gamestate - as current pattern
-    public enum Pattern  { single, pair, threeOfAKind, fourOfAKind, fiveOfAKind, sixOfAKind,
-        runOfThreeSingles, runOfFiveSingles, runOfTwoPairs, runOfThreePairs, runOfTwoOfAKind };
-     public Pattern currentPattern;
+    //___________PATTERN ENUMS_____________________
+    public enum Pattern  { noPattern, single, pair, threeOfAKind, fourOfAKind, fiveOfAKind, sixOfAKind, runOfThreeSingles, runOfFourSingles, runOfFiveSingles, runOfTwoPairs, runOfThreePairs, runOfTwoOfAKind };
+    public Pattern currentPattern;
 
-    public void getPattern(ArrayList<Card> cards) {
+
+    public void setPattern (ArrayList<Card> cards) {
         int cardCount = cards.size();
         boolean allSameSuit = allSameSuit(cards);
         boolean allSameRank = allSameRank(cards);
         boolean allInSequence = allInSequence(cards);
 
-        //depending on Card count, checks could be defined accordingly
 
-        //__________Set Patterns___________________________________
-        if (cardCount == 1)                      currentPattern = Pattern.single;
-        if (cardCount == 2 && allSameRank)       currentPattern = Pattern.pair;
-        if (cardCount == 3 && allSameRank)       currentPattern = Pattern.threeOfAKind;
-        if (cardCount == 4 && allSameRank)       currentPattern = Pattern.fourOfAKind;
-        if (cardCount == 5 && allSameRank)       currentPattern = Pattern.fiveOfAKind;
-        if (cardCount == 6 && allSameRank)       currentPattern = Pattern.sixOfAKind;
+        currentPattern = Pattern.noPattern;
+        System.out.println("card Count " + cardCount);
 
-        //__________Sequence Patterns___________________________________
+        //__________Sets_______________
+        if (allSameRank) {
+            switch (cardCount) {
+                case 1: currentPattern = Pattern.single;
+                    break;
+                case 2: currentPattern = Pattern.pair;
+                    break;
+                case 3: currentPattern = Pattern.threeOfAKind;
+                    break;
+                case 4: currentPattern = Pattern.fourOfAKind;
+                    break;
+                case 5: currentPattern = Pattern.fiveOfAKind;
+                    break;
+            }
+        }
+        //_________Sequences_____
+        if (allSameSuit && allInSequence) {
+            switch (cardCount) {
+                case 3: currentPattern = Pattern.runOfThreeSingles;
+                    break;
+                case 4: currentPattern = Pattern.runOfFourSingles;
+                    break;
+                case 5: currentPattern = Pattern.runOfFiveSingles;
+                    break;
+            }
+        }
 
-        if (cardCount == 3 && allSameSuit && allInSequence)      currentPattern = Pattern.runOfThreeSingles;
-        if (cardCount == 5 && allSameSuit && allInSequence)      currentPattern = Pattern.runOfFiveSingles;
 
         //__________Combo Patterns___________________________________
-        // need own checkMethods - run of Two Pairs - run of Three Pairs etc..-
-        //return Pattern; or set Pattern.Pair in the Card Container instance Variables.
-    }
+        // need own checkMethods - run of Two Pairs - run of Three Pairs etc.
+
+    } //end of setPattern
 
 
 
