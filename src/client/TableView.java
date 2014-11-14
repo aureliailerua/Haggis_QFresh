@@ -144,7 +144,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelOppositeInfo.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelOppositeInfo.setBackground(Color.RED);
 		
-		JLabel imgLabelCard = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/rueckseite_klein.jpg")));
+		JLabel imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/rueckseite_klein.jpg")));
 		imgLabelCard.setPreferredSize(new Dimension(22,35));
 		cOppositeInfo.gridx = 0;		//x-Koordinate im Grid
 		cOppositeInfo.gridy = 0;		//y-Koordinate im Grid
@@ -274,7 +274,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelStatusBar.setBackground(Color.GREEN);
 		
-		imgLabelCard = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/rueckseite_klein.jpg")));
+		imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/rueckseite_klein.jpg")));
 		imgLabelCard.setPreferredSize(new Dimension(22,35));
 		cStatusBar.gridx = 0;		//x-Koordinate im Grid
 		cStatusBar.gridy = 0;		//y-Koordinate im Grid
@@ -347,7 +347,7 @@ public class TableView extends JFrame implements ActionListener{
 		
 		btnSort = new JButton();
 		btnSort.setIcon(new ImageIcon(StatusBar.class.getResource("/gameContent/sort.png")));
-		btnSort.setPreferredSize(new Dimension(83,83));
+		btnSort.setPreferredSize(new Dimension(68,68));
 		btnSort.addActionListener(this);
 		cContainer.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
 		//c.weightx = 0.5;
@@ -359,7 +359,7 @@ public class TableView extends JFrame implements ActionListener{
 		
 		btnRules = new JButton();
 		btnRules.setIcon(new ImageIcon(StatusBar.class.getResource("/gameContent/rules.png")));
-		btnRules.setPreferredSize(new Dimension(83,83));
+		btnRules.setPreferredSize(new Dimension (68,68));
 		btnRules.addActionListener(this);
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
 		//c.weightx= 0.5;
@@ -392,7 +392,7 @@ public class TableView extends JFrame implements ActionListener{
 		
 		btnExit = new JButton();
 		btnExit.setIcon(new ImageIcon(StatusBar.class.getResource("/gameContent/home.png")));
-		btnExit.setPreferredSize(new Dimension(83,83));
+		btnExit.setPreferredSize(new Dimension(68,68));
 		btnExit.addActionListener(this);
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
 		cContainer.gridx = 2;
