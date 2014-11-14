@@ -161,7 +161,7 @@ public class TableView extends JFrame implements ActionListener{
 		cOppositeInfo.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
 		panelOppositeInfo.add(lbCardCount, cOppositeInfo);
 		
-		JLabel imgLabelCrown = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/krone_klein.png")));
+		JLabel imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/krone_klein.png")));
 		imgLabelCrown.setPreferredSize(new Dimension(20,16));
 		cOppositeInfo.gridx = 2;		
 		cOppositeInfo.gridy = 0;		
@@ -291,7 +291,7 @@ public class TableView extends JFrame implements ActionListener{
 		cStatusBar.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
 		panelStatusBar.add(lbCardCount, cStatusBar);
 		
-		imgLabelCrown = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/krone_klein.png")));
+		imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/krone_klein.png")));
 		imgLabelCrown.setPreferredSize(new Dimension(20,16));
 		cStatusBar.gridx = 2;		
 		cStatusBar.gridy = 0;		
@@ -346,7 +346,7 @@ public class TableView extends JFrame implements ActionListener{
 		//c.gridwidth = c.REMAINDER;		//comp be last on in its row	
 		
 		btnSort = new JButton();
-		btnSort.setIcon(new ImageIcon(StatusBar.class.getResource("/gameContent/sort.png")));
+		btnSort.setIcon(new ImageIcon(TableView.class.getResource("/gameContent/sort.png")));
 		btnSort.setPreferredSize(new Dimension(68,68));
 		btnSort.addActionListener(this);
 		cContainer.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
@@ -358,7 +358,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelControlContainer.add(btnSort, cContainer);
 		
 		btnRules = new JButton();
-		btnRules.setIcon(new ImageIcon(StatusBar.class.getResource("/gameContent/rules.png")));
+		btnRules.setIcon(new ImageIcon(TableView.class.getResource("/gameContent/rules.png")));
 		btnRules.setPreferredSize(new Dimension (68,68));
 		btnRules.addActionListener(this);
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
@@ -391,7 +391,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelControlContainer.add(btnBet15,cContainer);
 		
 		btnExit = new JButton();
-		btnExit.setIcon(new ImageIcon(StatusBar.class.getResource("/gameContent/home.png")));
+		btnExit.setIcon(new ImageIcon(TableView.class.getResource("/gameContent/home.png")));
 		btnExit.setPreferredSize(new Dimension(68,68));
 		btnExit.addActionListener(this);
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
@@ -462,7 +462,7 @@ public class TableView extends JFrame implements ActionListener{
         	JFrame frameRules = new JFrame ("Haggis Rules");
         	frameRules.setBounds(200, 200, 510, 326); // x-Position, y-Position, breite und höhe des Fenster
             frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
-            imgLabelRules = new JLabel(new ImageIcon(StatusBar.class.getResource("/gameContent/Kombinationen.jpg")));
+            imgLabelRules = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/Kombinationen.jpg")));
     		imgLabelRules.setPreferredSize(new Dimension(510,326));
             frameRules.add(imgLabelRules);
             frameRules.pack();
