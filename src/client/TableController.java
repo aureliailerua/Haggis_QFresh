@@ -1,7 +1,23 @@
 package client;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import library.Card;
+import library.CardContainer;
 import library.CardDeck;
 import library.GameState;
 import library.GameState.PlayerToken;
@@ -9,39 +25,91 @@ import library.Player;
 import client.TableView;
 
 
-public class TableController {
+public class TableController implements ActionListener,Observer{
 	TableView view;
-	PlayerToken token;
 	GameState gameState;
+	ServerHandler handler;
+	boolean mockup;
+	private static final Logger log = LogManager.getLogger( TableController.class.getName() );
 	
-	public TableController(TableView view) {
+	public TableController(ServerHandler handler) {
+		this.handler = handler;
+		handler.addObserver(this);
+			
+	}
+	public void setView(TableView view){
 		this.view = view;
-		view.setController(this);
-		token = PlayerToken.one; // FIXME this is a mockup
-		gameState = generateMockupGameState();
-		
+	}
+	public void drawGameState(){
+		log.debug("drawing new GameState");
 		view.drawGameState(gameState);
+		view.getJFrame().revalidate();
+		view.getJFrame().repaint();
 	}
 	
 	public PlayerToken getToken() {
-		return token;
+		return handler.getToken();
 	}
-
-	private GameState generateMockupGameState() {
-		GameState gameState = new GameState();
-		gameState.playerList = new ArrayList<Player>();
-		
-		//create three players with tokens
-		gameState.playerList.add(new Player(GameState.PlayerToken.one));
-		gameState.playerList.add(new Player(GameState.PlayerToken.two));
-		gameState.playerList.add(new Player(GameState.PlayerToken.three));
-		
-		//create deck and add cards / jokers to players
-		gameState.activeCardDeck = new CardDeck(gameState.playerList.size());
-		for (Player player : gameState.playerList){
-			player.setPlayerCards(gameState.activeCardDeck.give14Cards());
-			player.setPlayerJokers(gameState.activeCardDeck.give3Jokers());
+	
+	private void playCards(ArrayList<Card> cards){
+		log.debug("sending cards");
+		CardContainer container = new CardContainer(cards);
+		handler.send(container);
+	}
+	private ArrayList<BtnCard> playerCards(){
+		ArrayList<BtnCard> cards = new ArrayList<>();
+		cards.addAll(view.btnCardHand);
+		cards.addAll(view.btnJocker);
+		return cards;
+	}
+	public String getPlayerName(){
+		String name = "Player ";
+		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(handler.getToken());
+		return name+playerNum;
+	}
+	public void actionPerformed(ActionEvent e) {
+        
+		if (e.getSource().getClass() == BtnCard.class ){
+			for( BtnCard btnCard : playerCards()){
+				if ( btnCard == e.getSource()){ 
+	        		if (btnCard.isSelected()){
+	        			btnCard.setUnselected();
+	        		}   else {
+	        			btnCard.setSelected();
+	        		}
+        		}
+	        }
 		}
-		return gameState;
+        if( e.getSource () ==  view.btnPlay){
+           	ArrayList<Card> cards = new ArrayList<Card>();
+          	
+        	for (BtnCard btnCard : playerCards()) {
+        		if(btnCard.isSelected()) {
+            		cards.add(btnCard.getCard());
+        		}
+        	}
+    		playCards(cards);
+        }
+        
+        if(e.getSource() == view.btnPass){
+        	for (BtnCard btnCards : playerCards()) {
+        		btnCards.setUnselected();
+        	}
+        	
+        }
+        
+        if(e.getSource() == view.btnExit) {
+    		System.exit(0);
+        }
+        
+        if (e.getSource() == view.btnRules) {
+        	view.displayRules();
+        }
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		view.drawGameState(handler.getGameState());
+		view.getJFrame().getContentPane().revalidate();
 	}
 }

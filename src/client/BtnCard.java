@@ -12,7 +12,7 @@ import library.Card;
 public class BtnCard extends JButton{
 
 	private Card card;
-	public boolean selected;
+	public boolean selected = false;
 	
 	public BtnCard(Card card) {
 		super(card.getCardName());
@@ -30,6 +30,9 @@ public class BtnCard extends JButton{
 	public void setUnselected() {
 		this.selected = false;
 		drawUnselected();
+	}
+	public Card getCard(){
+		return card;
 	}
 
 	private void drawUnselected() {

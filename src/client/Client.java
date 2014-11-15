@@ -2,11 +2,13 @@ package client;
 
 import java.awt.EventQueue;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import server.Server;
 import library.GameState;
 import library.PropertyFile;
 
@@ -20,17 +22,14 @@ public class Client {
 	private int port;
 	private InetAddress address;
 	private ServerHandler handler;
-	private GuiController guiController;
-	private Gui window;
 	GameState.PlayerToken token;
+	private static final Logger log = LogManager.getLogger( Client.class.getName() );
 
 	public Client() throws IOException{
 	
 		prop = new PropertyFile();
-		
 		this.address  = InetAddress.getByName(prop.getProperty("server.address"));
 		this.port = Integer.parseInt(prop.getProperty("port"));
-		
 	}
 	
 	/**
@@ -39,16 +38,15 @@ public class Client {
 	 * 
 	 */
 	public void startup() throws IOException{
-		
 		Socket socket = new Socket(address,port);
 		this.handler = new ServerHandler(socket);
-		this.guiController = new GuiController(handler);
-		this.window = new Gui(guiController);
+		TableController controller = new TableController(handler);
+		TableView view = new TableView(controller);
+		controller.setView(view);
+		view.getJFrame().pack();
+		view.getJFrame().setVisible(true);
 		handler.initialize();
-		guiController.initialize();
 		new Thread(this.handler).start();
-		this.window.setVisible();
-		
 	}
 	
 	public static void startGui(){
@@ -66,7 +64,5 @@ public class Client {
 	
 	public static void main(String[] args) {
 		Client.startGui();
-
 	}
-
 }

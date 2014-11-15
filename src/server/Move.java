@@ -22,4 +22,7 @@ public class Move {
 		this.cardList  = cardList;
 		this.movingPlayer = movingPlayer;
 	}
+	public ArrayList<Card> getCardList(){
+		return cardList;
+	}
 }
