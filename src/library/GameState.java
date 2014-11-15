@@ -3,9 +3,11 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
+
 import org.apache.logging.log4j.*;
 
 import server.MaxPlayerException;
+import server.Round;
 
 
 /**
@@ -26,6 +28,7 @@ public class GameState extends Observable implements Serializable {
 	
 	public ArrayList<Player> playerList;
 	public CardDeck activeCardDeck;
+	public ArrayList<Round> roundList;
 	
 	private static final Logger log = LogManager.getLogger( GameState.class.getName() );
 	
@@ -35,6 +38,7 @@ public class GameState extends Observable implements Serializable {
 		this.activePlayer = PlayerToken.one;
 		this.state = State.startup;	
 		this.playerList = new ArrayList<Player>();
+		this.roundList = new ArrayList<Round>();
 	}
 	
 	public State getState() {

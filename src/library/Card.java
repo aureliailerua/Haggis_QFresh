@@ -2,8 +2,11 @@ package library;
 
 import java.io.Serializable;
 
+<<<<<<< HEAD
 import javax.swing.Icon;
 
+=======
+>>>>>>> logic-crlf
 /**
  * @author andreas.denger
  * This class provides the structure for all cards and will eventually
@@ -38,10 +41,13 @@ public class Card implements Serializable {
 	public String getCardSuit() {
 		return cardSuit;
 	}
+<<<<<<< HEAD
 	public String getCardName() {
 		return cardSuit + cardRank;
 	}
 	
+=======
+>>>>>>> logic-crlf
 	
 	/**
 	 * Set the Suit of a card, provided it is in SUITS[].  
@@ -59,4 +65,9 @@ public class Card implements Serializable {
 	}
 	
 
+<<<<<<< HEAD
 }	
+=======
+}	
+
+>>>>>>> logic-crlf

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Observable;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import library.Card;
 import library.CardContainer;
 import library.CardDeck;
@@ -17,6 +18,7 @@ import library.Player;
  * @author benjamin.indermuehle
  *
  */
+@SuppressWarnings("JavadocReference")
 public class GameHandler {
 	
 	private GameState gameState;
@@ -25,8 +27,11 @@ public class GameHandler {
 		
 		this.gameState = new GameState();
 	}
-	
-	/**
+
+
+
+
+    /**
 	 * FIXME some more logic will be needed here to start the game when enough players are connected. 
 	 * 
 	 */
@@ -73,7 +78,9 @@ public class GameHandler {
 		}
 	}
 	
-	
+
+
+
 	public void checkMove(CardContainer lvContainer) {
 		
 		ArrayList<Card> cards = lvContainer.getPlayCards();
@@ -98,8 +105,100 @@ public class GameHandler {
 		}*/ 
 	}
 
-	private boolean setNextActivePlayer() {
 
+
+
+    public static boolean allSameSuit (ArrayList<Card> cards) {
+        boolean sameSuit = true;
+        String comparableSuit = cards.get(0).getCardSuit();
+        for (Card c : cards) {
+            if (!c.getCardSuit().equals(comparableSuit)) {
+                sameSuit = false;
+                break;
+            }
+        }
+        return sameSuit;
+    }
+
+
+    public static boolean allSameRank (ArrayList<Card> cards){
+        boolean sameRank = true;
+        int comparableRank = cards.get(0).getCardRank();
+        for (Card c : cards) {
+            if (c.getCardRank() != comparableRank) {
+                sameRank = false;
+                break;
+            }
+        }
+        return sameRank;
+    }
+
+    public static boolean allInSequence (ArrayList<Card> cards){
+        bubbleSort(cards);
+        boolean inSequence = true;
+        int sequenceBase = cards.get(0).getCardRank();
+        int i = 0;
+        for (Card c : cards) {
+            if (c.getCardRank()   != sequenceBase + i) {
+                inSequence = false;
+                break;
+            }
+            i++;
+        }
+        return inSequence;
+    }
+
+    //___________PATTERN ENUMS_____________________
+    public enum Pattern  { noPattern, single, pair, threeOfAKind, fourOfAKind, fiveOfAKind, sixOfAKind, runOfThreeSingles, runOfFourSingles, runOfFiveSingles, runOfTwoPairs, runOfThreePairs, runOfTwoOfAKind };
+    public Pattern currentPattern;
+
+
+    public void setPattern (ArrayList<Card> cards) {
+        int cardCount = cards.size();
+        boolean allSameSuit = allSameSuit(cards);
+        boolean allSameRank = allSameRank(cards);
+        boolean allInSequence = allInSequence(cards);
+
+
+        currentPattern = Pattern.noPattern;
+        System.out.println("card Count " + cardCount);
+
+        //__________Sets_______________
+        if (allSameRank) {
+            switch (cardCount) {
+                case 1: currentPattern = Pattern.single;
+                    break;
+                case 2: currentPattern = Pattern.pair;
+                    break;
+                case 3: currentPattern = Pattern.threeOfAKind;
+                    break;
+                case 4: currentPattern = Pattern.fourOfAKind;
+                    break;
+                case 5: currentPattern = Pattern.fiveOfAKind;
+                    break;
+            }
+        }
+        //_________Sequences_____
+        if (allSameSuit && allInSequence) {
+            switch (cardCount) {
+                case 3: currentPattern = Pattern.runOfThreeSingles;
+                    break;
+                case 4: currentPattern = Pattern.runOfFourSingles;
+                    break;
+                case 5: currentPattern = Pattern.runOfFiveSingles;
+                    break;
+            }
+        }
+
+
+        //__________Combo Patterns___________________________________
+        // need own checkMethods - run of Two Pairs - run of Three Pairs etc.
+
+    } //end of setPattern
+
+
+
+    private boolean setNextActivePlayer() {
 		if (gameState.getActivePlayer() == PlayerToken.one){
 			gameState.setActivePlayer( PlayerToken.two);
 			return true;

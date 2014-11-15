@@ -3,9 +3,11 @@ package unittests;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
+import server.GameHandler;
 import library.Card;
 import library.CardDeck;
 
@@ -60,6 +62,23 @@ public class TestCardDeck {
 				numJoker++;
 			}
 		}
+		
+
+		//get single cards from deck
+		ArrayList<Card> lvSingleCards = new ArrayList<Card>();
+		lvSingleCards.add(deck3.getCardById(43));
+		lvSingleCards.add(deck3.getCardById(54));
+		lvSingleCards.add(deck3.getCardById(60));
+		assertEquals("wrong CardById", 43, lvSingleCards.get(0).getCardID());
+		assertEquals("wrong CardById", 54, lvSingleCards.get(1).getCardID());
+		assertEquals("wrong CardById", 60, lvSingleCards.get(2).getCardID());
+		
+		//get cardlist from deck
+		ArrayList<Card> lvMoreCards = deck3.getCardListById(new int[]{43,54,60});
+		GameHandler.bubbleSort(lvMoreCards);
+		assertEquals("wrong CardById", 43, lvMoreCards.get(0).getCardID());
+		assertEquals("wrong CardById", 54, lvMoreCards.get(1).getCardID());
+		assertEquals("wrong CardById", 60, lvMoreCards.get(2).getCardID());	
 		
 		//checks on 3-Player deck
 		assertNotNull("3-Player deck created", deck3);
