@@ -43,8 +43,8 @@ public class TableController implements ActionListener,Observer{
 	public void drawGameState(){
 		log.debug("drawing new GameState");
 		view.drawGameState(gameState);
-		view.getJFrame().revalidate();
-		view.getJFrame().repaint();
+		view.getJFrame().revalidate(); 	//setzt Componenten wieder auf validate und aktuallisiert die Layout's, wenn sich attribute geändert haben
+		view.getJFrame().repaint();		//aktuallisierte componenten sollen sich "repaint"-en
 	}
 	
 	public PlayerToken getToken() {
@@ -64,7 +64,7 @@ public class TableController implements ActionListener,Observer{
 	}
 	public String getPlayerName(){
 		String name = "Player ";
-		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(handler.getToken());
+		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(handler.getToken()); //?
 		return name+playerNum;
 	}
 	public void actionPerformed(ActionEvent e) {

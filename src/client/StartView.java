@@ -9,10 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;  
 
 import javax.swing.*;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -34,9 +30,32 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.BoxLayout;
 
-public class StartView {
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.FlowLayout;
+
+public class StartView extends JFrame implements ActionListener{
 
 	private JFrame frame;
+	
+	JPanel panelTitle;			//1
+	JPanel panelContent;		//2
+	JPanel panelButton;			//3
+	
+	JPanel panelStatusPlayer;	//2.1
+	JPanel panelImageContainer; //2.2
+	
+	JPanel panelBtnStart;		//3.1
+	JPanel panelBtnContainer;	//3.2
+	
+	JButton btnExit;
+	JButton btnRules;
+	JButton btnStart;
+	
+	JLabel lblWelcomeToHaggis;
+	JLabel lblWaitingForPlayer;
+	JLabel lblLogginPlayer;
+	JLabel imgCards;
 
 	/**
 	 * Launch the application.
@@ -54,41 +73,39 @@ public class StartView {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
-	public StartView() {
-		initialize();
-	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
+	public StartView() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 594, 477);
+		frame.setBounds(100, 100, 800, 500); // x, y, breite, höhe
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
+		/**
+		 * Title (1)
+		 */
+		panelTitle = new JPanel();
+		panelTitle.setBorder(new EmptyBorder(20, 0, 0, 10));
+		frame.getContentPane().add(panelTitle, BorderLayout.NORTH);
 		
-		JPanel panelNorth = new JPanel();
-		panelNorth.setBorder(new EmptyBorder(20, 0, 0, 10));
-		frame.getContentPane().add(panelNorth, BorderLayout.NORTH);
-		
-		JLabel lblWelcomeToHaggis = new JLabel("Welcome to QFresh Haggis Game!");
-		panelNorth.add(lblWelcomeToHaggis);
+		lblWelcomeToHaggis = new JLabel("Welcome to QFresh Haggis Game!");
+		panelTitle.add(lblWelcomeToHaggis);
 		lblWelcomeToHaggis.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JPanel panelCenter = new JPanel();
-		frame.getContentPane().add(panelCenter, BorderLayout.CENTER);
-		panelCenter.setLayout(new GridLayout(1, 2, 0, 0));
+		/**
+		 * Content (2) 
+		 * Connected Player and card img
+		 */
+		panelContent = new JPanel();
+		frame.getContentPane().add(panelContent, BorderLayout.CENTER);
+		panelContent.setLayout(new GridLayout(1, 2, 0, 0));
 		
-		JPanel panelPlayer = new JPanel();
-		panelCenter.add(panelPlayer);
-		panelPlayer.setLayout(new BorderLayout(0, 0));
+		// -- Connected Player (2.1)
+		panelStatusPlayer = new JPanel();
+		panelContent.add(panelStatusPlayer);
+		panelStatusPlayer.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblLogginPlayer = new JLabel("Angemeldete Player");
-		panelPlayer.add(lblLogginPlayer, BorderLayout.SOUTH);
+		lblLogginPlayer = new JLabel("Angemeldete Player");
+		panelStatusPlayer.add(lblLogginPlayer, BorderLayout.SOUTH);
 		
 	
 		String[] emptyPlayerList = {" "," "," "};
@@ -101,37 +118,54 @@ public class StartView {
 		//m.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		//m.setLeadAnchorNotificationEnabled(false);
 		
-		panelPlayer.add(list, BorderLayout.CENTER);
+		panelStatusPlayer.add(list, BorderLayout.CENTER);
 		
-		JLabel lblWaitingForPlayer = new JLabel("Waiting for Player...");
+		lblWaitingForPlayer = new JLabel("Waiting for Player...");
 		lblWaitingForPlayer.setHorizontalAlignment(SwingConstants.CENTER);
-		panelPlayer.add(lblWaitingForPlayer, BorderLayout.NORTH);
+		panelStatusPlayer.add(lblWaitingForPlayer, BorderLayout.NORTH);
 		
-		JPanel panelImageContainer = new JPanel();
-		panelCenter.add(panelImageContainer);
+		// -- Card Image (2.2)
+		panelImageContainer = new JPanel();
+		panelContent.add(panelImageContainer);
 		
-		JPanel panelSouth = new JPanel();
-		frame.getContentPane().add(panelSouth, BorderLayout.SOUTH);
-		panelSouth.setLayout(new GridLayout(1, 2, 0, 0));
+		imgCards = new JLabel(new ImageIcon(StartView.class.getResource("/gameContent/Dame.jpg")));
+		imgCards.setPreferredSize(new Dimension(127,80));
+		panelImageContainer.add(imgCards);
 		
-		JButton btnStartGame = new JButton("Start");
-		panelSouth.add(btnStartGame);
+		/**
+		 * Button Container (3)
+		 */
+		panelButton = new JPanel();
+		frame.getContentPane().add(panelButton, BorderLayout.SOUTH);
+		panelButton.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JPanel panelButtonContainer = new JPanel();
-		panelSouth.add(panelButtonContainer);
+		// -- Start Button (3.1)
+		panelBtnStart = new JPanel();
+		FlowLayout flBtnStart = (FlowLayout) panelBtnStart.getLayout();
+		flBtnStart.setAlignment(FlowLayout.LEFT);
+		panelButton.add(panelBtnStart);
 		
-		JButton btnRules = new JButton("Rules");
-		btnRules.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		btnStart = new JButton("Start Game");
+		btnStart.setPreferredSize(new Dimension(130, 48));
+		btnStart.addActionListener(this);
+		panelBtnStart.add(btnStart);
 		
+		// -- Button Container (3.2)
+		panelBtnContainer = new JPanel();
+		FlowLayout flBtnContainer = (FlowLayout) panelBtnContainer.getLayout();
+		flBtnContainer.setAlignment(FlowLayout.RIGHT);
+		panelButton.add(panelBtnContainer);
+		
+		btnRules = new JButton();		
 		btnRules.setIcon(new ImageIcon(StartView.class.getResource("/icons/rules.png")));
 		btnRules.setPreferredSize(new Dimension (64,64));
-		panelButtonContainer.add(btnRules);
+		btnRules.addActionListener(this);
+		panelBtnContainer.add(btnRules);
 		
-		JButton btnExit = new JButton("Exit");
-		panelButtonContainer.add(btnExit);
+		btnExit = new JButton();
+		btnExit.setIcon(new ImageIcon(StartView.class.getResource("/icons/exit.png")));
+		btnExit.setPreferredSize(new Dimension (64,64));
+		panelBtnContainer.add(btnExit);
 	}
 
 }
