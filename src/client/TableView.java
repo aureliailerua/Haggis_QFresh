@@ -426,8 +426,9 @@ public class TableView extends JFrame{
 				panelTable.add(btnCard);
 			}
 		}
-		panelTable.revalidate();
 		frame.getContentPane().revalidate();
+		frame.getContentPane().repaint();
+	
 	}
 	
 	public void updatePlayerHand(Player player){
@@ -453,7 +454,8 @@ public class TableView extends JFrame{
 			btnJocker.add(btnCard); //Add to ArrayList
 			panelJocker.add(btnCard);
 		}
-		panelPlayerKit.revalidate();
+		frame.getContentPane().revalidate();
+		frame.getContentPane().repaint();
 		
 	}
 	
