@@ -13,9 +13,9 @@ public class Card implements Serializable {
 	private int cardRank;
 	private int cardPoint;
 	private String cardSuit;
-	protected static final String[] SUITS = {"green", "yellow", "grey", "black", "orange", "joker"};
-	protected enum Suits { Green, Yellow, Grey, Black, Orange, Joker };
-	//public enum[] SuitList = { Suits.Green, Suits.Yellow, Suits.Grey, Suits.Black, Suits.Orange, Suits.Joker };
+	protected static final String[] SUITS = {"green", "yellow", "grey", "red", "orange", "joker"};
+	protected enum Suits { Green, Yellow, Grey, Red, Orange, Joker };
+	//public enum[] SuitList = { Suits.Green, Suits.Yellow, Suits.Grey, Suits.Red, Suits.Orange, Suits.Joker };
 	
 	public Card(int lvCardId, int lvCardRank, String lvCardSuit, int lvCardPoint) {
 		//System.out.println(Suits.values().length);
