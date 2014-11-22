@@ -46,9 +46,12 @@ public class TableView extends JFrame{
 
 	private JFrame frame;
 										//Layer
-	JPanel panelOpposition;			//1
-	JPanel panelTable;				//2
-	JPanel panelPlayer;				//3
+	JPanelOpposition panel1stOpposition;	//1W
+	//DEL JPanel panel1stOpposition;		//1 W
+	JPanel panelTable;				//2 C
+	JPanelOpposition panel2stOpposition; 	//3E
+	//DEL JPanel panel2ndOpposition;		//3 E
+	JPanel panelPlayer;				//4 N
 	
 	JPanel panelCardHand; 			//3.1
 	JPanel panelEmpty; 				//3.2
@@ -61,22 +64,6 @@ public class TableView extends JFrame{
 	JPanel panelBtnPlay;			//3.2.4
 
 	JPanel panelBet;				//3.4.1
-	
-	JPanel panelEmpty_2;			//1.1
-	JPanel panelFirstOpposite;		//1.2
-	JPanel panelSecondOpposite;		//1.3
-	
-	JPanel panelOppositeInfo;		//1.1.1
-	JPanel panelOppositeJocker;		//1.1.2
-	JPanel panelOppositeCardBack;	//1.1.3
-	
-	JPanel panel1OppositeBet;		//1.1.1.1
-	JPanel panel1OppositeStatusBar;	//1.1.1.2
-	JPanel panel1OppositeEmpty;		//1.1.1.3
-	
-	JPanel panel2OppositeBet;		//1.3.1.1
-	JPanel panel2OppositeStatusBar;	//1.3.1.2
-	JPanel panel2OppositeEmpty;		//1.3.1.3
 	
 	ArrayList<BtnCard> btnCardHand;
 	ArrayList<BtnCard> btnJocker;
@@ -100,6 +87,16 @@ public class TableView extends JFrame{
 	JLabel imgLabelRules;
 	JLabel lblPlaceHolder;
 	JLabel imgLabelCardBack;
+	JLabel imgPlaceholder;
+	
+	String pathImgBack;
+	String pathImgBackSmall;
+	String pathImgCrown;
+	String pathImgHomeBtn;
+	String pathImgSortBtn;
+	String pathImgRulesBtn;
+	
+	//enum GameSide {LEFT, RIGHT}
 	
 	TableController controller;
 
@@ -113,6 +110,14 @@ public class TableView extends JFrame{
 
 		this.controller = controller;
 		
+		// Initial the path of the images
+		pathImgBack = "/gameContent/back.jpg";
+		pathImgBackSmall = "/gameContent/back_small.jpg";
+		pathImgCrown = "/gameContent/crown.png";
+		pathImgHomeBtn = "/icons/home.png";
+		pathImgSortBtn = "/icons/sort.png";
+		pathImgRulesBtn ="/icons/rules.png";
+		
 		frame = new JFrame();
 		frame.setName("Haggis - Gametable");
 		frame.setBounds(0, 0, 1280, 720); // x-Position, y-Position, breite und höhe des Fenster
@@ -120,198 +125,73 @@ public class TableView extends JFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		/** 
-		 * Opposite Player (1)
-		 */
-		panelOpposition = new JPanel();
-		frame.getContentPane().add(panelOpposition, BorderLayout.NORTH);
-		panelOpposition.setLayout(new BorderLayout(0, 0));
-		
-		// - 1. Opposite Player (1.1.W)
-		panelFirstOpposite = new JPanel();
-		panelOpposition.add(panelFirstOpposite, BorderLayout.WEST);
-		panelFirstOpposite.setLayout(new BorderLayout(0, 0));
-		
-		// -- Opposite Info (1.1.1.N)
-		panelOppositeInfo = new JPanel();
-		panelFirstOpposite.add(panelOppositeInfo, BorderLayout.NORTH);
-		
-		// --- Bet (1.1.1.1.W)
-		panel1OppositeBet = new JPanel();
-		FlowLayout fl_panel1OppositeBet = (FlowLayout) panel1OppositeBet.getLayout();
-		fl_panel1OppositeBet.setAlignment(FlowLayout.RIGHT);
-		panelOppositeInfo.add(panel1OppositeBet, BorderLayout.WEST);
-		
-		TitledBorder bet1Title = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Bet");
-		bet1Title.setTitleJustification(TitledBorder.LEFT);
-		panel1OppositeBet.setBorder( bet1Title);		
-		btnBet30 = new JButton("30");
-		btnBet30.setPreferredSize(new Dimension(40,40));
-		btnBet30.setVisible(false);
-		panel1OppositeBet.add(btnBet30);
-
-		btnBet15 = new JButton("15");
-		btnBet15.setPreferredSize(new Dimension(40,40));
-		btnBet15.setVisible(true);
-		panel1OppositeBet.add(btnBet15);
-		
-		
-		// -- StatusBar (1.1.1.2.C)
-		panel1OppositeStatusBar = new JPanel();
-		panel1OppositeStatusBar.setPreferredSize(new Dimension(162,90) );
-		panelOppositeInfo.add(panel1OppositeStatusBar, BorderLayout.CENTER);
-
-		GridBagLayout gbl_OppositeInfo = new GridBagLayout();
-		GridBagConstraints cOppositeInfo = new GridBagConstraints();	//GridBag Grenzen erstellen
-		panel1OppositeStatusBar.setLayout(gbl_OppositeInfo); 		//Layout dem Panelzuweisen!!
-		panel1OppositeStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panel1OppositeStatusBar.setBackground(Color.RED);		//!! Aktiver Player!!!
-		
-		lbPlayerName= new JLabel("Player 2", JLabel.CENTER);
-		lbPlayerName.setPreferredSize(new Dimension(50,50));
-		lbPlayerName.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-		cOppositeInfo.fill = GridBagConstraints.BOTH;
-		cOppositeInfo.ipady = 10;
-		cOppositeInfo.weightx = 0.0;
-		cOppositeInfo.gridwidth = 5;
-		cOppositeInfo.gridx = 0;
-		cOppositeInfo.gridy = 0;
-		cOppositeInfo.insets = new Insets(0,10,5,0);
-		panel1OppositeStatusBar.add(lbPlayerName, cOppositeInfo);
-		
-		JLabel imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back_small.jpg")));
-		imgLabelCard.setPreferredSize(new Dimension(22,35));
-		cOppositeInfo = new GridBagConstraints();
-		cOppositeInfo.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
-		cOppositeInfo.gridx = 0;		//x-Koordinate im Grid
-		cOppositeInfo.gridy = 1;		//y-Koordinate im Grid
-		cOppositeInfo.ipady = 10;
-		cOppositeInfo.insets = new Insets(5,1,5,5); //Padding vom Displayrand (top, left, bottom, right)
-		panel1OppositeStatusBar.add(imgLabelCard, cOppositeInfo);
-	
-		
-		lbCardCount= new JLabel("6"); //!! Anpassen!!
-		lbCardCount.setPreferredSize(new Dimension(50,50));
-		cOppositeInfo = new GridBagConstraints();
-		cOppositeInfo.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
-		cOppositeInfo.gridx = 1;		//x-Koordinate im Grid
-		cOppositeInfo.gridy = 1;		//y-Koordinate im Grid
-		cOppositeInfo.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
-		panel1OppositeStatusBar.add(lbCardCount, cOppositeInfo);
-		
-		JLabel imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/crown.png")));
-		imgLabelCrown.setPreferredSize(new Dimension(25,22));
-		cOppositeInfo = new GridBagConstraints();
-		cOppositeInfo.fill = GridBagConstraints.BOTH;
-		cOppositeInfo.gridx = 2;		
-		cOppositeInfo.gridy = 1;		
-		cOppositeInfo.insets = new Insets(5,5,5,5);
-		panel1OppositeStatusBar.add(imgLabelCrown, cOppositeInfo);
-		
-		lbPoint= new JLabel("10");
-		lbPoint.setPreferredSize(new Dimension(50,50));
-		cOppositeInfo = new GridBagConstraints();
-		cOppositeInfo.fill = GridBagConstraints.BOTH;
-		cOppositeInfo.gridx = 3;
-		cOppositeInfo.gridy = 1;
-		cOppositeInfo.insets = new Insets(5,0,0,1);
-		panel1OppositeStatusBar.add(lbPoint, cOppositeInfo);
-	
-		
-		// -- CardBack (1.1.2.C)
-		panelOppositeCardBack = new JPanel();
-		panelFirstOpposite.add(panelOppositeCardBack, BorderLayout.CENTER);
-		
-		GridBagLayout gbl_OppositeCardBack = new GridBagLayout();
-		GridBagConstraints cOppositeCardBack = new GridBagConstraints();	//GridBag Grenzen erstellen
-		panelOppositeCardBack.setLayout(gbl_OppositeCardBack); 		//Layout dem Panelzuweisen!!
-		
-		imgLabelCardBack = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back.jpg")));
-		imgLabelCardBack.setHorizontalAlignment(SwingConstants.LEFT);
-		imgLabelCardBack.setPreferredSize(new Dimension(24,79));
-		imgLabelCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		cOppositeCardBack.fill = GridBagConstraints.BOTH;
-		cOppositeCardBack.gridwidth = 1;
-		cOppositeCardBack.gridx = 0;
-		cOppositeCardBack.gridy = 0;
-		cOppositeCardBack.anchor = GridBagConstraints.LINE_END;
-		cOppositeCardBack.insets = new Insets(0,20,0,0); //Padding vom Displayrand (top, left, bottom, right)
-		panelOppositeCardBack.add(imgLabelCardBack, cOppositeCardBack);
-		
-		imgLabelCardBack = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back.jpg")));
-		imgLabelCardBack.setHorizontalAlignment(SwingConstants.LEFT);
-		imgLabelCardBack.setPreferredSize(new Dimension(24,79));
-		imgLabelCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		cOppositeCardBack = new GridBagConstraints();
-		cOppositeCardBack.fill = GridBagConstraints.BOTH;
-		cOppositeCardBack.gridx = 1;
-		cOppositeCardBack.gridy = 0;
-		cOppositeCardBack.anchor = GridBagConstraints.LINE_END;
-		panelOppositeCardBack.add(imgLabelCardBack, cOppositeCardBack);
-		
-		imgLabelCardBack = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back.jpg")));
-		imgLabelCardBack.setPreferredSize(new Dimension(50,79));
-		imgLabelCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		cOppositeCardBack = new GridBagConstraints();
-		cOppositeCardBack.fill = GridBagConstraints.BOTH;
-		cOppositeCardBack.gridx = 2;
-		cOppositeCardBack.gridy = 0;
-		panelOppositeCardBack.add(imgLabelCardBack, cOppositeCardBack);
-		
-		// -- Jocker (1.1.3.S)
-		panelOppositeJocker = new JPanel();
-		//btnJocker	= new ArrayList<BtnCard>();
-		panelFirstOpposite.add(panelOppositeJocker, BorderLayout.SOUTH);
-		
-		// - Empty Space (1.2.C)
-		panelEmpty_2 = new JPanel();
-		panelOpposition.add(panelEmpty_2, BorderLayout.CENTER);
-		
-		// - 2. Opposite Player (1.3.E)
-		panelSecondOpposite = new JPanel();
-		panelOpposition.add(panelSecondOpposite, BorderLayout.EAST);
-		
 		
 		/** 
-		 * Card Desk (2)
+		 * 1st Opposite Player (1.W)
 		 */
-		panelTable = new JPanel();
-		btnCardTable = new ArrayList<BtnCard>();
-		frame.getContentPane().add(panelTable, BorderLayout.WEST);
+		panel1stOpposition = new JPanelOpposition("Player 2", 8, 120, 30, "LEFT");
+		panel1stOpposition.setPreferredSize(new Dimension(300, 320));
+		frame.getContentPane().add(panel1stOpposition, BorderLayout.WEST);
+		
 		
 		
 		/**
-		 * Player (3)
+		 * Table (Card Desk) (2.C)
+		 */		
+		panelTable = new JPanel();
+		FlowLayout fl_panelTable = (FlowLayout) panelTable.getLayout();
+		fl_panelTable.setHgap(0);
+		fl_panelTable.setVgap(0);
+		btnCardTable = new ArrayList<BtnCard>();
+		frame.getContentPane().add(panelTable, BorderLayout.CENTER);
+		
+		/**
+		 * 2nd Opposition Player (3.E)
+		 */
+		panel2stOpposition = new JPanelOpposition("Player 3", 10, 150, 0, "RIGHT");
+		panel2stOpposition.setPreferredSize(new Dimension(300, 320));
+
+		frame.getContentPane().add(panel2stOpposition, BorderLayout.EAST);
+
+		
+		/**
+		 * Player (4.N)
 		 */
 		panelPlayer = new JPanel();
 		frame.getContentPane().add(panelPlayer, BorderLayout.SOUTH);
 		panelPlayer.setLayout(new BorderLayout(0, 0));
-		
-		
-		/**
-		 * * Player's View *
-		 */
+
 		
 		// - Card Hand (3.1.N)
 		panelCardHand = new JPanel();
+		FlowLayout fl_panelCardHand = (FlowLayout) panelCardHand.getLayout();
+		fl_panelCardHand.setHgap(0);
+		fl_panelCardHand.setVgap(0);
 		btnCardHand = new ArrayList<BtnCard>();
 		panelPlayer.add(panelCardHand, BorderLayout.NORTH);
 		
 		// - Empty Space Left (3.2.W)
 		panelEmpty = new JPanel();
-		btnEmptyButton = new JButton("Empty Button");
+		imgPlaceholder = new JLabel("");
+		imgPlaceholder.setPreferredSize(new Dimension(200, 30));
+		
+		//btnEmptyButton = new JButton("Empty Button");
+		//btnEmptyButton.setVisible(false);
 		panelPlayer.add(panelEmpty, BorderLayout.WEST);
-		panelEmpty.add(btnEmptyButton);
+		panelEmpty.add(imgPlaceholder);
 		
 		// - Player's Kit (3.3.C)
 		panelPlayerKit = new JPanel();
 		panelPlayer.add(panelPlayerKit, BorderLayout.CENTER);
 		panelPlayerKit.setLayout(new BorderLayout(0, 0));
-		panelPlayerKit.setSize(new Dimension(50,200));
+		//panelPlayerKit.setSize(new Dimension(50,200));
 		
 		
 		// -- Jocker's (3.3.1.C)
 		panelJocker = new JPanel();
+		FlowLayout fl_panelJocker = (FlowLayout) panelJocker.getLayout();
+		fl_panelJocker.setVgap(0);
+		fl_panelJocker.setHgap(0);
 		btnJocker	= new ArrayList<BtnCard>();
 		panelPlayerKit.add(panelJocker, BorderLayout.NORTH);
 		
@@ -338,7 +218,7 @@ public class TableView extends JFrame{
 		GridBagLayout gbl_panelStatusBar = new GridBagLayout();
 		GridBagConstraints cStatusBar = new GridBagConstraints();	//GridBag Grenzen erstellen
 		panelStatusBar.setLayout(gbl_panelStatusBar); 		//Layout dem Panelzuweisen!!
-		panelStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		panelStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		panelStatusBar.setBackground(Color.GREEN); //!! Aktiver Spieler !!
 		
 		imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back_small.jpg")));
@@ -351,7 +231,7 @@ public class TableView extends JFrame{
 	
 		
 		lbCardCount= new JLabel("6"); //!! Anpassen!!
-		lbCardCount.setPreferredSize(new Dimension(50,50));
+		lbCardCount.setPreferredSize(new Dimension(50,30));
 		cStatusBar = new GridBagConstraints();
 		cStatusBar.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
 		cStatusBar.gridx = 1;		//x-Koordinate im Grid
@@ -368,7 +248,7 @@ public class TableView extends JFrame{
 		panelStatusBar.add(imgLabelCrown, cStatusBar);
 		
 		lbPoint= new JLabel("20");
-		lbPoint.setPreferredSize(new Dimension(50,50));
+		lbPoint.setPreferredSize(new Dimension(50,30));
 		cStatusBar = new GridBagConstraints();
 		cStatusBar.fill = GridBagConstraints.BOTH;
 		cStatusBar.gridx = 3;
@@ -377,11 +257,11 @@ public class TableView extends JFrame{
 		panelStatusBar.add(lbPoint, cStatusBar);
 		
 		lbPlayerName= new JLabel(controller.getPlayerName(), JLabel.CENTER);
-		lbPlayerName.setPreferredSize(new Dimension(50,50));
-		lbPlayerName.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+		lbPlayerName.setPreferredSize(new Dimension(50,30));
+		lbPlayerName.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Color.BLACK));
 		cStatusBar = new GridBagConstraints();
 		cStatusBar.fill = GridBagConstraints.BOTH;
-		cStatusBar.ipady = 10;
+		cStatusBar.ipady = 8;
 		cStatusBar.weightx = 0.0;
 		cStatusBar.gridwidth = 4;
 		cStatusBar.gridx = 0;
@@ -411,13 +291,8 @@ public class TableView extends JFrame{
 		GridBagConstraints cContainer = new GridBagConstraints();	//GridBag Grenzen erstellen
 		panelControlContainer.setLayout(gbl_panelControlContainer); 		//Layout dem Panelzuweisen!!
 
-		//panelControlContainer.setBorder( BorderFactory.createEmptyBorder( 2, 2, 2, 2 ) );
-		//panelControlContainer.setOpaque( true );
-		//panelControlContainer.setBackground( Color.WHITE );
-		//c.gridwidth = c.REMAINDER;		//comp be last on in its row	
-		
 		lblPlaceHolder = new JLabel();
-		lblPlaceHolder.setPreferredSize(new Dimension (68,68));
+		lblPlaceHolder.setPreferredSize(new Dimension (58,58));
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
 		cContainer.gridx = 0;
 		cContainer.gridy = 0;
@@ -426,8 +301,8 @@ public class TableView extends JFrame{
 		panelControlContainer.add(lblPlaceHolder,cContainer);
 		
 		btnSort = new JButton();
-		btnSort.setIcon(new ImageIcon(TableView.class.getResource("/icons/sort.png")));
-		btnSort.setPreferredSize(new Dimension(68,68));
+		btnSort.setIcon(new ImageIcon(TableView.class.getResource(pathImgSortBtn)));
+		btnSort.setPreferredSize(new Dimension(58,58));
 		btnSort.addActionListener(controller);
 		cContainer = new GridBagConstraints();
 		cContainer.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
@@ -438,8 +313,8 @@ public class TableView extends JFrame{
 		panelControlContainer.add(btnSort, cContainer);
 		
 		btnRules = new JButton();
-		btnRules.setIcon(new ImageIcon(TableView.class.getResource("/icons/rules.png")));
-		btnRules.setPreferredSize(new Dimension (68,68));
+		btnRules.setIcon(new ImageIcon(TableView.class.getResource(pathImgRulesBtn)));
+		btnRules.setPreferredSize(new Dimension (58,58));
 		btnRules.addActionListener(controller);
 		cContainer = new GridBagConstraints();
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
@@ -462,18 +337,18 @@ public class TableView extends JFrame{
 		panelControlContainer.add(panelBet, cContainer);
 		
 		btnBet30 = new JButton("30");
-		btnBet30.setPreferredSize(new Dimension(40,40));
+		btnBet30.setPreferredSize(new Dimension(35,35));
 		btnBet30.addActionListener(controller);
 		panelBet.add(btnBet30);
 
 		btnBet15 = new JButton("15");
-		btnBet15.setPreferredSize(new Dimension(40,40));
+		btnBet15.setPreferredSize(new Dimension(35,35));
 		btnBet15.addActionListener(controller);
 		panelBet.add(btnBet15);
 		
 		btnExit = new JButton();
-		btnExit.setIcon(new ImageIcon(TableView.class.getResource("/icons/home.png")));
-		btnExit.setPreferredSize(new Dimension(68,68));
+		btnExit.setIcon(new ImageIcon(TableView.class.getResource(pathImgHomeBtn)));
+		btnExit.setPreferredSize(new Dimension(58,58));
 		btnExit.addActionListener(controller);
 		cContainer = new GridBagConstraints();
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
@@ -544,6 +419,7 @@ public class TableView extends JFrame{
 		frame.getContentPane().repaint();
 		
 	}
+	
 	
 	public void displayRules(){
     	JFrame frameRules = new JFrame ("Haggis Rules");

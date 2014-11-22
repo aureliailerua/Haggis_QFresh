@@ -34,7 +34,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.FlowLayout;
 
-public class StartView extends JFrame implements ActionListener{
+public class StartView extends JFrame {
 
 	private JFrame frame;
 	
@@ -128,7 +128,7 @@ public class StartView extends JFrame implements ActionListener{
 		panelImageContainer = new JPanel();
 		panelContent.add(panelImageContainer);
 		
-		imgCards = new JLabel(new ImageIcon(StartView.class.getResource("/gameContent/Dame.jpg")));
+		imgCards = new JLabel(new ImageIcon(StartView.class.getResource("/gameContent/joker/joker12.jpg")));
 		imgCards.setPreferredSize(new Dimension(127,80));
 		panelImageContainer.add(imgCards);
 		
@@ -147,7 +147,7 @@ public class StartView extends JFrame implements ActionListener{
 		
 		btnStart = new JButton("Start Game");
 		btnStart.setPreferredSize(new Dimension(130, 48));
-		btnStart.addActionListener(this);
+		//btnStart.addActionListener(this);
 		panelBtnStart.add(btnStart);
 		
 		// -- Button Container (3.2)
@@ -157,9 +157,9 @@ public class StartView extends JFrame implements ActionListener{
 		panelButton.add(panelBtnContainer);
 		
 		btnRules = new JButton();		
-		btnRules.setIcon(new ImageIcon(StartView.class.getResource("/icons/rules.png")));
+		btnRules.setIcon(new ImageIcon(StartView.class.getResource("/icons/help.png")));
 		btnRules.setPreferredSize(new Dimension (64,64));
-		btnRules.addActionListener(this);
+		//btnRules.addActionListener(this);
 		panelBtnContainer.add(btnRules);
 		
 		btnExit = new JButton();

@@ -13,9 +13,13 @@ public class BtnCard extends JButton{
 
 	private Card card;
 	public boolean selected = false;
+	//private String pathImgCard;
 	
 	public BtnCard(Card card) {
-		super(card.getCardName());
+		super(card.getCardName()); 
+		//super();
+		//pathImgCard = "/gameContent/"+ card.getCardSuit() + "/" + card.getCardName() + ".jpg";
+		//setIcon(new ImageIcon(BtnCard.class.getResource(pathImgCard)));
 		this.card = card;
 		drawUnselected();	
 	}
@@ -52,9 +56,6 @@ public class BtnCard extends JButton{
 		setBorderPainted(true);
 		setContentAreaFilled(false);
 		setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
-
-		// ! myIcon[i] = new ImageIcon(TableView.class.getResource("/gameContent/gruen03.jpg"));
-		// ! btnCardHand[i].setIcon(myIcon[i]);
 	}
 	
 }
