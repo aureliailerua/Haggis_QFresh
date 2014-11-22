@@ -179,7 +179,7 @@ public class TableView extends JFrame{
 		cOppositeInfo.insets = new Insets(0,10,5,0);
 		panel1OppositeStatusBar.add(lbPlayerName, cOppositeInfo);
 		
-		JLabel imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/rueckseite_klein.jpg")));
+		JLabel imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back_small.jpg")));
 		imgLabelCard.setPreferredSize(new Dimension(22,35));
 		cOppositeInfo = new GridBagConstraints();
 		cOppositeInfo.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
@@ -199,7 +199,7 @@ public class TableView extends JFrame{
 		cOppositeInfo.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
 		panel1OppositeStatusBar.add(lbCardCount, cOppositeInfo);
 		
-		JLabel imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/krone.png")));
+		JLabel imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/crown.png")));
 		imgLabelCrown.setPreferredSize(new Dimension(25,22));
 		cOppositeInfo = new GridBagConstraints();
 		cOppositeInfo.fill = GridBagConstraints.BOTH;
@@ -226,7 +226,7 @@ public class TableView extends JFrame{
 		GridBagConstraints cOppositeCardBack = new GridBagConstraints();	//GridBag Grenzen erstellen
 		panelOppositeCardBack.setLayout(gbl_OppositeCardBack); 		//Layout dem Panelzuweisen!!
 		
-		imgLabelCardBack = new JLabel(new ImageIcon(CardBack.class.getResource("/gameContent/rueckseite.jpg")));
+		imgLabelCardBack = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back.jpg")));
 		imgLabelCardBack.setHorizontalAlignment(SwingConstants.LEFT);
 		imgLabelCardBack.setPreferredSize(new Dimension(24,79));
 		imgLabelCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
@@ -238,7 +238,7 @@ public class TableView extends JFrame{
 		cOppositeCardBack.insets = new Insets(0,20,0,0); //Padding vom Displayrand (top, left, bottom, right)
 		panelOppositeCardBack.add(imgLabelCardBack, cOppositeCardBack);
 		
-		imgLabelCardBack = new JLabel(new ImageIcon(CardBack.class.getResource("/gameContent/rueckseite.jpg")));
+		imgLabelCardBack = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back.jpg")));
 		imgLabelCardBack.setHorizontalAlignment(SwingConstants.LEFT);
 		imgLabelCardBack.setPreferredSize(new Dimension(24,79));
 		imgLabelCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
@@ -249,7 +249,7 @@ public class TableView extends JFrame{
 		cOppositeCardBack.anchor = GridBagConstraints.LINE_END;
 		panelOppositeCardBack.add(imgLabelCardBack, cOppositeCardBack);
 		
-		imgLabelCardBack = new JLabel(new ImageIcon(CardBack.class.getResource("/gameContent/rueckseite.jpg")));
+		imgLabelCardBack = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back.jpg")));
 		imgLabelCardBack.setPreferredSize(new Dimension(50,79));
 		imgLabelCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		cOppositeCardBack = new GridBagConstraints();
@@ -341,7 +341,7 @@ public class TableView extends JFrame{
 		panelStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelStatusBar.setBackground(Color.GREEN); //!! Aktiver Spieler !!
 		
-		imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/rueckseite_klein.jpg")));
+		imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back_small.jpg")));
 		imgLabelCard.setPreferredSize(new Dimension(22,35));
 		cStatusBar.gridx = 0;		//x-Koordinate im Grid
 		cStatusBar.gridy = 0;		//y-Koordinate im Grid
@@ -359,7 +359,7 @@ public class TableView extends JFrame{
 		cStatusBar.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
 		panelStatusBar.add(lbCardCount, cStatusBar);
 		
-		imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/krone.png")));
+		imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/crown.png")));
 		imgLabelCrown.setPreferredSize(new Dimension(25,22));
 		cStatusBar = new GridBagConstraints();
 		cStatusBar.gridx = 2;		
