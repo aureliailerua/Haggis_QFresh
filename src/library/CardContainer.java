@@ -13,5 +13,6 @@ public class CardContainer extends Container {
 	public ArrayList<Card> getPlayCards(){
 		return playCards;
 	}
+
 	
 }

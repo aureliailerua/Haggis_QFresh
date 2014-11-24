@@ -25,7 +25,7 @@ public class CardDeck implements Serializable {
 		this.cardDeck = cardDeck;
 	}
 	
-	public Card getCardById (int lvCardId){
+	public  Card getCardById (int lvCardId){
 		for (Card lvCard : this.cardDeck){
 			if (lvCard.getCardID() == lvCardId){
 				return lvCard;
