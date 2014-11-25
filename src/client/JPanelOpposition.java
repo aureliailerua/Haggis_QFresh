@@ -25,10 +25,11 @@ public class JPanelOpposition extends JPanel{
 	int cardCount;
 	int points;
 	int bet;
+	String gameFildSide;
 	String pathImgBack;
 	String pathImgBackSmall;
 	String pathImgCrown;
-	
+
 
 	JPanel panelOppInfo;		//1
 	JPanel panelOppCards;	//2
@@ -47,6 +48,10 @@ public class JPanelOpposition extends JPanel{
 	JLabel imgLabelCrown;
 	JLabel imgLabelCardBack;
 	
+	Color active;
+	Color inactive;
+	Color coints;
+	
 	//	public JPanelOpposition(String oppositionName, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide, BtnCard<ArrayList> jocker)  {
 
 	public JPanelOpposition(String oppositionName, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide)  {
@@ -54,7 +59,12 @@ public class JPanelOpposition extends JPanel{
 		cardCount = oppositionCardCount;
 		points = oppositionPoints;
 		bet = oppositionBet;
-		String gameFildSide = oppositionSide;
+		gameFildSide = oppositionSide;
+		
+		// Initial Color
+		active = new Color(147,196,125); 	//Green
+		inactive = new Color(234,153,153);	//Red
+		coints = new Color(255,217,102);	//Yellow
 		
 		// Initial path of the Image
 		pathImgBack = "/gameContent/back.jpg";
@@ -78,7 +88,7 @@ public class JPanelOpposition extends JPanel{
 		// -- StatusBar (1.1.2.C)
 		panelOppStatusBar = new JPanel();
 		panelOppStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		panelOppStatusBar.setBackground(Color.RED);		//!! Aktiver Player!!!
+		panelOppStatusBar.setBackground(inactive);		//!! Aktiver Player!!!
 		panelOppStatusBar.setPreferredSize(new Dimension(162,80) );
 		panelOppInfo.add(panelOppStatusBar, BorderLayout.CENTER);
 

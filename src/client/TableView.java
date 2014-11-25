@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import org.apache.logging.log4j.LogManager;
@@ -94,7 +95,10 @@ public class TableView extends JFrame{
 	String pathImgSortBtn;
 	String pathImgRulesBtn;
 	
-	//enum GameSide {LEFT, RIGHT}
+	Color active;
+	Color inactive;
+	Color coints;
+	
 	
 	TableController controller;
 
@@ -115,8 +119,13 @@ public class TableView extends JFrame{
 		pathImgHomeBtn = "/icons/home.png";
 		pathImgSortBtn = "/icons/sort.png";
 		pathImgRulesBtn ="/icons/rules.png";
-		//String pathImgBackground = "/icons/wood_table.jpg";
 		
+		// Initial Color
+		active = new Color(147,196,125); 	//Green
+		inactive = new Color(234,153,153);	//Red
+		coints = new Color(255,217,102);	//Yellow
+		
+		//bgt String pathImgBackground = "/icons/wood_table.jpg";
 		frame = new JFrame();
 		frame.setName("Haggis - Gametable");
 		frame.setBounds(0, 0, 1280, 720); // x-Position, y-Position, breite und höhe des Fenster
@@ -224,7 +233,7 @@ public class TableView extends JFrame{
 		// --- Status Bar (3.3.3.C)
 		panelStatusBar = new JPanel();
 		panelStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		panelStatusBar.setBackground(Color.GREEN); //!! Aktiver Spieler !!
+		panelStatusBar.setBackground(active); //!! Aktiver Spieler !!
 		panelStatusBar.setPreferredSize(new Dimension(300,120));
 		panelPlayerKit.add(panelStatusBar, BorderLayout.CENTER);
 		
