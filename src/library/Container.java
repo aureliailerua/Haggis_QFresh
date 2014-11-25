@@ -1,6 +1,7 @@
 package library;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import library.GameState.PlayerToken;
 
@@ -13,9 +14,26 @@ import library.GameState.PlayerToken;
 public class Container implements Serializable{
 	
 	private static final long serialVersionUID = 2245261864373794436L;
+	public ArrayList<Card> playCards;
+	public boolean playPass; 
 
 	private int addition;
 	private PlayerToken token;
+	
+	public Container(ArrayList<Card> cards){
+		playCards = cards;
+	}
+	
+	public Container(boolean pass){
+		this.playPass = pass;
+	}
+	
+	public Container(){
+	}
+	
+	public ArrayList<Card> getPlayCards(){
+		return playCards;
+	}
 	
 	public int getAddition() {
 		return addition;
@@ -25,9 +43,6 @@ public class Container implements Serializable{
 		this.addition = add;
 	}
 
-	public Container(){
-		
-	}
 
 	public void setToken(PlayerToken token) {
 		this.token = token;
@@ -37,12 +52,4 @@ public class Container implements Serializable{
 	public PlayerToken getToken() {
 		return token;
 	}
-
-	public boolean makeMove(GameState gameState) {
-		gameState.setNumber(gameState.getNumber()+addition);
-		System.out.printf("GameState Number is now %d\n",gameState.getNumber());
-		return true;
-		
-	}
-
 }
