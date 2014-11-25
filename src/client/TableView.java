@@ -47,10 +47,8 @@ public class TableView extends JFrame{
 	private JFrame frame;
 										//Layer
 	JPanelOpposition panel1stOpposition;	//1W
-	//DEL JPanel panel1stOpposition;		//1 W
 	JPanel panelTable;				//2 C
 	JPanelOpposition panel2stOpposition; 	//3E
-	//DEL JPanel panel2ndOpposition;		//3 E
 	JPanel panelPlayer;				//4 N
 	
 	JPanel panelCardHand; 			//3.1
@@ -117,6 +115,7 @@ public class TableView extends JFrame{
 		pathImgHomeBtn = "/icons/home.png";
 		pathImgSortBtn = "/icons/sort.png";
 		pathImgRulesBtn ="/icons/rules.png";
+		//String pathImgBackground = "/icons/wood_table.jpg";
 		
 		frame = new JFrame();
 		frame.setName("Haggis - Gametable");
@@ -124,15 +123,22 @@ public class TableView extends JFrame{
 		frame.setPreferredSize(new Dimension(1280,720));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		
+		frame.getContentPane().setBackground(Color.WHITE);
+		//Background Image Test
+		//bgt JLabel lblBackground = new JLabel(new ImageIcon(pathImgBackground));
+		//bgt JLabel lblBackground = new JLabel(new ImageIcon(TableView.class.getResource(pathImgBackground)));
+		//bgt JPanel panelBG = new JPanel();
+		//bgt panelBG.add(lblBackground);
+		//bgt frame.getContentPane().add(panelBG);
 		
 		/** 
 		 * 1st Opposite Player (1.W)
 		 */
 		panel1stOpposition = new JPanelOpposition("Player 2", 8, 120, 30, "LEFT");
+		panel1stOpposition.setOpaque(false);
 		panel1stOpposition.setPreferredSize(new Dimension(300, 320));
 		frame.getContentPane().add(panel1stOpposition, BorderLayout.WEST);
-		
+		//bgt panelBG.add(panel1stOpposition, BorderLayout.WEST);
 		
 		
 		/**
@@ -143,27 +149,31 @@ public class TableView extends JFrame{
 		fl_panelTable.setHgap(0);
 		fl_panelTable.setVgap(0);
 		btnCardTable = new ArrayList<BtnCard>();
+		panelTable.setOpaque(false);
 		frame.getContentPane().add(panelTable, BorderLayout.CENTER);
+		//bgt panelBG.add(panelTable, BorderLayout.CENTER);
 		
 		/**
 		 * 2nd Opposition Player (3.E)
 		 */
 		panel2stOpposition = new JPanelOpposition("Player 3", 10, 150, 0, "RIGHT");
 		panel2stOpposition.setPreferredSize(new Dimension(300, 320));
-
+		panel2stOpposition.setOpaque(false);
 		frame.getContentPane().add(panel2stOpposition, BorderLayout.EAST);
-
+		//bgt panelBG.add(panel2stOpposition, BorderLayout.EAST);
 		
 		/**
 		 * Player (4.N)
 		 */
 		panelPlayer = new JPanel();
-		frame.getContentPane().add(panelPlayer, BorderLayout.SOUTH);
+		panelPlayer.setOpaque(false);
 		panelPlayer.setLayout(new BorderLayout(0, 0));
-
+		frame.getContentPane().add(panelPlayer, BorderLayout.SOUTH);
+		//bgt panelBG.add(panelPlayer, BorderLayout.SOUTH);
 		
 		// - Card Hand (3.1.N)
 		panelCardHand = new JPanel();
+		panelCardHand.setOpaque(false);
 		FlowLayout fl_panelCardHand = (FlowLayout) panelCardHand.getLayout();
 		fl_panelCardHand.setHgap(0);
 		fl_panelCardHand.setVgap(0);
@@ -172,16 +182,15 @@ public class TableView extends JFrame{
 		
 		// - Empty Space Left (3.2.W)
 		panelEmpty = new JPanel();
+		panelEmpty.setOpaque(false);
 		imgPlaceholder = new JLabel("");
 		imgPlaceholder.setPreferredSize(new Dimension(200, 30));
-		
-		//btnEmptyButton = new JButton("Empty Button");
-		//btnEmptyButton.setVisible(false);
 		panelPlayer.add(panelEmpty, BorderLayout.WEST);
 		panelEmpty.add(imgPlaceholder);
 		
 		// - Player's Kit (3.3.C)
 		panelPlayerKit = new JPanel();
+		panelPlayerKit.setOpaque(false);
 		panelPlayer.add(panelPlayerKit, BorderLayout.CENTER);
 		panelPlayerKit.setLayout(new BorderLayout(0, 0));
 		//panelPlayerKit.setSize(new Dimension(50,200));
@@ -189,6 +198,7 @@ public class TableView extends JFrame{
 		
 		// -- Jocker's (3.3.1.C)
 		panelJocker = new JPanel();
+		panelJocker.setOpaque(false);
 		FlowLayout fl_panelJocker = (FlowLayout) panelJocker.getLayout();
 		fl_panelJocker.setVgap(0);
 		fl_panelJocker.setHgap(0);
@@ -197,6 +207,7 @@ public class TableView extends JFrame{
 		
 		// --- Pass Area (3.3.2.W)
 		panelBtnPass = new JPanel();
+		panelBtnPass.setOpaque(false);
 		FlowLayout fl_panelBtnPass = (FlowLayout) panelBtnPass.getLayout();
 		fl_panelBtnPass.setAlignment(FlowLayout.RIGHT);
 		panelPlayerKit.add(panelBtnPass, BorderLayout.WEST);
@@ -212,16 +223,17 @@ public class TableView extends JFrame{
 		
 		// --- Status Bar (3.3.3.C)
 		panelStatusBar = new JPanel();
+		panelStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		panelStatusBar.setBackground(Color.GREEN); //!! Aktiver Spieler !!
 		panelStatusBar.setPreferredSize(new Dimension(300,120));
 		panelPlayerKit.add(panelStatusBar, BorderLayout.CENTER);
 		
 		GridBagLayout gbl_panelStatusBar = new GridBagLayout();
 		GridBagConstraints cStatusBar = new GridBagConstraints();	//GridBag Grenzen erstellen
 		panelStatusBar.setLayout(gbl_panelStatusBar); 		//Layout dem Panelzuweisen!!
-		panelStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		panelStatusBar.setBackground(Color.GREEN); //!! Aktiver Spieler !!
+
 		
-		imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/back_small.jpg")));
+		imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource(pathImgBackSmall)));
 		imgLabelCard.setPreferredSize(new Dimension(22,35));
 		cStatusBar.gridx = 0;		//x-Koordinate im Grid
 		cStatusBar.gridy = 0;		//y-Koordinate im Grid
@@ -239,7 +251,7 @@ public class TableView extends JFrame{
 		cStatusBar.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
 		panelStatusBar.add(lbCardCount, cStatusBar);
 		
-		imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/crown.png")));
+		imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource(pathImgCrown)));
 		imgLabelCrown.setPreferredSize(new Dimension(25,22));
 		cStatusBar = new GridBagConstraints();
 		cStatusBar.gridx = 2;		
@@ -271,6 +283,7 @@ public class TableView extends JFrame{
 		 
 		// --- Play Area (3.3.4.E)
 		panelBtnPlay = new JPanel();
+		panelBtnPlay.setOpaque(false);
 		FlowLayout fl_panelBtnPlay = (FlowLayout) panelBtnPlay.getLayout();
 		fl_panelBtnPlay.setAlignment(FlowLayout.LEFT);
 		panelPlayerKit.add(panelBtnPlay, BorderLayout.EAST);
@@ -286,6 +299,7 @@ public class TableView extends JFrame{
 		
 		// -- Control Container with Buttons (3.4.E)
 		panelControlContainer = new JPanel();
+		panelControlContainer.setOpaque(false);
 		panelPlayer.add(panelControlContainer, BorderLayout.EAST);
 		GridBagLayout gbl_panelControlContainer = new GridBagLayout(); 
 		GridBagConstraints cContainer = new GridBagConstraints();	//GridBag Grenzen erstellen
@@ -325,6 +339,7 @@ public class TableView extends JFrame{
 		panelControlContainer.add(btnRules,cContainer);
 
 		panelBet = new JPanel();
+		panelBet.setOpaque(false);
 		TitledBorder betPlayerTitle = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Bet");
 		betPlayerTitle.setTitleJustification(TitledBorder.LEFT);
 		panelBet.setBorder( betPlayerTitle);

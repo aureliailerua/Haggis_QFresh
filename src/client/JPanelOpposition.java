@@ -66,7 +66,7 @@ public class JPanelOpposition extends JPanel{
 		
 		// - Opposition Info (1.1.N)
 		panelOppInfo = new JPanel();
-		panelOppInfo.setBackground(Color.WHITE);
+		panelOppInfo.setOpaque(false);
 		add(panelOppInfo, BorderLayout.NORTH);
 		
 		// -- Bet (1.1.1.w) for Player in at the left side
@@ -77,14 +77,15 @@ public class JPanelOpposition extends JPanel{
 				
 		// -- StatusBar (1.1.2.C)
 		panelOppStatusBar = new JPanel();
+		panelOppStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		panelOppStatusBar.setBackground(Color.RED);		//!! Aktiver Player!!!
 		panelOppStatusBar.setPreferredSize(new Dimension(162,80) );
 		panelOppInfo.add(panelOppStatusBar, BorderLayout.CENTER);
 
 		GridBagLayout gbl_OppositeInfo = new GridBagLayout();
 		GridBagConstraints cOppInfo = new GridBagConstraints();	//GridBag Grenzen erstellen
 		panelOppStatusBar.setLayout(gbl_OppositeInfo); 		//Layout dem Panelzuweisen!!
-		panelOppStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		panelOppStatusBar.setBackground(Color.RED);		//!! Aktiver Player!!!
+
 				
 		// --- Player Name
 		lbPlayerName= new JLabel(playerName, JLabel.CENTER);
@@ -151,7 +152,7 @@ public class JPanelOpposition extends JPanel{
 		
 		// - Opposition Cards (1.2.C)
 		panelOppCards = new JPanel();
-		panelOppCards.setBackground(Color.WHITE);
+		panelOppCards.setOpaque(false);
 		//panelOppCardBack.setPreferredSize(new Dimension(210,80));
 		add(panelOppCards, BorderLayout.CENTER);
 		
@@ -237,6 +238,7 @@ public class JPanelOpposition extends JPanel{
 	public void setBetPanel() {
 		// -- Bet (1.1.1.W)
 		panelOppBet = new JPanel();
+		panelOppBet.setOpaque(false);
 		FlowLayout fl_panelOppositeBet = (FlowLayout) panelOppBet.getLayout();
 		fl_panelOppositeBet.setAlignment(FlowLayout.RIGHT);
 		panelOppBet.setBackground(Color.WHITE);
