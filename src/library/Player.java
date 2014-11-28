@@ -6,6 +6,9 @@ package library;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import library.GameState.PlayerToken;
 
 /**
@@ -18,6 +21,8 @@ public class Player implements Serializable {
 	ArrayList<Card> playerJokers;
 	private int playerPoints;
 	private PlayerToken token;
+	
+	private static final Logger log = LogManager.getLogger( GameState.class.getName() );
 	
 	public Player(PlayerToken lvToken){
 		this.setToken(lvToken);
@@ -78,5 +83,21 @@ public class Player implements Serializable {
 	 */
 	public void setToken(PlayerToken token) {
 		this.token = token;
+	}
+	
+	/**
+	 * @param ArrayList<Card> to remove from Player
+	 */
+	public void removeCardsFromPlayer(ArrayList<Card> lvCards){
+		for (Card lvRemoveCard : lvCards){
+			if (playerCards.remove(lvRemoveCard)){
+				log.debug("PLAYER "+this.getToken()+"- card removed  ID: "+lvRemoveCard.getCardID());
+			}
+		}
+		for (Card lvRemoveCard : lvCards){
+			if (playerJokers.remove(lvRemoveCard)){
+				log.debug("PLAYER "+this.getToken()+"- Joker removed  ID: "+lvRemoveCard.getCardID());
+			}
+		}
 	}
 }//Player

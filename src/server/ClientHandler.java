@@ -89,7 +89,7 @@ public class ClientHandler extends Thread implements Observer {
     			 move = (Container) this.in.readObject();
     			 log.debug("recieved new Container");
     			 move.setToken(this.token);
-    	    	this.dealer.makeMove(move);
+    	    	this.dealer.newMove(move);
     		} catch (ClassNotFoundException e) {
     			//TODO Auto-generated catch block
     			e.printStackTrace();

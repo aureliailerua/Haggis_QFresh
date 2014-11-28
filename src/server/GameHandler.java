@@ -9,14 +9,15 @@ import library.GameState.State;
 
 
 /**
- * @author benjamin.indermuehle
+ * @author benjamin.indermuehle / andreas.denger
  *
  */
 @SuppressWarnings("JavadocReference")
 public class GameHandler {
 
-    private Pattern currentPattern;
-	private GameState gameState;
+    
+	public GameState gameState;
+	
 	public GameHandler(){
 		
 		this.gameState = new GameState();
@@ -52,6 +53,8 @@ public class GameHandler {
 				player.setPlayerCards(gameState.activeCardDeck.give14Cards());
 				player.setPlayerJokers(gameState.activeCardDeck.give3Jokers());
 			}
+			gameState.roundList.add(new Round());
+			gameState.setActivePattern("");
 		}
 	}
 	public synchronized GameState getGameState(){
@@ -62,41 +65,47 @@ public class GameHandler {
 	 * @param move
 	 * Applies move Object to the GameState Object
 	 */
-	public synchronized void makeMove(Container move) {
-		if ( move.getToken() == gameState.getActivePlayer() &&
+	public synchronized void newMove(Container lvContainer) {
+		if ( lvContainer.getToken() == gameState.getActivePlayer() &&
 				gameState.getState() == State.running){
-			if( move.makeMove(gameState)){
+			
+			ArrayList<Card> lvCards = lvContainer.getPlayCards();
+			PlayerToken lvToken = lvContainer.getToken();
+						
+			if (lvCards.size()==0){
+				//this means the player is passing
+				gameState.commitMove(lvToken, lvCards);
+			} else {
+				if (gameState.checkMove(lvCards)){
+					gameState.commitMove(lvToken, lvCards);
+				} else{
+					gameState.rejectMove();
+					gameState.notifyObservers();
+					return;
+					// TODO:geht das so?!?
+				}
+			}
+
+			//at this point the move is commited or rejected. 
+			//Now for the Round/Tick mechanic....
+			if(gameState.checkEndRound() && gameState.checkEndTick()){
+				gameState.newRound();
+			} else if (gameState.checkEndTick()){
+				gameState.newTick();
+			} else {
 				setNextActivePlayer();
 				gameState.notifyObservers();
-			}	
+			}
+				
+			
+
+			//moveEnd
+			//	setNextActivePlayer();
+			//	gameState.notifyObservers();
+	
 		}
 	}
 	
-
-
-
-	public void checkMove(CardContainer lvContainer) {
-		
-		ArrayList<Card> cards = lvContainer.getPlayCards();
-		// rough evaluation of the move
-		int cardCount = cards.size();
-		int minimum = 14;
-		for (Card c : cards ) {
-			minimum = Math.min (minimum,  c.getCardRank());		
-		}
-		//if minimum <= round.tick.Cards.getLowestCard();
-		//if cards.size()<= round.tick.Cards.size();
-		
-
-		// fine-grain evaluation of the move
-		//int[] suitCount = {0,0,0,0,0,0};
-		
-		/*
-		int[] rankCount = new int[14]; 
-		for (Card c : cards ) {
-			rankCount[c.getCardRank()]++;
-		}*/ 
-	}
 
     //all pattern related checks moved to class Pattern
 

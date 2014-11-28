@@ -20,6 +20,11 @@ public class Container implements Serializable{
 	private int addition;
 	private PlayerToken token;
 	
+	public Container(PlayerToken token, ArrayList<Card> cards){
+		this.token = token;
+		playCards = cards;
+	}
+	
 	public Container(ArrayList<Card> cards){
 		playCards = cards;
 	}

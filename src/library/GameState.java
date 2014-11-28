@@ -7,11 +7,13 @@ import java.util.Observable;
 import org.apache.logging.log4j.*;
 
 import server.MaxPlayerException;
+import server.Move;
 import server.Round;
+import server.Tick;
 
 
 /**
- * @author benjamin.indermuehle
+ * @author benjamin.indermuehle / andreas.denger
  * This is a prototype class and needs to be changed.
  * in the current state it manages a number internally
  */
@@ -29,6 +31,8 @@ public class GameState extends Observable implements Serializable {
 	public ArrayList<Player> playerList;
 	public CardDeck activeCardDeck;
 	public ArrayList<Round> roundList;
+	
+	private String activePattern;
 	
 	private static final Logger log = LogManager.getLogger( GameState.class.getName() );
 	
@@ -62,6 +66,10 @@ public class GameState extends Observable implements Serializable {
 	}
 	public void setNumPlayers(int numPlayers) {
 		this.numPlayers = numPlayers;
+	}
+	
+	public Round getActiveRound(){
+		return roundList.get(roundList.size()-1);
 	}
 
 	public PlayerToken makeMove(){
@@ -110,5 +118,77 @@ public class GameState extends Observable implements Serializable {
 	public void removePlayer(){
 		numPlayers = numPlayers-1;
 		
+	}
+	
+	public void commitMove(PlayerToken lvToken, ArrayList<Card> lvCards){
+		getActiveRound().getActiveTick().addMove(new Move(lvToken,lvCards));
+		for (Player p : playerList){
+			if (p.getToken().equals(lvToken)){
+				p.removeCardsFromPlayer(lvCards);
+			}
+		}
+		
+	}
+
+	public void rejectMove(){
+		//TODO ..
+	}
+	
+	public boolean checkEndRound(){
+		//TODO ..
+		return false;
+	}
+	
+	public void newRound(){
+		//TODO set RoundWinner		
+		roundList.add(new Round());
+		setActivePattern("");
+	}
+	
+	public boolean checkEndTick(){
+		return (getActiveRound().getActiveTick().checkPass(this.numPlayers));
+	}
+	
+	public void newTick(){
+		//TODO set TickWinner
+		getActiveRound().addNewTick();
+		setActivePattern("");
+	}
+
+	public boolean checkMove(ArrayList<Card> lvCards) {
+		
+		//TODO many checks and set pattern
+		// - card count
+		// - lowest card
+		// - analyze pattern
+		// - compare pattern
+		//return true (commmit) or false (reject)
+	
+		return true;
+	}
+
+	/**
+	 * @return the activePattern
+	 */
+	public String getActivePattern() {
+		return activePattern;
+	}
+
+	/**
+	 * @param activePattern the activePattern to set
+	 */
+	public void setActivePattern(String activePattern) {
+		this.activePattern = activePattern;
+	}
+	
+	
+	public ArrayList<Card> getTopCards(){
+		ArrayList<Move> lvMoveList = getActiveRound().getActiveTick().moveList;
+		for (int i =  lvMoveList.size()-1; i >=0; i--){
+			if (!lvMoveList.get(i).getCardList().isEmpty()){
+				return lvMoveList.get(i).getCardList();
+			}
+		}
+		return new ArrayList<Card>();
 	}
 }
