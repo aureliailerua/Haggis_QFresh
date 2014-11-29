@@ -411,10 +411,10 @@ public class TableView extends JFrame implements ActionListener{
 		
 		panelTable.removeAll();
 		if (gameState.roundList.size() > 0){
-			for (int i = 0; i <= gameState.getTopCards().size(); i++) {
+			for (int i = 0; i < gameState.getTopCards().size(); i++) {
 				BtnCard btnCard = new BtnCard(gameState.getTopCards().get(i));
 				btnCardTable.add(btnCard);
-				cTable.gridx = i++;
+				cTable.gridx = i;
 				cTable.gridy = 0;
 				cTable.ipady = 10;
 				cTable.insets = new Insets(0,0,0,0); //Padding top, left, bottom, right
