@@ -88,6 +88,9 @@ public class TableView extends JFrame{
 	JLabel imgLabelCardBack;
 	JLabel imgPlaceholder;
 	
+	GridBagConstraints cTable;	
+
+	
 	String pathImgBack;
 	String pathImgBackSmall;
 	String pathImgCrown;
@@ -98,7 +101,7 @@ public class TableView extends JFrame{
 	Color active;
 	Color inactive;
 	Color coints;
-	
+		
 	
 	TableController controller;
 
@@ -154,12 +157,16 @@ public class TableView extends JFrame{
 		 * Table (Card Desk) (2.C)
 		 */		
 		panelTable = new JPanel();
-		FlowLayout fl_panelTable = (FlowLayout) panelTable.getLayout();
-		fl_panelTable.setHgap(0);
-		fl_panelTable.setVgap(0);
-		btnCardTable = new ArrayList<BtnCard>();
+		//FlowLayout fl_panelTable = (FlowLayout) panelTable.getLayout();
+		//fl_panelTable.setHgap(0);
+		//fl_panelTable.setVgap(0);
+		
+		GridBagLayout gbl_panelTable = new GridBagLayout();
+		cTable = new GridBagConstraints();
+		panelTable.setLayout(gbl_panelTable); 		
 		panelTable.setOpaque(false);
 		frame.getContentPane().add(panelTable, BorderLayout.CENTER);
+		btnCardTable = new ArrayList<BtnCard>();
 		//bgt panelBG.add(panelTable, BorderLayout.CENTER);
 		
 		/**
@@ -405,10 +412,17 @@ public class TableView extends JFrame{
 			Round round = gameState.roundList.get(gameState.roundList.size()-1);
 			Tick tick = round.tickList.get(round.tickList.size()-1);
 			Move move = tick.moveList.get(tick.moveList.size()-1);
+			int i = 0;
 			for (Card card:  move.getCardList()){
 				BtnCard btnCard = new BtnCard(card);
 				btnCardTable.add(btnCard);
-				panelTable.add(btnCard);
+				//panelTable.add(btnCard);
+				cTable.gridx = i;		//x-Koordinate im Grid
+				cTable.gridy = 0;		//y-Koordinate im Grid
+				cTable.ipady = 10;
+				cTable.insets = new Insets(0,0,0,0); //Padding vom Displayrand (top, left, bottom, right)
+				panelTable.add(btnCard,cTable);
+				i++;
 			}
 		}
 		frame.getContentPane().revalidate();

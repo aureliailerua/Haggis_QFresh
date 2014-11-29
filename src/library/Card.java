@@ -13,7 +13,7 @@ public class Card implements Serializable {
 	private int cardRank;
 	private int cardPoint;
 	private String cardSuit;
-	protected static final String[] SUITS = {"green", "yellow", "grey", "red", "orange", "joker"};
+	public static final String[] SUITS = {"green", "yellow", "grey", "red", "orange", "joker"};
 	protected enum Suits { Green, Yellow, Grey, Red, Orange, Joker };
 	//public enum[] SuitList = { Suits.Green, Suits.Yellow, Suits.Grey, Suits.Red, Suits.Orange, Suits.Joker };
 	
@@ -55,5 +55,6 @@ public class Card implements Serializable {
 		}
 		throw new IllegalArgumentException("illegal cardSuit ... not in SUITS[]");
 	}
+
 }
 	

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -67,6 +68,11 @@ public class TableController implements ActionListener,Observer{
 		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(handler.getToken()); //?
 		return name+playerNum;
 	}
+	
+	/**
+	 * Sort Cards
+	 */
+	
 	public void actionPerformed(ActionEvent e) {
         
 		if (e.getSource().getClass() == BtnCard.class ){
@@ -105,6 +111,12 @@ public class TableController implements ActionListener,Observer{
         if (e.getSource() == view.btnRules) {
         	view.displayRules();
         }
+        /** Not finish yet, but also not working...**/
+        //int clickCount;
+        if (e.getSource() == view.btnSort ){
+        
+        	//!! ArrayList.sort(playerCards, new SortCardSuit());
+        }
 	}
 	
 	@Override
@@ -112,4 +124,6 @@ public class TableController implements ActionListener,Observer{
 		view.drawGameState(handler.getGameState());
 		view.getJFrame().getContentPane().revalidate();
 	}
+	
+
 }

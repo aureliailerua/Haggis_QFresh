@@ -32,7 +32,7 @@ public class JPanelOpposition extends JPanel{
 
 
 	JPanel panelOppInfo;		//1
-	JPanel panelOppCards;	//2
+	JPanel panelOppCards;		//2
 	JPanel panelOppJocker;		//3
 	
 	JPanel panelOppBet;				//1.1
@@ -169,6 +169,7 @@ public class JPanelOpposition extends JPanel{
 		GridBagLayout gbl_OppositeCards = new GridBagLayout();
 		GridBagConstraints cOppCards = new GridBagConstraints();	//GridBag Grenzen erstellen
 		panelOppCards.setLayout(gbl_OppositeCards); 		//Layout dem Panelzuweisen!!
+	
 		
 		// --CardBack
 		imgLabelCardBack = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathImgBack)));
