@@ -170,10 +170,6 @@ public class GameState extends Observable implements Serializable {
 	
 	public boolean checkEndTick(){
 		return (getActiveRound().getActiveTick().checkPass(this.numPlayers-outOfCardsPlayers));
-		
-		
-		
-
 	}
 	
 	public void newTick(){
@@ -246,5 +242,17 @@ public class GameState extends Observable implements Serializable {
 			}
 		}
 		return null;
+	}
+	public Player getPlayerObject(PlayerToken lvToken){
+		Player lvReturn = null;
+		for (Player p : playerList){
+			if (p.getToken().equals(lvToken)){
+				lvReturn = p;
+			}
+		}
+		return lvReturn;
+	}
+	public int getPlayerPoints(PlayerToken lvToken){
+		return getPlayerObject(lvToken).getPlayerPoints();
 	}
 }
