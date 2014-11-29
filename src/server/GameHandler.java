@@ -47,7 +47,7 @@ public class GameHandler {
 	 * #FIXME this function should be renamed
 	 */
 	private void startGame() {
-		if (gameState.getNumPlayers() ==3) {
+		if (gameState.getNumPlayers() >=3) {
 			gameState.setActivePlayer(PlayerToken.one);
 			gameState.setState(GameState.State.running);
 			gameState.activeCardDeck = new CardDeck(gameState.getNumPlayers());
@@ -118,11 +118,11 @@ public class GameHandler {
     			gameState.setActivePlayer( PlayerToken.one);
     		}
     	} else if (gameState.getNumPlayers() == 3){
-    		if (gameState.getActivePlayer() == PlayerToken.one && getPlayerObject(PlayerToken.two).isPlayerIsfinished()){
+    		if (gameState.getActivePlayer() == PlayerToken.one && getPlayerObject(PlayerToken.two).isFinished()){
     			gameState.setActivePlayer(PlayerToken.three);
-    		} else if (gameState.getActivePlayer() == PlayerToken.two && getPlayerObject(PlayerToken.three).isPlayerIsfinished()){
+    		} else if (gameState.getActivePlayer() == PlayerToken.two && getPlayerObject(PlayerToken.three).isFinished()){
     			gameState.setActivePlayer(PlayerToken.one);
-    		} else if (gameState.getActivePlayer() == PlayerToken.three && getPlayerObject(PlayerToken.one).isPlayerIsfinished()){
+    		} else if (gameState.getActivePlayer() == PlayerToken.three && getPlayerObject(PlayerToken.one).isFinished()){
     			gameState.setActivePlayer(PlayerToken.two);
     		} else if (gameState.getActivePlayer() == PlayerToken.one){
     			gameState.setActivePlayer(PlayerToken.two);

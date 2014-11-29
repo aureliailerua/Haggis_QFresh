@@ -20,7 +20,7 @@ import library.GameState.PlayerToken;
 public class Tick implements Serializable {
 	public ArrayList<Move> moveList;
 	private PlayerToken tickWinner;
-	private static final Logger log = LogManager.getLogger( Server.class.getName() );
+	private static final Logger log = LogManager.getLogger( Tick.class.getName() );
 	
 	public Tick(){
 		log.debug("TICK - new Tick");

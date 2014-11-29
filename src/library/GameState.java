@@ -19,7 +19,7 @@ import server.Tick;
  */
 public class GameState extends Observable implements Serializable {
 
-	public static int MAX_PLAYERS =2;
+	public static int MAX_PLAYERS =3;
 	public enum PlayerToken{ one,two,three };
 	public enum State { startup, running, end};
 	
@@ -27,6 +27,7 @@ public class GameState extends Observable implements Serializable {
 	private State state;
 	private int numPlayers;
 	private int number;
+	private int outOfCardsPlayers = 0;
 	
 	public ArrayList<Player> playerList;
 	public CardDeck activeCardDeck;
@@ -101,7 +102,7 @@ public class GameState extends Observable implements Serializable {
 				return null;
 		}
 		this.playerList.add(new Player(token));
-		System.out.println("Player created: "+playerList.get(playerList.size()-1).getToken());
+		log.debug("Player created: "+playerList.get(playerList.size()-1).getToken());
 		this.numPlayers = this.numPlayers+1;
 		return token;
 	}
@@ -135,7 +136,21 @@ public class GameState extends Observable implements Serializable {
 	}
 	
 	public boolean checkEndRound(){
-		//TODO ..
+		if (numPlayers == 2){
+			if (playerList.get(0).isFinished() || playerList.get(1).isFinished()){
+				return true;
+			}
+		} else if (numPlayers == 3){
+			if (playerList.get(0).isFinished() && playerList.get(1).isFinished()){
+				return true;
+			} else if (playerList.get(0).isFinished() && playerList.get(2).isFinished()){
+				return true;
+			} else if (playerList.get(1).isFinished() && playerList.get(2).isFinished()){
+				return true;
+			}
+		} else {
+			throw new IllegalArgumentException("numPlayers not as expected");
+		}
 		return false;
 	}
 	
@@ -143,14 +158,33 @@ public class GameState extends Observable implements Serializable {
 		//TODO set RoundWinner		
 		roundList.add(new Round());
 		setActivePattern("");
+		
+		activeCardDeck = new CardDeck(getNumPlayers());
+		
+		for (Player player : playerList){
+			player.setPlayerCards(activeCardDeck.give14Cards());
+			player.setPlayerJokers(activeCardDeck.give3Jokers());
+		}
+		outOfCardsPlayers = 0;
 	}
 	
 	public boolean checkEndTick(){
-		return (getActiveRound().getActiveTick().checkPass(this.numPlayers));
+		return (getActiveRound().getActiveTick().checkPass(this.numPlayers-outOfCardsPlayers));
+		
+		
+		
+
 	}
 	
 	public void newTick(){
-		//TODO set TickWinner
+		ArrayList<Move> lvMoveList = getActiveRound().getActiveTick().moveList;
+		for (int i =  lvMoveList.size()-1; i >=0; i--){
+			if (!lvMoveList.get(i).getCardList().isEmpty()){
+				getActiveRound().getActiveTick().setTickWinner(lvMoveList.get(i).getMovingPlayer());
+				log.debug("TICK - setTickWinner Player "+ lvMoveList.get(i).getMovingPlayer());
+				break;
+			}
+		}
 		getActiveRound().addNewTick();
 		setActivePattern("");
 	}
@@ -197,6 +231,7 @@ public class GameState extends Observable implements Serializable {
 				if (p.getPlayerCards().size() + p.getPlayerJokers().size() == 0){
 					p.setPlayerIsfinished(true);
 					log.debug("PLAYER "+p.getToken()+" - is out of cards");
+					outOfCardsPlayers+=1;
 					return true;
 				}
 			}

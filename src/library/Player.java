@@ -104,7 +104,7 @@ public class Player implements Serializable {
 	/**
 	 * @return the playerIsfinished
 	 */
-	public boolean isPlayerIsfinished() {
+	public boolean isFinished() {
 		return playerIsfinished;
 	}
 

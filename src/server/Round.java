@@ -19,7 +19,7 @@ import library.GameState.PlayerToken;
 public class Round implements Serializable {
 	public ArrayList<Tick> tickList;
 	private PlayerToken roundWinner;
-	private static final Logger log = LogManager.getLogger( Server.class.getName() );
+	private static final Logger log = LogManager.getLogger( Round.class.getName() );
 	
 	public Tick getActiveTick(){
 		return tickList.get(tickList.size()-1);
