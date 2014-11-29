@@ -1,7 +1,6 @@
 package client;
 
 import java.awt.BorderLayout;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -17,10 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
+import library.GameState.PlayerToken;
 import library.Player;
 
 public class JPanelOpposition extends JPanel{
 	
+	private TableView view;
 	String playerName;
 	int cardCount;
 	int points;
@@ -54,7 +55,8 @@ public class JPanelOpposition extends JPanel{
 	
 	//	public JPanelOpposition(String oppositionName, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide, BtnCard<ArrayList> jocker)  {
 
-	public JPanelOpposition(String oppositionName, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide)  {
+	public JPanelOpposition(TableView view, String oppositionName, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide)  {
+		this.view = view;
 		playerName = oppositionName;
 		cardCount = oppositionCardCount;
 		points = oppositionPoints;
@@ -278,7 +280,15 @@ public class JPanelOpposition extends JPanel{
 			panelOppBet.setPreferredSize(new Dimension(45,78));
 		}
 	}
+
+	public void updatePlayer(Player player, PlayerToken activePlayer) {
+		lbPlayerName.setText(view.getPlayerName(player));
+		if ( activePlayer == player.getToken()){
+			panelOppStatusBar.setBackground(active);
+		}
+		else{
+			panelOppStatusBar.setBackground(inactive);
+		}
+	}
 	
 }
-
-

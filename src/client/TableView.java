@@ -7,6 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.net.URL;  
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.awt.Dimension;  
 
@@ -40,10 +42,11 @@ import java.awt.GridLayout;
 
 import library.Card;
 import library.GameState;
+import library.GameState.PlayerToken;
 import library.Player;
 
 
-public class TableView extends JFrame{
+public class TableView extends JFrame implements ActionListener{
 
 	private JFrame frame;
 										//Layer
@@ -101,7 +104,8 @@ public class TableView extends JFrame{
 	Color active;
 	Color inactive;
 	Color coints;
-		
+	
+	private boolean sortByID = true;
 	
 	TableController controller;
 
@@ -146,7 +150,7 @@ public class TableView extends JFrame{
 		/** 
 		 * 1st Opposite Player (1.W)
 		 */
-		panel1stOpposition = new JPanelOpposition("Player 2", 8, 120, 30, "LEFT");
+		panel1stOpposition = new JPanelOpposition(this, "Player 2", 8, 120, 30, "LEFT");
 		panel1stOpposition.setOpaque(false);
 		panel1stOpposition.setPreferredSize(new Dimension(300, 320));
 		frame.getContentPane().add(panel1stOpposition, BorderLayout.WEST);
@@ -172,7 +176,7 @@ public class TableView extends JFrame{
 		/**
 		 * 2nd Opposition Player (3.E)
 		 */
-		panel2stOpposition = new JPanelOpposition("Player 3", 10, 150, 0, "RIGHT");
+		panel2stOpposition = new JPanelOpposition(this, "Player 3", 10, 150, 0, "RIGHT");
 		panel2stOpposition.setPreferredSize(new Dimension(300, 320));
 		panel2stOpposition.setOpaque(false);
 		frame.getContentPane().add(panel2stOpposition, BorderLayout.EAST);
@@ -240,7 +244,7 @@ public class TableView extends JFrame{
 		// --- Status Bar (3.3.3.C)
 		panelStatusBar = new JPanel();
 		panelStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		panelStatusBar.setBackground(active); //!! Aktiver Spieler !!
+		panelStatusBar.setBackground(inactive); //!! Aktiver Spieler !!
 		panelStatusBar.setPreferredSize(new Dimension(300,120));
 		panelPlayerKit.add(panelStatusBar, BorderLayout.CENTER);
 		
@@ -284,7 +288,7 @@ public class TableView extends JFrame{
 		cStatusBar.insets = new Insets(5,0,0,10);
 		panelStatusBar.add(lbPoint, cStatusBar);
 		
-		lbPlayerName= new JLabel(controller.getPlayerName(), JLabel.CENTER);
+		lbPlayerName= new JLabel("", JLabel.CENTER);
 		lbPlayerName.setPreferredSize(new Dimension(50,30));
 		lbPlayerName.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Color.BLACK));
 		cStatusBar = new GridBagConstraints();
@@ -333,7 +337,7 @@ public class TableView extends JFrame{
 		btnSort = new JButton();
 		btnSort.setIcon(new ImageIcon(TableView.class.getResource(pathImgSortBtn)));
 		btnSort.setPreferredSize(new Dimension(58,58));
-		btnSort.addActionListener(controller);
+		btnSort.addActionListener(this);
 		cContainer = new GridBagConstraints();
 		cContainer.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
 		cContainer.gridx = 1;		//x-Koordinate im Grid
@@ -345,7 +349,7 @@ public class TableView extends JFrame{
 		btnRules = new JButton();
 		btnRules.setIcon(new ImageIcon(TableView.class.getResource(pathImgRulesBtn)));
 		btnRules.setPreferredSize(new Dimension (58,58));
-		btnRules.addActionListener(controller);
+		btnRules.addActionListener(this);
 		cContainer = new GridBagConstraints();
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
 		cContainer.gridx = 2;
@@ -400,9 +404,9 @@ public class TableView extends JFrame{
 	
 	public void drawGameState(GameState gameState) {
 		log.debug("rendering player " + controller.getToken());
-		Player player = gameState.getPlayer(controller.getToken());
-		updatePlayerHand(player);
+		updatePlayerHand(controller.getPlayer());
 		updateTable(gameState);
+		updatePlayers();
 
 	}
 	public void updateTable(GameState gameState){
@@ -436,13 +440,19 @@ public class TableView extends JFrame{
 		
 		btnCardHand = new ArrayList<BtnCard>();
 		btnJocker = new ArrayList<BtnCard>();
-		
+		if (sortByID) {
+			Collections.sort(player.getPlayerCards());
+		} else {
+			Collections.sort(player.getPlayerCards(), Card.CardSuitComparator);
+		}
 		for( Card card : player.getPlayerCards()){
 			BtnCard btnCard = new BtnCard(card);
 			btnCard.addActionListener(controller);
 			btnCardHand.add(btnCard); //Add to ArrayList
 			panelCardHand.add(btnCard);	    	
     	}
+		
+		Collections.sort(player.getPlayerJokers());
 		
 		for( Card jocker : player.getPlayerJokers()) {
 			BtnCard btnCard = new BtnCard(jocker);
@@ -454,7 +464,23 @@ public class TableView extends JFrame{
 		frame.getContentPane().repaint();
 		
 	}
-	
+	public void updatePlayers(){
+		lbPlayerName.setText(getPlayerName(controller.getPlayer()));
+		GameState.PlayerToken activePlayerToken = controller.getGameState().getActivePlayer();
+		if ( activePlayerToken == controller.getToken()){
+			panelStatusBar.setBackground(active);
+		}
+		else{
+			panelStatusBar.setBackground(inactive);
+		}
+		Player player2 = controller.getNextPlayer(controller.getPlayer());
+		panel1stOpposition.updatePlayer(player2,activePlayerToken);
+		log.debug("Player 1 = "+ controller.getPlayer().getToken() + " Player 2 = " +player2.getToken());
+		if ( controller.getGameState().playerList.size() == 3){
+			Player player3 = controller.getNextPlayer(player2);
+			panel2stOpposition.updatePlayer(player3,activePlayerToken);
+		}
+	}
 	
 	public void displayRules(){
     	JFrame frameRules = new JFrame ("Haggis Rules");
@@ -465,5 +491,24 @@ public class TableView extends JFrame{
         frameRules.getContentPane().add(imgLabelRules);
         frameRules.pack();
         frameRules.setVisible(true);
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+	    if (e.getSource() == btnRules) {
+	    	displayRules();
+	    }
+	    if (e.getSource() == btnSort ){
+	    	if (sortByID)
+	    		sortByID = false;
+	    	else
+	    		sortByID = true;
+	    	updatePlayerHand(controller.getPlayer());
+	    }
+	}
+	
+	public String getPlayerName(Player player){
+		String name = "Player ";
+		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1; //?
+		return name+playerNum;
 	}
 }

@@ -81,6 +81,14 @@ public class TestCardDeck {
 		assertEquals("wrong CardById", 54, lvMoreCards.get(1).getCardID());
 		assertEquals("wrong CardById", 60, lvMoreCards.get(2).getCardID());	
 		
+		//
+		ArrayList<Card> lvSuitCards = deck3.getCardListById(new int[]{51,60,50});
+		//GameHandler.bubbleSort(lvMoreCards);
+		Collections.sort(lvSuitCards, Card.CardSuitComparator);
+		assertEquals("wrong CardById", 50, lvSuitCards.get(0).getCardID());
+		assertEquals("wrong CardById", 60, lvSuitCards.get(1).getCardID());
+		assertEquals("wrong CardById", 51, lvSuitCards.get(2).getCardID());	
+		
 		//checks on 3-Player deck
 		assertNotNull("3-Player deck created", deck3);
 		assertEquals("54 Cards created", 54, deck3.cardDeck.size());

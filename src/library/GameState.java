@@ -106,7 +106,7 @@ public class GameState extends Observable implements Serializable {
 		return token;
 	}
 	
-	public Object getActivePlayer() {
+	public PlayerToken getActivePlayer() {
 		return activePlayer;
 	}
 	

@@ -28,7 +28,6 @@ import client.TableView;
 
 public class TableController implements ActionListener,Observer{
 	TableView view;
-	GameState gameState;
 	ServerHandler handler;
 	boolean mockup;
 	private static final Logger log = LogManager.getLogger( TableController.class.getName() );
@@ -43,7 +42,7 @@ public class TableController implements ActionListener,Observer{
 	}
 	public void drawGameState(){
 		log.debug("drawing new GameState");
-		view.drawGameState(gameState);
+		view.drawGameState(getGameState());
 		view.getJFrame().revalidate(); 	//setzt Componenten wieder auf validate und aktuallisiert die Layout's, wenn sich attribute geändert haben
 		view.getJFrame().repaint();		//aktuallisierte componenten sollen sich "repaint"-en
 	}
@@ -51,7 +50,9 @@ public class TableController implements ActionListener,Observer{
 	public PlayerToken getToken() {
 		return handler.getToken();
 	}
-	
+	public GameState getGameState(){
+		return handler.gameState;
+	}
 	private void playCards(ArrayList<Card> cards){
 		log.debug("sending cards");
 		Container container = new Container(cards);
@@ -63,10 +64,9 @@ public class TableController implements ActionListener,Observer{
 		cards.addAll(view.btnJocker);
 		return cards;
 	}
-	public String getPlayerName(){
-		String name = "Player ";
-		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(handler.getToken()); //?
-		return name+playerNum;
+	
+	public Player getPlayer(){
+		return getGameState().getPlayer(getToken());
 	}
 	
 	/**
@@ -123,6 +123,14 @@ public class TableController implements ActionListener,Observer{
 	public void update(Observable o, Object arg) {
 		view.drawGameState(handler.getGameState());
 		view.getJFrame().getContentPane().revalidate();
+	}
+	public Player getNextPlayer(Player player) {
+		// TODO Auto-generated method stub
+		int index = getGameState().playerList.indexOf(player);
+		if (index+1 == getGameState().playerList.size()){
+			return getGameState().playerList.get(0);
+		}
+		return getGameState().playerList.get(index+1);
 	}
 	
 

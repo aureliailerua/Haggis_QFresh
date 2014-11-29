@@ -1,6 +1,8 @@
 package library;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * @author andreas.denger
@@ -76,4 +78,18 @@ public class Card implements Serializable, Comparable {
 		Card card = (Card)o;
 		return getCardID()-card.getCardID();
 	}
+	
+	public static Comparator<Card> CardSuitComparator  = new Comparator<Card>() {
+		public int compare(Card card1, Card card2) {
+			int suit1 = Arrays.asList(card1.SUITS).indexOf(card1.getCardSuit());
+			int suit2 = Arrays.asList(card2.SUITS).indexOf(card2.getCardSuit());
+			
+			int delta = suit1 - suit2;
+			
+			if (delta == 0) {
+				return card1.compareTo(card2);
+			}
+			return delta;
+		}
+	};	
 }	
