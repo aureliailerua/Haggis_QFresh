@@ -3,6 +3,7 @@
  */
 package server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ import library.GameState.PlayerToken;
  * @author aurelia.erhardt
  *
  */
-public class Tick {
+public class Tick implements Serializable {
 	public ArrayList<Move> moveList;
 	private PlayerToken tickWinner;
 	private static final Logger log = LogManager.getLogger( Server.class.getName() );

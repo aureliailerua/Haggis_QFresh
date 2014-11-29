@@ -55,4 +55,17 @@ public class Card implements Serializable {
 		}
 		throw new IllegalArgumentException("illegal cardSuit ... not in SUITS[]");
 	}
+	@Override
+	public boolean equals(Object obj){
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Card card = (Card)obj;
+		if (getCardID() == card.getCardID())
+			return true;
+	return false;
+	}
 }	

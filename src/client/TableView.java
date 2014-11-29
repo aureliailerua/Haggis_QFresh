@@ -409,15 +409,12 @@ public class TableView extends JFrame{
 		
 		panelTable.removeAll();
 		if (gameState.roundList.size() > 0){
-			Round round = gameState.roundList.get(gameState.roundList.size()-1);
-			Tick tick = round.tickList.get(round.tickList.size()-1);
-			Move move = tick.moveList.get(tick.moveList.size()-1);
 			int i = 0;
-			for (Card card:  move.getCardList()){
+			for (Card card:  gameState.getTopCards()){
 				BtnCard btnCard = new BtnCard(card);
 				btnCardTable.add(btnCard);
 				//panelTable.add(btnCard);
-				cTable.gridx = i;		//x-Koordinate im Grid
+				cTable.gridx = i++;		//x-Koordinate im Grid
 				cTable.gridy = 0;		//y-Koordinate im Grid
 				cTable.ipady = 10;
 				cTable.insets = new Insets(0,0,0,0); //Padding vom Displayrand (top, left, bottom, right)

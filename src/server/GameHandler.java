@@ -20,7 +20,7 @@ import library.GameState.State;
 @SuppressWarnings("JavadocReference")
 public class GameHandler {
 	public GameState gameState;
-	private static final Logger log = LogManager.getLogger( Server.class.getName() );
+	private static final Logger log = LogManager.getLogger( GameHandler.class.getName() );
 	
 	public GameHandler(){
 		
@@ -84,12 +84,9 @@ public class GameHandler {
 					gameState.commitMove(lvToken, lvCards);
 				} else{
 					gameState.rejectMove();
-					gameState.notifyObservers();
-					return;
 					// TODO:geht das so?!?
 				}
 			}
-
 			//at this point the move is commited or rejected. 
 			//Now for the Round/Tick mechanic....
 			if(gameState.checkEndRound() && gameState.checkEndTick()){
@@ -98,15 +95,11 @@ public class GameHandler {
 				gameState.newTick();
 			} else {
 				setNextActivePlayer();
-				gameState.notifyObservers();
 			}
-				
-			
-
+			gameState.notifyObservers();
 			//moveEnd
 			//	setNextActivePlayer();
 			//	gameState.notifyObservers();
-	
 		}
 	}
 	

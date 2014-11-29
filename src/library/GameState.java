@@ -127,7 +127,7 @@ public class GameState extends Observable implements Serializable {
 				p.removeCardsFromPlayer(lvCards);
 			}
 		}
-		
+		setChanged();
 	}
 
 	public void rejectMove(){

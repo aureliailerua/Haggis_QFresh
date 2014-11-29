@@ -3,7 +3,9 @@
  */
 package server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+
 
 
 
@@ -18,11 +20,11 @@ import library.GameState.PlayerToken;
  * @author aurelia.erhardt
  *
  */
-public class Move {
+public class Move implements Serializable {
 	private ArrayList<Card> cardList;
 	private PlayerToken movingPlayer;
 	private boolean Pass;
-	private static final Logger log = LogManager.getLogger( Server.class.getName() );
+	private static final Logger log = LogManager.getLogger( Move.class.getName() );
 	
 	public Move(PlayerToken movingPlayer, ArrayList<Card> cardList){
 		if (cardList.size() == 0){
