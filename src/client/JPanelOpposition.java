@@ -55,9 +55,11 @@ public class JPanelOpposition extends JPanel{
 	
 	//	public JPanelOpposition(String oppositionName, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide, BtnCard<ArrayList> jocker)  {
 
-	public JPanelOpposition(TableView view, String oppositionName, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide)  {
+	//public JPanelOpposition(TableView view, String oppositionName, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide)  {
+	public JPanelOpposition(TableView view, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide)  {
+
 		this.view = view;
-		playerName = oppositionName;
+		//playerName = oppositionName;
 		cardCount = oppositionCardCount;
 		points = oppositionPoints;
 		bet = oppositionBet;
@@ -90,7 +92,7 @@ public class JPanelOpposition extends JPanel{
 		// -- StatusBar (1.1.2.C)
 		panelOppStatusBar = new JPanel();
 		panelOppStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		panelOppStatusBar.setBackground(inactive);		//!! Aktiver Player!!!
+		panelOppStatusBar.setBackground(inactive);		//default: incative
 		panelOppStatusBar.setPreferredSize(new Dimension(162,80) );
 		panelOppInfo.add(panelOppStatusBar, BorderLayout.CENTER);
 
@@ -100,7 +102,7 @@ public class JPanelOpposition extends JPanel{
 
 				
 		// --- Player Name
-		lbPlayerName= new JLabel(playerName, JLabel.CENTER);
+		lbPlayerName= new JLabel("", JLabel.CENTER);
 		lbPlayerName.setPreferredSize(new Dimension(50,50));
 		lbPlayerName.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
 		cOppInfo.fill = GridBagConstraints.BOTH;
@@ -121,17 +123,17 @@ public class JPanelOpposition extends JPanel{
 		cOppInfo.gridx = 0;		//x-Koordinate im Grid
 		cOppInfo.gridy = 1;		//y-Koordinate im Grid
 		cOppInfo.ipady = 10;
-		cOppInfo.insets = new Insets(5,1,5,5); //Padding vom Displayrand (top, left, bottom, right)
+		cOppInfo.insets = new Insets(5,1,5,5); //Padding top, left, bottom, right
 		panelOppStatusBar.add(imgLabelCard, cOppInfo);
 		
 		// ---- Number of Cards
 		lbCardCount= new JLabel(Integer.toString(cardCount)); //!! Anpassen!!
 		lbCardCount.setPreferredSize(new Dimension(50,50));
 		cOppInfo = new GridBagConstraints();
-		cOppInfo.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
-		cOppInfo.gridx = 1;		//x-Koordinate im Grid
-		cOppInfo.gridy = 1;		//y-Koordinate im Grid
-		cOppInfo.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
+		cOppInfo.fill = GridBagConstraints.BOTH;
+		cOppInfo.gridx = 1;		
+		cOppInfo.gridy = 1;		
+		cOppInfo.insets = new Insets(5,5,5,5); //Padding top, left, bottom, right
 		panelOppStatusBar.add(lbCardCount, cOppInfo);
 				
 		// --- Points
@@ -169,8 +171,8 @@ public class JPanelOpposition extends JPanel{
 		add(panelOppCards, BorderLayout.CENTER);
 		
 		GridBagLayout gbl_OppositeCards = new GridBagLayout();
-		GridBagConstraints cOppCards = new GridBagConstraints();	//GridBag Grenzen erstellen
-		panelOppCards.setLayout(gbl_OppositeCards); 		//Layout dem Panelzuweisen!!
+		GridBagConstraints cOppCards = new GridBagConstraints();	
+		panelOppCards.setLayout(gbl_OppositeCards);
 	
 		
 		// --CardBack
