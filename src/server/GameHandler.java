@@ -78,12 +78,18 @@ public class GameHandler {
 			PlayerToken lvToken = lvContainer.getToken();
 						
 			if (lvCards.size()==0){
-				//this means the player is passing
-				gameState.commitMove(lvToken, lvCards);
+				//this means the player is passing, only accept if cards have already been played
+				if (!gameState.getActiveRound().getActiveTick().moveList.isEmpty()){
+					gameState.commitMove(lvToken, lvCards);
+					setNextActivePlayer();
+				} else {
+					gameState.rejectMove();
+				}
 			} else {
 				if (gameState.checkMove(lvCards)){
 					gameState.commitMove(lvToken, lvCards);
 					gameState.checkIsPlayerFinished(lvToken);
+					setNextActivePlayer();
 				} else{
 					gameState.rejectMove();
 					// TODO:geht das so?!?
@@ -95,9 +101,7 @@ public class GameHandler {
 				gameState.newRound();
 			} else if (gameState.checkEndTick()){
 				gameState.newTick();
-			} else {
-				setNextActivePlayer();
-			}
+			} 
 			gameState.notifyObservers();
 			//moveEnd
 			//	setNextActivePlayer();
