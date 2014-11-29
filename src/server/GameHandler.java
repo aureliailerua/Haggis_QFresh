@@ -47,7 +47,7 @@ public class GameHandler {
 	 * #FIXME this function should be renamed
 	 */
 	private void startGame() {
-		if (gameState.getNumPlayers() >=2) {
+		if (gameState.getNumPlayers() ==3) {
 			gameState.setActivePlayer(PlayerToken.one);
 			gameState.setState(GameState.State.running);
 			gameState.activeCardDeck = new CardDeck(gameState.getNumPlayers());
