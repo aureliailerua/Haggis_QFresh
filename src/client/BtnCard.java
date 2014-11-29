@@ -13,13 +13,13 @@ public class BtnCard extends JButton{
 
 	private Card card;
 	public boolean selected = false;
-	//private String pathImgCard;
+	private String pathImgCard;
 	
 	public BtnCard(Card card) {
-		super(card.getCardName()); 
-		//super();
-		//pathImgCard = "/gameContent/"+ card.getCardSuit() + "/" + card.getCardName() + ".jpg";
-		//setIcon(new ImageIcon(BtnCard.class.getResource(pathImgCard)));
+		//super(card.getCardName()); 
+		super();
+		pathImgCard = "/gameContent/"+ card.getCardSuit() + "/" + card.getCardName() + ".jpg";
+		setIcon(new ImageIcon(BtnCard.class.getResource(pathImgCard)));
 		this.card = card;
 		drawUnselected();	
 	}

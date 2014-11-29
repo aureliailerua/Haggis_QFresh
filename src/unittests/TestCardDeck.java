@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.junit.Test;
 
@@ -73,8 +74,9 @@ public class TestCardDeck {
 		assertEquals("wrong CardById", 60, lvSingleCards.get(2).getCardID());
 		
 		//get cardlist from deck
-		ArrayList<Card> lvMoreCards = deck3.getCardListById(new int[]{43,54,60});
-		GameHandler.bubbleSort(lvMoreCards);
+		ArrayList<Card> lvMoreCards = deck3.getCardListById(new int[]{54,43,60});
+		//GameHandler.bubbleSort(lvMoreCards);
+		Collections.sort(lvMoreCards);
 		assertEquals("wrong CardById", 43, lvMoreCards.get(0).getCardID());
 		assertEquals("wrong CardById", 54, lvMoreCards.get(1).getCardID());
 		assertEquals("wrong CardById", 60, lvMoreCards.get(2).getCardID());	

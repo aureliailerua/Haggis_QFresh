@@ -7,7 +7,7 @@ import java.io.Serializable;
  * This class provides the structure for all cards and will eventually
  * provide some helper-methods to aid in validating moves and comparing Cards
  */
-public class Card implements Serializable {
+public class Card implements Serializable, Comparable {
 
 	protected int cardID;
 	private int cardRank;
@@ -55,6 +55,9 @@ public class Card implements Serializable {
 		}
 		throw new IllegalArgumentException("illegal cardSuit ... not in SUITS[]");
 	}
+	
+	
+	
 	@Override
 	public boolean equals(Object obj){
 		if (this == obj)
@@ -67,5 +70,10 @@ public class Card implements Serializable {
 		if (getCardID() == card.getCardID())
 			return true;
 	return false;
+	}
+	@Override
+	public int compareTo(Object o) {
+		Card card = (Card)o;
+		return getCardID()-card.getCardID();
 	}
 }	
