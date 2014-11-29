@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
+
 import library.*;
 
 import org.apache.logging.log4j.LogManager;
@@ -82,6 +83,7 @@ public class GameHandler {
 			} else {
 				if (gameState.checkMove(lvCards)){
 					gameState.commitMove(lvToken, lvCards);
+					gameState.checkIsPlayerFinished(lvToken);
 				} else{
 					gameState.rejectMove();
 					// TODO:geht das so?!?
@@ -107,19 +109,34 @@ public class GameHandler {
     //all pattern related checks moved to class Pattern
 
 
-    private boolean setNextActivePlayer() {
-		if (gameState.getActivePlayer() == PlayerToken.one){
-			gameState.setActivePlayer( PlayerToken.two);
-			return true;
-		}
-		if ( gameState.getActivePlayer() == PlayerToken.two
-				&& gameState.getNumPlayers() > 2){
-			gameState.setActivePlayer(PlayerToken.three);
-			return true;	
-		}
-		gameState.setActivePlayer(PlayerToken.one);
-		return true;
-	}
+    private void setNextActivePlayer() {
+    	log.debug("old activePlayer: " +gameState.getActivePlayer());
+    	if (gameState.getNumPlayers() == 2){
+    		if (gameState.getActivePlayer() == PlayerToken.one){
+    			gameState.setActivePlayer(PlayerToken.two);
+    		} else {
+    			gameState.setActivePlayer( PlayerToken.one);
+    		}
+    	} else if (gameState.getNumPlayers() == 3){
+    		if (gameState.getActivePlayer() == PlayerToken.one && getPlayerObject(PlayerToken.two).isPlayerIsfinished()){
+    			gameState.setActivePlayer(PlayerToken.three);
+    		} else if (gameState.getActivePlayer() == PlayerToken.two && getPlayerObject(PlayerToken.three).isPlayerIsfinished()){
+    			gameState.setActivePlayer(PlayerToken.one);
+    		} else if (gameState.getActivePlayer() == PlayerToken.three && getPlayerObject(PlayerToken.one).isPlayerIsfinished()){
+    			gameState.setActivePlayer(PlayerToken.two);
+    		} else if (gameState.getActivePlayer() == PlayerToken.one){
+    			gameState.setActivePlayer(PlayerToken.two);
+    		} else if (gameState.getActivePlayer() == PlayerToken.two){
+    			gameState.setActivePlayer(PlayerToken.three);
+    		} else if (gameState.getActivePlayer() == PlayerToken.three){
+    			gameState.setActivePlayer(PlayerToken.one);
+    		}
+     	} else {
+     		throw new IllegalArgumentException("gameState.getNumPlayers() not as expected");
+     	}
+    	log.debug("new activePlayer: " +gameState.getActivePlayer());
+    }
+      
 
 	/**
 	 * this function will be called after player initialization is finished to check if game
@@ -128,6 +145,16 @@ public class GameHandler {
 	public void playerAdded() {
 		System.out.println("player Added");
 		startGame();
+	}
+	
+	public Player getPlayerObject(PlayerToken lvToken){
+		Player lvReturn = null;
+		for (Player p : gameState.playerList){
+			if (p.getToken().equals(lvToken)){
+				lvReturn = p;
+			}
+		}
+		return lvReturn;
 	}
 	
 	/**

@@ -20,6 +20,7 @@ public class Player implements Serializable {
 	ArrayList<Card> playerJokers;
 	private int playerPoints;
 	private PlayerToken token;
+	private boolean playerIsfinished = false;
 	
 	private static final Logger log = LogManager.getLogger( GameState.class.getName() );
 	
@@ -98,5 +99,19 @@ public class Player implements Serializable {
 				log.debug("PLAYER "+this.getToken()+"- Joker removed  ID: "+lvRemoveCard.getCardID());
 			}
 		}
+	}
+
+	/**
+	 * @return the playerIsfinished
+	 */
+	public boolean isPlayerIsfinished() {
+		return playerIsfinished;
+	}
+
+	/**
+	 * @param playerIsfinished the playerIsfinished to set
+	 */
+	public void setPlayerIsfinished(boolean playerIsfinished) {
+		this.playerIsfinished = playerIsfinished;
 	}
 }//Player

@@ -106,7 +106,7 @@ public class GameState extends Observable implements Serializable {
 		return token;
 	}
 	
-	public Object getActivePlayer() {
+	public PlayerToken getActivePlayer() {
 		return activePlayer;
 	}
 	
@@ -190,6 +190,18 @@ public class GameState extends Observable implements Serializable {
 			}
 		}
 		return new ArrayList<Card>();
+	}
+	public boolean checkIsPlayerFinished(PlayerToken lvToken){
+		for (Player p : playerList){
+			if (p.getToken().equals(lvToken)){
+				if (p.getPlayerCards().size() + p.getPlayerJokers().size() == 0){
+					p.setPlayerIsfinished(true);
+					log.debug("PLAYER "+p.getToken()+" - is out of cards");
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public Player getPlayer( PlayerToken token){
