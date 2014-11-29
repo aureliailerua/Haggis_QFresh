@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import library.*;
 import library.GameState.PlayerToken;
 import server.MaxPlayerException;
@@ -24,8 +23,7 @@ public class TestGameState {
 	public static void setupBeforeClass() throws Exception {
 
 	}
-	
-	
+
 	@Test
 	public void testPlayerCreation() throws IOException, MaxPlayerException {
 		//init

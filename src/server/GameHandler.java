@@ -3,7 +3,12 @@ package server;
 import java.util.ArrayList;
 import java.util.Collections;
 
+
 import library.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import library.GameState.PlayerToken;
 import library.GameState.State;
 
@@ -14,9 +19,8 @@ import library.GameState.State;
  */
 @SuppressWarnings("JavadocReference")
 public class GameHandler {
-
-    
 	public GameState gameState;
+	private static final Logger log = LogManager.getLogger( Server.class.getName() );
 	
 	public GameHandler(){
 		
@@ -45,16 +49,16 @@ public class GameHandler {
 		if (gameState.getNumPlayers() >=2) {
 			gameState.setActivePlayer(PlayerToken.one);
 			gameState.setState(GameState.State.running);
-			gameState.notifyObservers();
-			System.out.println("starting game");
 			gameState.activeCardDeck = new CardDeck(gameState.getNumPlayers());
-			
+		
 			for (Player player : gameState.playerList){
 				player.setPlayerCards(gameState.activeCardDeck.give14Cards());
 				player.setPlayerJokers(gameState.activeCardDeck.give3Jokers());
 			}
 			gameState.roundList.add(new Round());
 			gameState.setActivePattern("");
+			gameState.notifyObservers();
+			log.debug("starting game");
 		}
 	}
 	public synchronized GameState getGameState(){

@@ -5,7 +5,6 @@ package library;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -84,7 +83,7 @@ public class Player implements Serializable {
 	public void setToken(PlayerToken token) {
 		this.token = token;
 	}
-	
+
 	/**
 	 * @param ArrayList<Card> to remove from Player
 	 */

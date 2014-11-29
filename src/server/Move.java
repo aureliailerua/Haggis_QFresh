@@ -39,15 +39,14 @@ public class Move {
 		
 	}
 
-	public ArrayList<Card> getCardList() {
-		return cardList;
-	}
-
 	public PlayerToken getMovingPlayer() {
 		return movingPlayer;
 	}
 
 	public boolean Pass() {
 		return Pass;
+	}
+	public ArrayList<Card> getCardList(){
+		return cardList;
 	}
 }

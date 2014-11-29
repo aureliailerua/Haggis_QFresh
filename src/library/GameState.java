@@ -1,4 +1,4 @@
-package library;
+	package library;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -131,7 +131,7 @@ public class GameState extends Observable implements Serializable {
 	}
 
 	public void rejectMove(){
-		//TODO ..
+		setChanged();
 	}
 	
 	public boolean checkEndRound(){
@@ -190,5 +190,14 @@ public class GameState extends Observable implements Serializable {
 			}
 		}
 		return new ArrayList<Card>();
+	}
+	
+	public Player getPlayer( PlayerToken token){
+		for (Player player: playerList){
+			if( player.getToken() == token){
+				return player;
+			}
+		}
+		return null;
 	}
 }

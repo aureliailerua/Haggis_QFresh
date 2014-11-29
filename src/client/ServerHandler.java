@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Observable;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import library.GameState;
 import library.Container;
@@ -16,15 +18,20 @@ public class ServerHandler extends Observable implements Runnable {
 	private Socket socket;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-	public GameState.PlayerToken token;
-	public GameState gameState;
+	protected GameState.PlayerToken token;
+	protected GameState gameState;
 	private final Object lock = new Object();
+	private static final Logger log = LogManager.getLogger( ServerHandler.class.getName() );
 	
 	public ServerHandler (Socket socket){
 		this.gameState = new GameState();
 		this.socket = socket;
 	}
 	
+	public GameState.PlayerToken getToken(){
+		return token;
+	}
+
 	/**
 	 * @throws IOException
 	 * open connections and retrieve player token
@@ -33,7 +40,7 @@ public class ServerHandler extends Observable implements Runnable {
 		
 		in = new ObjectInputStream(socket.getInputStream());
 		out = new ObjectOutputStream(socket.getOutputStream());
-		System.out.println("client socket established");
+		log.debug("client socket established");
 		try {
 			this.token = (GameState.PlayerToken) in.readObject();
 		} catch (ClassNotFoundException e) {
@@ -50,10 +57,11 @@ public class ServerHandler extends Observable implements Runnable {
      * notify observers
      */
     private void watchInput() throws IOException{
-    	System.out.println("listening for GameState");
+    	log.debug("listening for GameState");
   		try{
   			GameState newGameState;
-    		while ( (newGameState = (GameState)in.readObject()) != null){        		
+    		while ( (newGameState = (GameState)in.readObject()) != null){
+    			log.debug("recieved new GameState");
     			this.gameState = newGameState;
         		this.setChanged();
         		this.notifyObservers();
@@ -71,7 +79,6 @@ public class ServerHandler extends Observable implements Runnable {
 		synchronized (lock) {
 			return gameState;
 		}
-		
 	}
 	
 	/**
@@ -79,6 +86,7 @@ public class ServerHandler extends Observable implements Runnable {
 	 * send move object to the server
 	 */
 	public void send(Container move){	
+		log.debug("sending a container");
 		try {
 			this.out.writeObject(move);
 			this.out.flush();
