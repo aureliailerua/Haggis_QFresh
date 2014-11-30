@@ -134,7 +134,7 @@ public class TableView extends JFrame implements ActionListener{
 		
 		//bgt String pathImgBackground = "/icons/wood_table.jpg";
 		frame = new JFrame();
-		frame.setName("Haggis - Gametable");
+		frame.setName("QFresh Haggis Game - Gametable");
 		frame.setBounds(0, 0, 1280, 720); // x-Position, y-Position, breite und höhe des Fenster
 		frame.setPreferredSize(new Dimension(1280,720));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -463,7 +463,7 @@ public class TableView extends JFrame implements ActionListener{
 		
 	}
 	
-	// How are you?
+	// Define player name
 	public String getPlayerName(Player player){
 		String name = "Player ";
 		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1; //?
@@ -501,6 +501,7 @@ public class TableView extends JFrame implements ActionListener{
         frameRules.setVisible(true);
 	}
 	
+	// Action Performer (Rule and Sort Button)
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getSource() == btnRules) {
 	    	displayRules();

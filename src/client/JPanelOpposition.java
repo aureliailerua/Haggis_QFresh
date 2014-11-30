@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
@@ -173,7 +174,6 @@ public class JPanelOpposition extends JPanel{
 		GridBagLayout gbl_OppositeCards = new GridBagLayout();
 		GridBagConstraints cOppCards = new GridBagConstraints();	
 		panelOppCards.setLayout(gbl_OppositeCards);
-	
 		
 		// --CardBack
 		imgLabelCardBack = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathImgBack)));
