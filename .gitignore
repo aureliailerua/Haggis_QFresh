@@ -1,7 +1,4 @@
 /bin
-<<<<<<< HEAD
 /.idea
-=======
-.idea/
->>>>>>> refs/heads/develop
+/out
 Haggis_QFresh.iml
