@@ -3,6 +3,7 @@
  */
 package unittests;
 
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -96,6 +97,8 @@ import server.Server;
             log.debug("_________End of fourth Check - return value from Joker Bomb : "+shouldBeBomb);
 
 
+
+
         ArrayList<Card> bombSequenceCards = new ArrayList<Card>();
         bombSequenceCards.add(lvCardDeck.getCardById(30));
         bombSequenceCards.add(lvCardDeck.getCardById(50));
@@ -146,7 +149,7 @@ import server.Server;
             }
         }
         // sort required to check in sequence:
-        GameHandler.bubbleSort(lvCardList2);
+        Collections.sort(lvCardList2);
         assertTrue("same Suit wrong", Pattern.allSameSuit(lvCardList2));
         assertFalse("same Rank wrong", Pattern.allSameRank(lvCardList2));
 
@@ -159,7 +162,7 @@ import server.Server;
             }
         }
         // sort required to check in sequence:
-        GameHandler.bubbleSort(lvCardList3);
+        Collections.sort(lvCardList3);
         assertFalse("same Suit wrong", Pattern.allSameSuit(lvCardList3));
         assertTrue("same Rank wrong", Pattern.allSameRank(lvCardList3));
 
@@ -168,7 +171,7 @@ import server.Server;
         twoCardsSameRank.add(lvCardDeck.getCardById(50));
         twoCardsSameRank.add(lvCardDeck.getCardById(54));
         String onePair = Pattern.analyzePattern(twoCardsSameRank);
-
+        System.out.println("should be a pair: "+ onePair);
 
 
 

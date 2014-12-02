@@ -29,8 +29,8 @@ public class Pattern {
     }
 
     public boolean comparePattern (ArrayList<Card> tableCards, ArrayList<Card> newCards, String activePattern ){
-    	return true;  
-    } 
+        return true;
+    }
     
     public static String analyzePattern(ArrayList<Card> cards) {
         Pattern thePattern = new Pattern();
@@ -152,7 +152,7 @@ public class Pattern {
      * 0= no sequence, 1=Run of Singles, 2= Run of Pairs, 3=Run of 3ofAKind, 4= 4oAKind (including jokerCards)
      */
     public static int isRunOfSequence (ArrayList<Card> normalCards, ArrayList<Card> jokerCards) {
-        GameHandler.bubbleSort(normalCards);
+        Collections.sort(normalCards);
         int isRunOfSequence ;
         int jokerCount = jokerCards.size();
         int lowestRank = Collections.min(normalCards).getCardRank();
@@ -202,13 +202,11 @@ public class Pattern {
      * all in Sequence checks if a regular Sequence is possible including the use of 1 or 2 jokers
      */
     public static int inSequence (ArrayList<Card> cards, int jokerCount, int lowestRank, int amountOfCardsBySuit) {
-        GameHandler.bubbleSort(cards);
+        Collections.sort(cards);
         int errorTolerance = jokerCount;
         int sequenceBase = lowestRank;
         int i = 0;
-        System.out.println("in WHILE tolerance: "+errorTolerance);
         for (Card c : cards) {
-                System.out.println(" currently checking Card Nr. : " + c.getCardID());
                 while (c.getCardRank() != sequenceBase + i) {
                     System.out.println("gap at Card Nr. " + c.getCardID());
                     if (errorTolerance <= 0) {
@@ -230,76 +228,57 @@ public class Pattern {
 
     /**
      * Boolean Check :
-     * is Bomb
+     * is Bomb checking 3-5-7-9 suited or all off suit & 2 or 3 jokers played
      */
     public static boolean isBomb ( ArrayList<Card> normalCards, ArrayList<Card> jokerCards) {
-        boolean isBomb = false;
-        log.debug("joker count inside isBomb CHECK "+jokerCards.size());
-        //log.debug("bomb sequence boolean "+bombSequence(normalCards));
-        //log.debug("all same suit boolean "+allSameSuit(normalCards));
-
-        switch (jokerCards.size()){
-            case 0 : if ((bombSequence(normalCards) && (allSameSuit(normalCards))) || allDifferentSuit(normalCards)) {isBomb = true;}
-                                                                    log.debug("bomb        case 0 "); break;
-            case 1 : isBomb = false;                                log.debug("bomb false, case 1 "); break;
-            case 2 : if (normalCards.size() == 0 ) {isBomb = true;  log.debug("bomb true,  case 2 ");} break;
-            case 3 : if (normalCards.size() == 0 ) {isBomb = true;  log.debug("bomb true , case 3 ");} break;
+        boolean isBomb = true;
+        System.out.print("xxx to is bomb");
+        if (normalCards.size() > 0 && jokerCards.size() > 0 ){
+            isBomb = false;
+            return isBomb;
         }
-        log.debug("end of isbomb : return "+isBomb);
+
+        //__bomb sequence of 3-5-7-9
+        if(normalCards.size() > 0  ){
+            int lowestRank = normalCards.get(0).getCardRank();
+            if (normalCards.get(0).getCardRank() == 3 && normalCards.size() ==4 ){
+                for (int i = 0; i < normalCards.size(); i++) {
+                    if (normalCards.get(i).getCardRank() != lowestRank + i * 2) {
+                        isBomb = false;
+                    }
+                }
+
+                //____splitting cards by suit in different card lists to count suits
+                HashMap<String, ArrayList<Card>> cardSuits = new HashMap<String, ArrayList<Card>>(5);
+                for (Card c : normalCards) {
+                    if (!cardSuits.containsKey(c.getCardSuit())) {
+                        cardSuits.put(c.getCardSuit(), new ArrayList<Card>());
+                    }
+                    cardSuits.get(c.getCardSuit()).add(c);
+                }
+                //____if Sequence is ok, cards must be all suited or all different suit
+                int suitCount = cardSuits.keySet().size();
+                if (suitCount == 2 || suitCount == 3){
+                    isBomb = false;
+                }
+            }
+            else {
+                isBomb = false;
+            }
+            return isBomb;
+        } //end of bomb sequence 3-5-7-9
+
+        //__joker bombs__
+        if(jokerCards.size() > 0   ){
+            switch (jokerCards.size()){
+                case 1 : isBomb = false;
+                case 2 : isBomb = true;
+                case 3 : isBomb = true;
+            }
+        } //end of joker bombs
         return isBomb;
-    }
+    }// end of isBomb
 
-
-    /**
-     * Boolean Check :
-     * all different suit - for bombs
-     */
-    public static boolean allDifferentSuit (ArrayList<Card> cards) {
-        boolean allDifferentSuit = true;
-        for (int i=0; i<cards.size(); i++) {
-            for(int j=cards.size()-1; j>i; j--){
-                if(cards.get(i).getCardSuit().equals(cards.get(j).getCardSuit())){
-                allDifferentSuit = false;
-                break;
-                }
-            }
-        }
-        return allDifferentSuit;
-    }
-
-
-    /**
-     * Boolean Check :
-     * bomb sequence
-     */
-    public static boolean bombSequence (ArrayList<Card> cards) {
-        GameHandler.bubbleSort(cards);
-        for (Card c : cards){
-            log.debug("cards after bubble sort"+c.getCardID()+" "+c.getCardRank());
-        }
-
-        boolean bombSequence = true;
-        int sequenceBase = cards.get(0).getCardRank();              log.debug("boo-CHECK base must be 3: "+sequenceBase);
-                                                                    log.debug("boo-CHECK cards size must be 4: "+cards.size());
-                                                                    log.debug("first card rank : "+cards.get(0).getCardRank());
-
-
-        if (sequenceBase != 3 || cards.size()!=4 ){
-            bombSequence = false;
-        }
-        else {
-            int i = 0;
-            for (Card c : cards) {
-                if (c.getCardRank() != sequenceBase + i) {
-                    log.debug("card rank "+c.getCardRank()+" sequenceBase" +sequenceBase+" plus i "+i);
-                    bombSequence = false;
-                    break;
-                }
-                i += 2;
-            }
-        }
-        return bombSequence;
-    }
 
     /**
      * Boolean Check :
