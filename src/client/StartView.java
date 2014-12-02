@@ -29,6 +29,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 import javax.swing.JList;
@@ -37,6 +38,9 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.BoxLayout;
 import javax.swing.SwingConstants;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
 
@@ -68,6 +72,8 @@ public class StartView extends JFrame implements ActionListener {
 	JLabel lblWaitingForPlayer;
 	JLabel lblLogginPlayer;
 	JLabel imgLableCard;
+	
+	private static final Logger log = LogManager.getLogger( TableController.class.getName() );
 	
     //private DefaultListModel listPlayingPlayer;
 	
@@ -292,30 +298,36 @@ public class StartView extends JFrame implements ActionListener {
 		btnRules = new JButton();		
 		btnRules.setIcon(new ImageIcon(StartView.class.getResource(pathImgHelp)));
 		btnRules.setPreferredSize(new Dimension (58,58));
-		//btnRules.addActionListener(this);
+		btnRules.addActionListener(this);
 		panelBtnContainer.add(btnRules);
 		
 		btnExit = new JButton();
 		btnExit.setIcon(new ImageIcon(StartView.class.getResource(pathImgExit)));
 		btnExit.setPreferredSize(new Dimension (58,58));
+		btnExit.addActionListener(this);
 		panelBtnContainer.add(btnExit);
 		
 	}
 	
+	/**
+	 * Display Rules with scrollbar
+	 */
 	public void displayRules() {
-		String pathImgRulePage1 = "/gameContent/haggis_rules_p1.png";
-		String pathImgRulePage2 = "/gameContent/haggis_rules_p2.png";
-		
 		JFrame frameRules = new JFrame ("Haggis Rules");
-		frameRules.setBounds(10, 10, 716, 750); // x-Position, y-Position, breite und höhe des Fenster
+		frameRules.setBounds(10, 10, 800, 750); // x-Position, y-Position, breite und höhe des Fenster
 	    frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+	    JPanel panelRules = new JPanel();
+	    panelRules.setLayout(new BoxLayout(panelRules, BoxLayout.Y_AXIS));
+	    JScrollPane scrPane = new JScrollPane(panelRules); //Add ScrollPanel
+        frameRules.add(scrPane);
 	    
-	    JLabel imgRulePage1 = new JLabel(new ImageIcon(StartView.class.getResource(pathImgRulePage1)));
-		JLabel imgRulePage2 = new JLabel(new ImageIcon(StartView.class.getResource(pathImgRulePage2)));
-		
-	    
-	    frameRules.getContentPane().add(imgRulePage1);
-	    frameRules.getContentPane().add(imgRulePage2);
+        JLabel[] jlRule = new JLabel[6];
+		for (int i=0; i < jlRule.length; i++) {
+			int j=i+1;
+			jlRule[i] = new JLabel(new ImageIcon(StartView.class.getResource("/gameContent/rules/haggis_rules_p"+ j +".png")));
+			panelRules.add(jlRule[i]);
+		}
+	
 	    frameRules.pack();
 	    frameRules.setVisible(true);
 	}
@@ -324,7 +336,6 @@ public class StartView extends JFrame implements ActionListener {
 	    if (e.getSource() == btnRules) {
 	    	displayRules();
 	    }
-	    
 	}
 
 }

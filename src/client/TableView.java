@@ -494,7 +494,7 @@ public class TableView extends JFrame implements ActionListener{
     	JFrame frameRules = new JFrame ("Haggis Rules");
     	frameRules.setBounds(200, 200, 510, 326); // x-Position, y-Position, breite und höhe des Fenster
         frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
-        JLabel imgLabelRules = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/Kombinationen.jpg")));
+        JLabel imgLabelRules = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/rules/combination.jpg")));
 		imgLabelRules.setPreferredSize(new Dimension(510,326));
         frameRules.getContentPane().add(imgLabelRules);
         frameRules.pack();
