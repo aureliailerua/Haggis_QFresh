@@ -1,7 +1,9 @@
-package server;
+package unittests;
 
 import library.Card;
 import library.CardDeck;
+import server.GameHandler;
+import server.Pattern;
 
 import javax.print.DocFlavor;
 import java.lang.reflect.Array;
