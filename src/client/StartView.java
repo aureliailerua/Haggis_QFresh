@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
@@ -45,7 +46,7 @@ import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class StartView extends JFrame {
+public class StartView extends JFrame implements ActionListener {
 
 	private JFrame frame;
 	
@@ -299,6 +300,31 @@ public class StartView extends JFrame {
 		btnExit.setPreferredSize(new Dimension (58,58));
 		panelBtnContainer.add(btnExit);
 		
+	}
+	
+	public void displayRules() {
+		String pathImgRulePage1 = "/gameContent/haggis_rules_p1.png";
+		String pathImgRulePage2 = "/gameContent/haggis_rules_p2.png";
+		
+		JFrame frameRules = new JFrame ("Haggis Rules");
+		frameRules.setBounds(10, 10, 716, 750); // x-Position, y-Position, breite und höhe des Fenster
+	    frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+	    
+	    JLabel imgRulePage1 = new JLabel(new ImageIcon(StartView.class.getResource(pathImgRulePage1)));
+		JLabel imgRulePage2 = new JLabel(new ImageIcon(StartView.class.getResource(pathImgRulePage2)));
+		
+	    
+	    frameRules.getContentPane().add(imgRulePage1);
+	    frameRules.getContentPane().add(imgRulePage2);
+	    frameRules.pack();
+	    frameRules.setVisible(true);
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+	    if (e.getSource() == btnRules) {
+	    	displayRules();
+	    }
+	    
 	}
 
 }
