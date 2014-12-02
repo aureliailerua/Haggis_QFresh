@@ -22,7 +22,7 @@ public class Player implements Serializable {
 	private PlayerToken token;
 	private boolean playerIsfinished = false;
 	
-	private static final Logger log = LogManager.getLogger( GameState.class.getName() );
+	private static final Logger log = LogManager.getLogger( Player.class.getName() );
 	
 	public Player(PlayerToken lvToken){
 		this.setToken(lvToken);
@@ -44,7 +44,7 @@ public class Player implements Serializable {
 	 * @param points to add to existing points
 	 */
 	public void addPoints(int points) {
-		this.playerPoints =+ points;
+		this.playerPoints += points;
 	}
 	/**
 	 * @return get playerCards as ArrayList<Card>

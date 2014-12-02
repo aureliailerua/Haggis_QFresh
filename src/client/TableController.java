@@ -59,7 +59,7 @@ public class TableController implements ActionListener,Observer{
 		handler.send(container);
 	}
 	private ArrayList<BtnCard> playerCards(){
-		ArrayList<BtnCard> cards = new ArrayList<>();
+		ArrayList<BtnCard> cards = new ArrayList<BtnCard>();
 		cards.addAll(view.btnCardHand);
 		cards.addAll(view.btnJocker);
 		return cards;

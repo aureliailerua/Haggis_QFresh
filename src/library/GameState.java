@@ -174,13 +174,23 @@ public class GameState extends Observable implements Serializable {
 	
 	public void newTick(){
 		ArrayList<Move> lvMoveList = getActiveRound().getActiveTick().moveList;
+		PlayerToken lvTickWinner = null;
 		for (int i =  lvMoveList.size()-1; i >=0; i--){
 			if (!lvMoveList.get(i).getCardList().isEmpty()){
-				getActiveRound().getActiveTick().setTickWinner(lvMoveList.get(i).getMovingPlayer());
-				log.debug("TICK - setTickWinner Player "+ lvMoveList.get(i).getMovingPlayer());
+				lvTickWinner = lvMoveList.get(i).getMovingPlayer();
+				getActiveRound().getActiveTick().setTickWinner(lvTickWinner);
+				log.debug("TICK - setTickWinner Player "+ lvTickWinner);
 				break;
 			}
 		}
+		log.debug("TICK - Points before counting: "+ getPlayerObject(lvTickWinner).getPlayerPoints());
+		for (Move lvMove : lvMoveList){
+			for (Card lvCard : lvMove.getCardList()){
+				getPlayerObject(lvTickWinner).addPoints(lvCard.getCardPoint());
+				log.debug("TICK - Counting Points - ID: "+lvCard.getCardID()+" Points: "+lvCard.getCardPoint());
+			}
+		}
+		log.debug("TICK - Points after counting: "+ getPlayerObject(lvTickWinner).getPlayerPoints());
 		getActiveRound().addNewTick();
 		setActivePattern("");
 	}
