@@ -34,6 +34,7 @@ public class TestGameState {
 		gameState.playerList.add(new Player(GameState.PlayerToken.one));
 		gameState.playerList.add(new Player(GameState.PlayerToken.two));
 		gameState.playerList.add(new Player(GameState.PlayerToken.three));
+		gameState.setNumPlayers(3);
 		
 		//create deck and add cards / jokers to players
 		gameState.activeCardDeck = new CardDeck(gameState.playerList.size());
@@ -67,12 +68,14 @@ public class TestGameState {
 	public void testRoundTickMove() throws IOException, MaxPlayerException {
 		//init
 		GameState gameState = new GameState();
-		gameState.newRound();
+	
 		
 		//create three players with tokens
 		gameState.playerList.add(new Player(GameState.PlayerToken.one));
 		gameState.playerList.add(new Player(GameState.PlayerToken.two));
 		gameState.playerList.add(new Player(GameState.PlayerToken.three));
+		gameState.setNumPlayers(3);
+		gameState.newRound();
 		
 		//create deck and add build some cardlists
 		gameState.activeCardDeck = new CardDeck(gameState.playerList.size());
@@ -146,6 +149,7 @@ public class TestGameState {
 		gameState.playerList.add(new Player(GameState.PlayerToken.one));
 		gameState.playerList.add(new Player(GameState.PlayerToken.two));
 		gameState.playerList.add(new Player(GameState.PlayerToken.three));
+		gameState.setNumPlayers(3);
 		
 		//create deck and add build some cardlists
 		gameState.activeCardDeck = new CardDeck(gameState.playerList.size());
