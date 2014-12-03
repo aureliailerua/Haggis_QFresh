@@ -28,6 +28,7 @@ import client.TableView;
 
 public class TableController implements ActionListener,Observer{
 	TableView view;
+	StartView startview;
 	ServerHandler handler;
 	boolean mockup;
 	private static final Logger log = LogManager.getLogger( TableController.class.getName() );
@@ -40,6 +41,15 @@ public class TableController implements ActionListener,Observer{
 	public void setView(TableView view){
 		this.view = view;
 	}
+	
+	
+	public void setStartView(StartView view){
+		this.startview = view;
+	}
+	
+	/*public void drawStartTable() {
+		startview.getJFrame();
+	}*/
 	public void drawGameState(){
 		log.debug("drawing new GameState");
 		view.drawGameState(getGameState());
@@ -53,10 +63,16 @@ public class TableController implements ActionListener,Observer{
 	public GameState getGameState(){
 		return handler.gameState;
 	}
-	private void playCards(ArrayList<Card> cards){
-		log.debug("sending cards");
-		Container container = new Container(cards);
-		handler.send(container);
+	private void playCards(ArrayList<Card> cards, String buttonCheck){
+		if (((cards.size() != 0) && (buttonCheck.equals("Play"))) || ((cards.size() == 0) && (buttonCheck.equals("Pass")))){
+		//if((cards.size() != 0) && (buttonCheck.equals("Play"))) {
+			log.debug("sending cards");
+			Container container = new Container(cards);
+			handler.send(container);
+		} else {
+			log.debug("play emtpy card");
+			view.displayClientInfo("you don't selected any cards! And you shoult play a cards when you push the play button" );
+		}
 	}
 	private ArrayList<BtnCard> playerCards(){
 		ArrayList<BtnCard> cards = new ArrayList<BtnCard>();
@@ -94,13 +110,15 @@ public class TableController implements ActionListener,Observer{
             		cards.add(btnCard.getCard());
         		}
         	}
-    		playCards(cards);
+    		playCards(cards, "Play");
         }
         
         if(e.getSource() == view.btnPass){
+        	ArrayList<Card> emtpyCards = new ArrayList<Card>();
         	for (BtnCard btnCards : playerCards()) {
         		btnCards.setUnselected();
         	}
+        	playCards(emtpyCards, "Pass");	//play a emtpy ArrayList, Class Move will check if list is empty or not.
         	
         }
         
@@ -132,6 +150,7 @@ public class TableController implements ActionListener,Observer{
 		}
 		return getGameState().playerList.get(index+1);
 	}
+
 	
 
 }

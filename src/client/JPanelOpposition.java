@@ -35,11 +35,9 @@ public class JPanelOpposition extends JPanel{
 
 	JPanel panelOppInfo;		//1
 	JPanel panelOppCards;		//2
-	JPanel panelOppJocker;		//3
 	
 	JPanel panelOppBet;				//1.1
 	JPanel panelOppStatusBar;		//1.2
-	JPanel panelOppEmpty;			//1.3
 	
 	protected JButton btnBet15;
 	protected JButton btnBet30;
@@ -248,7 +246,9 @@ public class JPanelOpposition extends JPanel{
 		cOppCards.gridy = 1;
 		cOppCards.anchor = GridBagConstraints.LAST_LINE_START;
 		panelOppCards.add(imgLabelCardBack, cOppCards);
-	}
+		
+		displayBorder();	
+}
 	
 	public void setBetPanel() {
 		// -- Bet (1.1.1.W)
@@ -291,6 +291,16 @@ public class JPanelOpposition extends JPanel{
 		else{
 			panelOppStatusBar.setBackground(inactive);
 		}
+	}
+	
+	/**
+	 * TestLayoutManager Methode
+	 */
+	public void displayBorder() {
+		panelOppInfo.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		panelOppCards.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		panelOppBet.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		panelOppStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 	}
 	
 }

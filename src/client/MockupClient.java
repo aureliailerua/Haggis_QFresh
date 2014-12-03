@@ -12,8 +12,10 @@ public class MockupClient {
 					
 					ServerHandlerMock handler = new ServerHandlerMock(new Socket());
 					TableController controller = new TableController(handler);
+					//StartView view = new StartView(controller);
 					TableView view = new TableView(controller);
 					controller.setView(view);
+					//controller.setStartView(view);
 					view.getJFrame().pack();
 					view.getJFrame().setVisible(true);
 					handler.sendGameState();

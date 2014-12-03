@@ -42,14 +42,19 @@ import javax.swing.SwingConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
-
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.FlowLayout;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Vector;
 
+
+/**
+ * 
+ * @author felicita.acklin
+ * StartView is responsible for starting the game, show all logged in player and game rules
+ */
 public class StartView extends JFrame implements ActionListener {
 
 	private JFrame frame;
@@ -80,9 +85,7 @@ public class StartView extends JFrame implements ActionListener {
 	TableController controller;
 
 
-	/**
-	 * Launch the application.
-	 */
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -95,11 +98,11 @@ public class StartView extends JFrame implements ActionListener {
 			}
 		});
 	}
+	*/
 
-
-	//public StartView(TableController controller) {
-	public StartView() {
-		//this.controller = controller;
+	public StartView(TableController controller) {
+	//public StartView() {
+		this.controller = controller;
 		
 		// Define Font's
 		Font title = new Font("Comic Sans MS", Font.BOLD, 20);
@@ -115,7 +118,8 @@ public class StartView extends JFrame implements ActionListener {
 		String pathImgHelp = "/icons/help.png";
 
 		frame = new JFrame("QFresh Haggis Game - Game Registration");
-		frame.setBounds(100, 100, 1000, 500); // x, y, breite, höhe
+		frame.setBounds(0, 0, 1000, 500); // x, y, breite, höhe
+		frame.setPreferredSize(new Dimension(1000, 500));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().setBackground(Color.WHITE);
@@ -308,17 +312,31 @@ public class StartView extends JFrame implements ActionListener {
 		panelBtnContainer.add(btnExit);
 		
 	}
+	/**
+	 * Method to get the frame
+	 * @return
+	 */
+	public JFrame getJFrame(){
+		return frame;
+	}
+	/**
+	 * Method to set the controller
+	 * @param controller
+	 */
+	public void setController(TableController controller){
+		this.controller = controller;	
+	}
 	
 	/**
-	 * Display Rules with scrollbar
+	 * Method to display Rules with scrollbar
 	 */
 	public void displayRules() {
 		JFrame frameRules = new JFrame ("Haggis Rules");
-		frameRules.setBounds(10, 10, 800, 750); // x-Position, y-Position, breite und höhe des Fenster
+		frameRules.setBounds(10, 10, 800, 750); 						// x-Position, y-Position, breite und höhe des Fenster
 	    frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
 	    JPanel panelRules = new JPanel();
 	    panelRules.setLayout(new BoxLayout(panelRules, BoxLayout.Y_AXIS));
-	    JScrollPane scrPane = new JScrollPane(panelRules); //Add ScrollPanel
+	    JScrollPane scrPane = new JScrollPane(panelRules); 				//Add ScrollPanel
         frameRules.add(scrPane);
 	    
         JLabel[] jlRule = new JLabel[6];
@@ -332,9 +350,26 @@ public class StartView extends JFrame implements ActionListener {
 	    frameRules.setVisible(true);
 	}
 	
+	
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getSource() == btnRules) {
 	    	displayRules();
+	    }
+	    
+	    if (e.getSource() == btnStart) {
+	    	try {
+				
+				ServerHandlerMock handler = new ServerHandlerMock(new Socket());
+				TableController controller = new TableController(handler);
+				TableView view = new TableView(controller);
+				controller.setView(view);
+				view.getJFrame().pack();
+				view.getJFrame().setVisible(true);
+				handler.sendGameState();
+				
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 	    }
 	}
 
