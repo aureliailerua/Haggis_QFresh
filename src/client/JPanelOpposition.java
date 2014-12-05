@@ -260,19 +260,25 @@ public class JPanelOpposition extends JPanel{
 
 				
 		if(bet!=0){
-			TitledBorder betTitle = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Bet");
+			TitledBorder betTitle = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black,2), "Bet");
 			betTitle.setTitleJustification(TitledBorder.LEFT);
 			panelOppBet.setBorder( betTitle);	
 				
 			switch(bet) {
 				case 15:
-					btnBet15 = new JButton("15");
+					btnBet15 = new JButton();
+					ImageIcon imageIcon15 = new ImageIcon(TableView.class.getResource("/gameContent/15bet_active.png"));
+					btnBet15.setIcon(new ImageIcon(imageIcon15.getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH)));
+					btnBet15.setBorder(null);
 					btnBet15.setPreferredSize(new Dimension(30,30));
 					btnBet15.setVisible(true);
 					panelOppBet.add(btnBet15);
 					break;
 				case 30:
-					btnBet30 = new JButton("30");
+					btnBet30 = new JButton();
+					ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/30bet_active.png"));
+					btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH)));
+					btnBet30.setBorder(null);
 					btnBet30.setPreferredSize(new Dimension(30,30));
 					btnBet30.setVisible(true);
 					panelOppBet.add(btnBet30);

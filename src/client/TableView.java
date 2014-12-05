@@ -92,6 +92,8 @@ public class TableView extends JFrame implements ActionListener{
 	protected JButton btnBet15;
 	protected JButton btnBet30;
 	protected JButton btnEmptyButton;
+	
+	ImageIcon imageIcon30;
 
 	
 	JLabel lbCardCount;
@@ -391,13 +393,20 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.insets = new Insets(5,0,0,10); // top, left, bottom, right
 		panelControlContainer.add(panelBet, cContainer);
 		
-		btnBet30 = new JButton("30");
+		btnBet30 = new JButton();
+		imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/15bet_active.png"));
+		btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
 		btnBet30.setPreferredSize(new Dimension(35,35));
+		btnBet30.setBorder(null);
 		btnBet30.addActionListener(controller);
 		panelBet.add(btnBet30);
 
-		btnBet15 = new JButton("15");
+		btnBet15 = new JButton();
+		ImageIcon imageIcon = new ImageIcon(TableView.class.getResource("/gameContent/15bet_inactive.png"));
+
+		btnBet15.setIcon(new ImageIcon(imageIcon.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
 		btnBet15.setPreferredSize(new Dimension(35,35));
+		btnBet15.setBorder(null);
 		btnBet15.addActionListener(controller);
 		panelBet.add(btnBet15);
 		
@@ -595,6 +604,10 @@ public class TableView extends JFrame implements ActionListener{
 	    	else
 	    		sortByID = true;
 	    	updatePlayerHand(controller.getPlayer());
+	    }
+	    if (e.getSource() == btnBet30 ){
+	    	imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/30bet_active.png"));
+	    	btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
 	    }
 	}
 	
