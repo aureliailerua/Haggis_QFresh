@@ -126,7 +126,8 @@ public class JPanelOpposition extends JPanel{
 		panelOppStatusBar.add(imgLabelCard, cOppInfo);
 		
 		// ---- Number of Cards
-		lbCardCount= new JLabel(Integer.toString(cardCount)); //!! Anpassen!!
+		//lbCardCount= new JLabel(Integer.toString(cardCount)); //!! Anpassen!!
+		lbCardCount= new JLabel("14");
 		lbCardCount.setPreferredSize(new Dimension(50,50));
 		cOppInfo = new GridBagConstraints();
 		cOppInfo.fill = GridBagConstraints.BOTH;
@@ -147,7 +148,8 @@ public class JPanelOpposition extends JPanel{
 		panelOppStatusBar.add(imgLabelCrown, cOppInfo);
 		
 		// ---- Number of Points
-		lbPoint= new JLabel(Integer.toString(points));
+		//lbPoint= new JLabel(Integer.toString(points));
+		lbPoint= new JLabel("0");
 		lbPoint.setPreferredSize(new Dimension(50,50));
 		cOppInfo = new GridBagConstraints();
 		cOppInfo.fill = GridBagConstraints.BOTH;
@@ -290,7 +292,13 @@ public class JPanelOpposition extends JPanel{
 	}
 
 	public void updatePlayer(Player player, PlayerToken activePlayer) {
+		cardCount = player.getPlayerCards().size() + player.getPlayerJokers().size();
+		points = player.getPlayerPoints();
+		
 		lbPlayerName.setText(view.getPlayerName(player));
+		lbCardCount= new JLabel(Integer.toString(cardCount));
+		lbPoint= new JLabel(Integer.toString(points));
+
 		if ( activePlayer == player.getToken()){
 			panelOppStatusBar.setBackground(active);
 		}

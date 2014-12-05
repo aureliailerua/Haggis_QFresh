@@ -394,7 +394,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelControlContainer.add(panelBet, cContainer);
 		
 		btnBet30 = new JButton();
-		imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/15bet_active.png"));
+		imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/30bet_inactive.png"));
 		btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
 		btnBet30.setPreferredSize(new Dimension(35,35));
 		btnBet30.setBorder(null);
@@ -427,13 +427,21 @@ public class TableView extends JFrame implements ActionListener{
 
 	}
 	
-	public JFrame getJFrame(){
-		return frame;
-	}
+	/**
+	 * Method for the communication between controller and view
+	 * 
+	 */
 	public void setController(TableController controller){
 		this.controller = controller;	
 	}
+	public JFrame getJFrame(){
+		return frame;
+	}
 	
+	/**
+	 * Method to (re-)draw the game field
+	 * @param gameState
+	 */
 	public void drawGameState(GameState gameState) {
 		log.debug("rendering player " + controller.getToken());
 		updatePlayerHand(controller.getPlayer());
@@ -454,6 +462,7 @@ public class TableView extends JFrame implements ActionListener{
 				cTable.ipady = 10;
 				cTable.insets = new Insets(0,0,0,0); //Padding top, left, bottom, right
 				panelTable.add(btnCard,cTable);
+				// --- not finish yet
 				if (i >= 7) {
 					//panelTable.setPreferredSize(new Dimension());
 				} 
@@ -498,18 +507,6 @@ public class TableView extends JFrame implements ActionListener{
 		
 	}
 	
-
-	/**
-	 * Method to define player name
-	 * @param player
-	 * @return Player + playerNumber
-	 */
-	public String getPlayerName(Player player){
-		String name = "Player ";
-		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1; //?
-		return name+playerNum;
-	}
-	
 	/**
 	 * Method to set player name and how is the active player
 	 */
@@ -530,6 +527,18 @@ public class TableView extends JFrame implements ActionListener{
 			panel2stOpposition.updatePlayer(player3,activePlayerToken);
 		}
 	}
+	
+	/**
+	 * Method to define player name
+	 * @param player
+	 * @return Player + playerNumber
+	 */
+	public String getPlayerName(Player player){
+		String name = "Player ";
+		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1; //?
+		return name+playerNum;
+	}
+
 	
 	/**
 	 * Method to open the combination card
