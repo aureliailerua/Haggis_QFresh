@@ -166,7 +166,7 @@ public class TableView extends JFrame implements ActionListener{
 		/** 
 		 * 1st Opposite Player (1.W)
 		 */
-		panel1stOpposition = new JPanelOpposition(this, 8, 120, 30, "LEFT");
+		panel1stOpposition = new JPanelOpposition(this, "LEFT");
 		panel1stOpposition.setOpaque(false);
 		panel1stOpposition.setPreferredSize(new Dimension(300, 320));
 		frame.getContentPane().add(panel1stOpposition, BorderLayout.WEST);
@@ -188,7 +188,7 @@ public class TableView extends JFrame implements ActionListener{
 		/**
 		 * 2nd Opposition Player (3.E)
 		 */
-		panel2stOpposition = new JPanelOpposition(this, 10, 150, 0, "RIGHT");
+		panel2stOpposition = new JPanelOpposition(this, "RIGHT");
 		panel2stOpposition.setPreferredSize(new Dimension(300, 320));
 		panel2stOpposition.setOpaque(false);
 		frame.getContentPane().add(panel2stOpposition, BorderLayout.EAST);
@@ -252,7 +252,6 @@ public class TableView extends JFrame implements ActionListener{
 		panelBtnPass.setPreferredSize(new Dimension(180,50));
 		btnPass = new JButton();
 		btnPass.setText("Pass");
-		btnPass.setBackground(Color.GREEN);
 		btnPass.setPreferredSize(new Dimension(130, 58));
 		btnPass.setEnabled(true);
 		btnPass.setVisible(true);
@@ -280,7 +279,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelStatusBar.add(imgLabelCard, cStatusBar);
 	
 		// ---- Count of Cards
-		lbCardCount= new JLabel("6"); //!! Anpassen!!
+		lbCardCount= new JLabel("0");
 		lbCardCount.setPreferredSize(new Dimension(50,30));
 		cStatusBar = new GridBagConstraints();
 		cStatusBar.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
@@ -299,7 +298,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelStatusBar.add(imgLabelCrown, cStatusBar);
 		
 		//---- Display count of points
-		lbPoint= new JLabel("20");
+		lbPoint= new JLabel("0");
 		lbPoint.setPreferredSize(new Dimension(50,30));
 		cStatusBar = new GridBagConstraints();
 		cStatusBar.fill = GridBagConstraints.BOTH;
@@ -331,7 +330,6 @@ public class TableView extends JFrame implements ActionListener{
 		panelBtnPlay.setPreferredSize(new Dimension(180,50));
 		btnPlay = new JButton();
 		btnPlay.setText("Play");
-		btnPlay.setBackground(Color.GREEN);
 		btnPlay.setPreferredSize(new Dimension(130, 58));
 		btnPlay.setEnabled(true);
 		btnPlay.setVisible(true);
@@ -513,6 +511,7 @@ public class TableView extends JFrame implements ActionListener{
 	public void updatePlayers(){
 		lbPlayerName.setText(getPlayerName(controller.getPlayer()));
 		GameState.PlayerToken activePlayerToken = controller.getGameState().getActivePlayer();
+		
 		if ( activePlayerToken == controller.getToken()){
 			panelStatusBar.setBackground(active);
 		}
@@ -520,12 +519,16 @@ public class TableView extends JFrame implements ActionListener{
 			panelStatusBar.setBackground(inactive);
 		}
 		Player player2 = controller.getNextPlayer(controller.getPlayer());
-		panel1stOpposition.updatePlayer(player2,activePlayerToken);
+		panel1stOpposition.updatePlayer(player2,activePlayerToken);				//invoke updatePlayer of Opposition
 		log.debug("Player 1 = "+ controller.getPlayer().getToken() + " Player 2 = " +player2.getToken());
 		if ( controller.getGameState().playerList.size() == 3){
 			Player player3 = controller.getNextPlayer(player2);
-			panel2stOpposition.updatePlayer(player3,activePlayerToken);
+			panel2stOpposition.updatePlayer(player3,activePlayerToken);			//invoke updatePlayer of Opposition
 		}
+		
+		getPlayerName(controller.getPlayer());
+		lbCardCount.setText(Integer.toString(getPlayerCardCount(controller.getPlayer())));
+		lbPoint.setText(Integer.toString(getPlayerPoints(controller.getPlayer())));
 	}
 	
 	/**
@@ -539,6 +542,16 @@ public class TableView extends JFrame implements ActionListener{
 		return name+playerNum;
 	}
 
+	public int getPlayerCardCount(Player player){
+		int cardCount = player.getPlayerCards().size() + player.getPlayerJokers().size();	
+		return cardCount;
+	}
+	
+	public int getPlayerPoints(Player player){
+		int points = player.getPlayerPoints();		
+		return points;
+	}
+	
 	
 	/**
 	 * Method to open the combination card

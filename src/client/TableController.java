@@ -129,8 +129,6 @@ public class TableController implements ActionListener,Observer{
         if (e.getSource() == view.btnRules) {
         	view.displayRules();
         }
-        if (e.getSource() == view.btnSort ){
-        }
 	}
 	
 	@Override
@@ -139,7 +137,6 @@ public class TableController implements ActionListener,Observer{
 		view.getJFrame().getContentPane().revalidate();
 	}
 	public Player getNextPlayer(Player player) {
-		// TODO Auto-generated method stub
 		int index = getGameState().playerList.indexOf(player);
 		if (index+1 == getGameState().playerList.size()){
 			return getGameState().playerList.get(0);
