@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -18,6 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import library.GameState.PlayerToken;
 import library.Card;
 import library.Player;
@@ -25,22 +29,21 @@ import library.Player;
 public class JPanelOpposition extends JPanel{
 	
 	private TableView view;
-	String playerName;
-	int cardCount;
-	int points;
-	int bet;
-	String gameFildSide;
-	String pathImgBack;
-	String pathImgBackSmall;
-	String pathImgCrown;
-
-
-	JPanel panelOppInfo;		//1
-	JPanel panelOppCards;		//2
+	
+	JPanel panelOppInfo;			//1
+	JPanel panelOppCards;			//2
+	JPanel panelOppSpacer;			//3
 	
 	JPanel panelOppBet;				//1.1
 	JPanel panelOppStatusBar;		//1.2
 	
+	String playerName;
+	String gameFildSide;
+	
+	int cardCount;
+	int points;
+	int bet;
+
 	protected JButton btnBet15;
 	protected JButton btnBet30;
 	
@@ -52,29 +55,29 @@ public class JPanelOpposition extends JPanel{
 	JLabel[] imgLabelJoker = new JLabel[4];
 	//ArrayList<JLabel> imgLabelJoker = new ArrayList<JLabel>();
 
-	
 	Color active;
 	Color inactive;
-	Color coints;
 	
-	//	public JPanelOpposition(String oppositionName, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide, BtnCard<ArrayList> jocker)  {
-
-	//public JPanelOpposition(TableView view, String oppositionName, int oppositionCardCount, int oppositionPoints, int oppositionBet, String oppositionSide)  {
+	private static final Logger log = LogManager.getLogger( JPanelOpposition.class.getName() );
+	
 	public JPanelOpposition(TableView view, String oppositionSide)  {
 
 		this.view = view;
-		//playerName = oppositionName;
 		gameFildSide = oppositionSide;
 		
 		// Initial Color
 		active = new Color(147,196,125); 	//Green
 		inactive = new Color(234,153,153);	//Red
-		coints = new Color(255,217,102);	//Yellow
 		
 		// Initial path of the Image
-		pathImgBack = "/gameContent/back.jpg";
-		pathImgBackSmall = "/gameContent/back_small.jpg";
-		pathImgCrown = "/gameContent/crown.png";
+		String pathImgBack = "/gameContent/back.jpg";
+		String pathImgBackSmall = "/gameContent/back_small.jpg";
+		String pathImgCrown = "/gameContent/crown.png";
+		
+		// Define Fonts
+		Font player = new Font("Comic Sans MS", Font.BOLD, 15);
+		Font statusbar = new Font("Comic Sans MS", Font.PLAIN, 14);
+		//Font button = new Font("comic Sans MS", Font.PLAIN, 16);
 		
 		// Initial joker array
 		imgLabelJoker[0] = new JLabel(new ImageIcon(JPanelOpposition.class.getResource("/gameContent/joker/opp_joker11.jpg")));
@@ -99,7 +102,7 @@ public class JPanelOpposition extends JPanel{
 		panelOppStatusBar = new JPanel();
 		panelOppStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		panelOppStatusBar.setBackground(inactive);		//default: incative
-		panelOppStatusBar.setPreferredSize(new Dimension(162,80) );
+		panelOppStatusBar.setPreferredSize(new Dimension(162,90) );
 		panelOppInfo.add(panelOppStatusBar, BorderLayout.CENTER);
 
 		GridBagLayout gbl_OppositeInfo = new GridBagLayout();
@@ -109,6 +112,7 @@ public class JPanelOpposition extends JPanel{
 				
 		// --- Player Name
 		lbPlayerName= new JLabel("", JLabel.CENTER);
+		lbPlayerName.setFont(player);
 		lbPlayerName.setPreferredSize(new Dimension(50,50));
 		lbPlayerName.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
 		cOppInfo.fill = GridBagConstraints.BOTH;
@@ -135,6 +139,7 @@ public class JPanelOpposition extends JPanel{
 		// ---- Number of Cards
 		//lbCardCount= new JLabel(Integer.toString(cardCount)); //!! Anpassen!!
 		lbCardCount= new JLabel("0");
+		lbCardCount.setFont(statusbar);
 		lbCardCount.setPreferredSize(new Dimension(50,50));
 		cOppInfo = new GridBagConstraints();
 		cOppInfo.fill = GridBagConstraints.BOTH;
@@ -157,6 +162,7 @@ public class JPanelOpposition extends JPanel{
 		// ---- Number of Points
 		//lbPoint= new JLabel(Integer.toString(points));
 		lbPoint= new JLabel("0");
+		lbPoint.setFont(statusbar);
 		lbPoint.setPreferredSize(new Dimension(50,50));
 		cOppInfo = new GridBagConstraints();
 		cOppInfo.fill = GridBagConstraints.BOTH;
@@ -175,11 +181,11 @@ public class JPanelOpposition extends JPanel{
 		// - Opposition Cards (1.2.C)
 		panelOppCards = new JPanel();
 		panelOppCards.setOpaque(false);
-		//panelOppCardBack.setPreferredSize(new Dimension(210,80));
+		panelOppCards.setPreferredSize(new Dimension(210,90));
 		add(panelOppCards, BorderLayout.CENTER);
 		
 		GridBagLayout gbl_OppositeCards = new GridBagLayout();
-		GridBagConstraints cOppCards = new GridBagConstraints();	
+		GridBagConstraints cOppCards = new GridBagConstraints();
 		panelOppCards.setLayout(gbl_OppositeCards);
 		
 		// --CardBack
@@ -187,11 +193,12 @@ public class JPanelOpposition extends JPanel{
 		imgLabelCardBack.setPreferredSize(new Dimension(24,79));
 		imgLabelCardBack.setHorizontalAlignment(SwingConstants.LEFT);
 		imgLabelCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		cOppCards.anchor = GridBagConstraints.NORTH;
 		cOppCards.fill = GridBagConstraints.BOTH;
 		cOppCards.gridwidth = 1;
 		cOppCards.gridx = 0;
 		cOppCards.gridy = 0;
-		cOppCards.anchor = GridBagConstraints.LINE_END;
+		cOppCards.anchor = GridBagConstraints.NORTH;
 		// Check for the padding of the card back
 		//if (gameFildSide == "LEFT") { cOppCardBack.insets = new Insets(0,20,0,0); }
 		panelOppCards.add(imgLabelCardBack, cOppCards);
@@ -204,7 +211,7 @@ public class JPanelOpposition extends JPanel{
 		cOppCards.fill = GridBagConstraints.BOTH;
 		cOppCards.gridx = 1;
 		cOppCards.gridy = 0;
-		cOppCards.anchor = GridBagConstraints.LINE_END;
+		cOppCards.anchor = GridBagConstraints.NORTH;
 		panelOppCards.add(imgLabelCardBack, cOppCards);
 		
 		imgLabelCardBack = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathImgBack)));
@@ -214,6 +221,7 @@ public class JPanelOpposition extends JPanel{
 		cOppCards.fill = GridBagConstraints.BOTH;
 		cOppCards.gridx = 2;
 		cOppCards.gridy = 0;
+		cOppCards.anchor = GridBagConstraints.NORTH;
 		//if (gameFildSide == "RIGHT") {cOppCardBack.insets = new Insets(0,0,0,20);} //Padding vom Displayrand (top, left, bottom, right)
 		panelOppCards.add(imgLabelCardBack, cOppCards);
 
@@ -249,6 +257,7 @@ public class JPanelOpposition extends JPanel{
 		cOppCards.gridy = 1;
 		panelOppCards.add(imgLabelJoker[2], cOppCards);
 	
+		
 		//drawJoker();
 
 		/*
@@ -273,6 +282,11 @@ public class JPanelOpposition extends JPanel{
 		cOppCards.gridy = 1;
 		cOppCards.anchor = GridBagConstraints.LAST_LINE_START;
 		panelOppCards.add(imgLabelJoker, cOppCards);*/
+		
+		panelOppSpacer = new JPanel();
+		panelOppSpacer.setOpaque(false);
+		panelOppSpacer.setPreferredSize(new Dimension(210,80));
+		add(panelOppSpacer, BorderLayout.SOUTH);
 		
 		displayBorder();	
 }
@@ -332,13 +346,24 @@ public class JPanelOpposition extends JPanel{
 		lbPlayerName.setText(view.getPlayerName(player));
 		lbCardCount.setText(Integer.toString(cardCount));
 		lbPoint.setText(Integer.toString(points));
-		//updateJoker(player.getPlayerJokers());
+		updateJoker(player.getPlayerJokers());
 		
 		if ( activePlayer == player.getToken()){
 			panelOppStatusBar.setBackground(active);
 		}
 		else{
 			panelOppStatusBar.setBackground(inactive);
+		}
+	}
+	
+	public void updateJoker(ArrayList<Card> joker) {
+		ArrayList<JLabel> lblJoker = new ArrayList<JLabel>();  
+		//for (Card j : joker) {
+		for (int i=0; i<joker.size(); i++) {
+			log.debug("updatejoker:"+ joker.get(i).getCardName() + joker.get(i).getCardRank());
+			String pathImgJoker = "/gameContent/"+ joker.get(i).getCardSuit() + "/" + joker.get(i).getCardName() + ".jpg";
+			lblJoker.add(new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathImgJoker))));
+			log.debug("fill lbljoker:" + lblJoker.get(i));
 		}
 	}
 	
@@ -353,6 +378,10 @@ public class JPanelOpposition extends JPanel{
 	}
 
 	public void drawJoker() {
+	
+		panelJocker.removeAll();
+		panelJocker.revalidate();
+		
 		for (int i=0; i < imgLabelJoker.size(); i++) {
 		//for (JLabel joker: imgLabelJoker) {
 				imgLabelJoker.get(i).setPreferredSize(new Dimension(24,40));
