@@ -62,7 +62,7 @@ public class TableController implements ActionListener,Observer{
 			handler.send(container);
 		} else {
 			log.debug("play emtpy card");
-			view.displayClientInfo("you don't selected any cards! And you shoult play a cards when you push the play button" );
+			view.displayClientInfo("you have not selected any cards! And you shoult play a cards when you push the play button" );
 		}
 	}
 	private ArrayList<BtnCard> playerCards(){
@@ -120,12 +120,6 @@ public class TableController implements ActionListener,Observer{
         if (e.getSource() == view.btnRules) {
         	view.displayRules();
         }
-        /** Not finish yet, but also not working...**/
-        //int clickCount;
-        if (e.getSource() == view.btnSort ){
-        
-        	//!! ArrayList.sort(playerCards, new SortCardSuit());
-        }
 	}
 	
 	@Override
@@ -134,13 +128,14 @@ public class TableController implements ActionListener,Observer{
 		view.getJFrame().getContentPane().revalidate();
 	}
 	public Player getNextPlayer(Player player) {
-		// TODO Auto-generated method stub
 		int index = getGameState().playerList.indexOf(player);
 		if (index+1 == getGameState().playerList.size()){
 			return getGameState().playerList.get(0);
 		}
 		return getGameState().playerList.get(index+1);
 	}
+	
+	
 
 	
 

@@ -320,7 +320,8 @@ public class StartView extends JFrame implements ActionListener {
         JLabel[] jlRule = new JLabel[6];
 		for (int i=0; i < jlRule.length; i++) {
 			int j=i+1;
-			jlRule[i] = new JLabel(new ImageIcon(StartView.class.getResource("/gameContent/rules/haggis_rules_p"+ j +".png")));
+			ImageIcon imageIcon = new ImageIcon(StartView.class.getResource("/gameContent/rules/haggis_rules_p"+ j +".png"));
+			jlRule[i] = new JLabel(new ImageIcon(imageIcon.getImage().getScaledInstance(537, 829,  java.awt.Image.SCALE_SMOOTH)));
 			panelRules.add(jlRule[i]);
 		}
 	

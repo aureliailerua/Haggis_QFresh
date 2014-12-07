@@ -34,27 +34,75 @@ import server.Server;
     @BeforeClass
     public static void setupBeforeClass() throws Exception {
     }
+    /*
+    @Test
+    public void testComparePattern() throws IOException, MaxPlayerException {
+        CardDeck lvCardDeck = new CardDeck(3);
+
+        ArrayList<Card> set4oaK = new ArrayList<Card>();
+        set4oaK.add(lvCardDeck.getCardById(135));
+        set4oaK.add(lvCardDeck.getCardById(50));
+        set4oaK.add(lvCardDeck.getCardById(52));
+        set4oaK.add(lvCardDeck.getCardById(53));
+
+        String table4oaK = Pattern.analyzePattern(set4oaK);
+
+        ArrayList<Card> set4oaK2 = new ArrayList<Card>();
+        set4oaK2.add(lvCardDeck.getCardById(64));
+        set4oaK2.add(lvCardDeck.getCardById(60));
+        set4oaK2.add(lvCardDeck.getCardById(62));
+        set4oaK2.add(lvCardDeck.getCardById(63));
+
+        boolean matchOK = Pattern.comparePattern(set4oaK, set4oaK2, table4oaK);
+        log.debug("match OK ? "+matchOK);
+
+    }
+    */
 
     @Test
     public void testAnalyzePattern() throws IOException, MaxPlayerException {
+
         //__Checking the SET pattern___
         CardDeck lvCardDeck = new CardDeck(3);
+
+        ArrayList<Card> bombCards = new ArrayList<Card>();
+        bombCards.add(lvCardDeck.getCardById(115));
+        bombCards.add(lvCardDeck.getCardById(125));
+        bombCards.add(lvCardDeck.getCardById(135));
+            Pattern a = new Pattern (bombCards);
+
+            String a_result  =   a.analyzePattern();
+            log.debug("__a Pattern result : "+a_result);
+            log.debug("_________End of A Check - return value from Joker Bomb : "+a_result);
+
+        ArrayList<Card> bombSequenceCards = new ArrayList<Card>();
+        bombSequenceCards.add(lvCardDeck.getCardById(30));
+        bombSequenceCards.add(lvCardDeck.getCardById(50));
+        bombSequenceCards.add(lvCardDeck.getCardById(70));
+        bombSequenceCards.add(lvCardDeck.getCardById(90));
+            Pattern b  = new Pattern (bombSequenceCards);
+            String b_result =   b.analyzePattern();
+            log.debug("__ b Pattern result : "+b_result);
+            log.debug("_________End of B Check - return value from Sequence Bomb : "+b_result);
 
         ArrayList<Card> setCards = new ArrayList<Card>();
         setCards.add(lvCardDeck.getCardById(135));
         setCards.add(lvCardDeck.getCardById(50));
         setCards.add(lvCardDeck.getCardById(52));
         setCards.add(lvCardDeck.getCardById(53));
-            String shouldBe4ofAKind = Pattern.analyzePattern(setCards);
-            log.debug("_________End of first Check - return value from setCards "+shouldBe4ofAKind);
+            Pattern c = new Pattern(setCards);
+            String c_result = c.analyzePattern();
+            log.debug("_________End of C Check - return value from setCards 4oaK:  "+c_result);
+
 
         ArrayList<Card> randomCards = new ArrayList<Card>();
         randomCards.add(lvCardDeck.getCardById(32));
         randomCards.add(lvCardDeck.getCardById(135));
         randomCards.add(lvCardDeck.getCardById(73));
         randomCards.add(lvCardDeck.getCardById(83));
-            String shouldBeNoPattern = Pattern.analyzePattern(randomCards);
-            log.debug("_________End of noPattern Check - return value random Cards "+shouldBeNoPattern);
+            Pattern d = new Pattern(randomCards);
+            String d_result = d.analyzePattern();
+            log.debug("_________End of D Check - return value random Cards "+d_result);
 
         //__Checking the SEQ pattern____
         ArrayList<Card> seqCards = new ArrayList<Card>();
@@ -62,8 +110,9 @@ import server.Server;
         seqCards.add(lvCardDeck.getCardById(50));
         seqCards.add(lvCardDeck.getCardById(60));
         seqCards.add(lvCardDeck.getCardById(115));
-            String shouldBeSequence = Pattern.analyzePattern(seqCards);
-            log.debug("_________End of second Check - return value from seqCards "+shouldBeSequence);
+            Pattern e = new Pattern(seqCards);
+            String e_result = e.analyzePattern();
+            log.debug("_________End of E Check - return value from seqCards "+e_result);
 
         //_Checking the run of Pair patterns___
         ArrayList<Card> parSeqCards = new ArrayList<Card>();
@@ -73,8 +122,10 @@ import server.Server;
         parSeqCards.add(lvCardDeck.getCardById(44));
         parSeqCards.add(lvCardDeck.getCardById(34));
         parSeqCards.add(lvCardDeck.getCardById(40));
-            String shouldBeParallelSequence = Pattern.analyzePattern(parSeqCards);
-            log.debug("_________End of third Check - return value from parSeqCards -Pattern: "+shouldBeParallelSequence);
+            Pattern f = new Pattern(parSeqCards);
+            String f_result = f.analyzePattern();
+            log.debug("_________End of F Check - return value from parallel sequence Cards run of three pairs:  "+f_result);
+
 
         //_Checking the run of Pair patterns___
         ArrayList<Card> notSequenceRun = new ArrayList<Card>();
@@ -84,130 +135,25 @@ import server.Server;
         notSequenceRun.add(lvCardDeck.getCardById(125));
         notSequenceRun.add(lvCardDeck.getCardById(34));
         notSequenceRun.add(lvCardDeck.getCardById(40));
-        String shouldBeNoSequenceRun = Pattern.analyzePattern(notSequenceRun);
-        log.debug("_________End of 3.5th Check - return value from parSeqNoJokersCards -  Pattern should be null now sequence base is not the same - "+shouldBeNoSequenceRun);
+            Pattern g = new Pattern(notSequenceRun);
+            String g_result = g.analyzePattern();
+            log.debug("_________End of G Check - return value from parSeqNoJokersCards -  Pattern should be null now sequence base is not the same - "+g_result);
 
-
-
-        ArrayList<Card> bombCards = new ArrayList<Card>();
-        bombCards.add(lvCardDeck.getCardById(115));
-        bombCards.add(lvCardDeck.getCardById(125));
-        bombCards.add(lvCardDeck.getCardById(135));
-            String shouldBeBomb = Pattern.analyzePattern(bombCards);
-            log.debug("_________End of fourth Check - return value from Joker Bomb : "+shouldBeBomb);
-
-
-
-
-        ArrayList<Card> bombSequenceCards = new ArrayList<Card>();
-        bombSequenceCards.add(lvCardDeck.getCardById(30));
-        bombSequenceCards.add(lvCardDeck.getCardById(50));
-        bombSequenceCards.add(lvCardDeck.getCardById(70));
-        bombSequenceCards.add(lvCardDeck.getCardById(90));
-           String shouldBeSequenceBomb = Pattern.analyzePattern(bombSequenceCards);
-            log.debug("_________End of fifth Check - return value from Sequence Bomb : "+shouldBeSequenceBomb);
 
         ArrayList<Card> twoJokerCards = new ArrayList<Card>();
         twoJokerCards.add(lvCardDeck.getCardById(115));
         twoJokerCards.add(lvCardDeck.getCardById(125));
-            String shouldBeTwoJokerBomb = Pattern.analyzePattern(twoJokerCards);
-            log.debug("_________End of sixth Check - return value from two Joker Bomb : "+shouldBeTwoJokerBomb);
+            Pattern h = new Pattern(twoJokerCards);
+            String h_result = h.analyzePattern();
+            log.debug("_________End of G Check - r return value from two Joker Bomb :"+h_result);
 
-
-        assertTrue("SET check failed ", shouldBe4ofAKind.equals("fourOfAKind"));
-        assertTrue("noPattern check failed ", shouldBeNoPattern == null );
-        assertTrue("Sequence check failed ", shouldBeSequence.equals("runOfFourSingles"));
-        assertTrue("Parallel Sequence check failed ", shouldBeParallelSequence.equals("runOfThreePairs"));
-        assertTrue("shouldBeNoSequenceRun failed 3.5 check ", shouldBeNoSequenceRun == null);
-        assertTrue("Joker Bomb check failed ", shouldBeBomb.equals("bomb"));
-        assertTrue("Sequence Bomb check failed ", shouldBeSequenceBomb.equals("bomb"));
-        assertTrue("Two Joker Bomb check failed ", shouldBeTwoJokerBomb.equals("bomb"));
-    }
-
-
-    @Test
-    public void testBooleanCardChecks() throws IOException, MaxPlayerException {
-        // create card deck
-        CardDeck lvCardDeck = new CardDeck(3);
-
-        //____________Test 1:  Cards are  all same suit but not sameRank or in sequence_____________
-        ArrayList<Card> lvCardList = new ArrayList<Card>();
-        for (Card c : lvCardDeck.cardDeck) {
-            if (c.getCardID() == 30 || c.getCardID() == 50 || c.getCardID() == 90 ) {
-                lvCardList.add(c);
-            }
-        }
-        assertTrue("same Suit wrong", Pattern.allSameSuit(lvCardList));
-        assertFalse("same Rank wrong", Pattern.allSameRank(lvCardList));
-
-
-        //____________Test 2: Cards are  all same suit, not sameRank AND in sequence_____________
-        ArrayList<Card> lvCardList2 = new ArrayList<Card>();
-        for (Card c : lvCardDeck.cardDeck) {
-            if (c.getCardID() == 50 || c.getCardID() == 60 || c.getCardID() == 70 ) {
-                lvCardList2.add(c);
-            }
-        }
-        // sort required to check in sequence:
-        Collections.sort(lvCardList2);
-        assertTrue("same Suit wrong", Pattern.allSameSuit(lvCardList2));
-        assertFalse("same Rank wrong", Pattern.allSameRank(lvCardList2));
-
-
-        //____________Test 3: Cards are not same suit, but sameRank, (not in sequence, of course) _____________
-        ArrayList<Card> lvCardList3 = new ArrayList<Card>();
-        for (Card c : lvCardDeck.cardDeck) {
-            if (c.getCardID() == 50 ||  c.getCardID() == 52 ||  c.getCardID() == 54 ) {
-                lvCardList3.add(c);
-            }
-        }
-        // sort required to check in sequence:
-        Collections.sort(lvCardList3);
-        assertFalse("same Suit wrong", Pattern.allSameSuit(lvCardList3));
-        assertTrue("same Rank wrong", Pattern.allSameRank(lvCardList3));
-
-
-        ArrayList<Card> twoCardsSameRank = new ArrayList<Card>();
-        twoCardsSameRank.add(lvCardDeck.getCardById(50));
-        twoCardsSameRank.add(lvCardDeck.getCardById(54));
-        String onePair = Pattern.analyzePattern(twoCardsSameRank);
-        System.out.println("should be a pair: "+ onePair);
-
-
-
-        //_____Preparing Card Combinations: noPattern (three Cards Same Suit)
-        ArrayList<Card> threeCardsSameSuit = new ArrayList<Card>();
-        for (Card c : lvCardDeck.cardDeck) {
-            if (    c.getCardID() == 30 ||
-                    c.getCardID() == 50 ||
-                    c.getCardID() == 90 )
-                threeCardsSameSuit.add(c);
-        }
-
-        //_____Preparing Card Combinations: 3 suited Connectors (three Cards, Same Suit, in Sequence)
-        ArrayList<Card> threeCardsSameSuitInSequence = new ArrayList<Card>();
-        for (Card c : lvCardDeck.cardDeck) {
-            if (    c.getCardID() == 50 ||
-                    c.getCardID() == 60 ||
-                    c.getCardID() == 70 )
-                threeCardsSameSuitInSequence.add(c);
-        }
-
-        //_____Preparing Card Combinations: 4 suited Connectors (four Cards, Same Suit, in Sequence)
-        ArrayList<Card> fourCardsSameSuitInSequence = new ArrayList<Card>();
-        for (Card c : lvCardDeck.cardDeck) {
-            if (    c.getCardID() == 52 ||
-                    c.getCardID() == 62 ||
-                    c.getCardID() == 72 ||
-                    c.getCardID() == 82 )
-                fourCardsSameSuitInSequence.add(c);
-        }
-
-        //________Checking the setPattern function_________________
-        System.out.println("save the pair !!!! "+Pattern.allSameRank(twoCardsSameRank));
-
-        //assertTrue("pair check failed ", onePair.equals("pair"));
-        assertTrue("runOfThreeSingles check failed ", Pattern.analyzePattern(threeCardsSameSuitInSequence).equals("runOfThreeSingles"));
-        assertTrue("runOf4Singles check failed ", Pattern.analyzePattern(fourCardsSameSuitInSequence).equals("runOfFourSingles"));
+        assertTrue("Joker Bomb check failed ", a_result.equals("bomb"));
+        assertTrue("Sequence Bomb check failed ", b_result.equals("bomb"));
+        assertTrue("SET check failed ", c_result.equals("fourOfAKind"));
+        assertTrue("noPattern check failed ", d_result == null);
+        assertTrue("Sequence check failed ", e_result.equals("runOfFourSingles"));
+        assertTrue("Parallel Sequence check failed ", f_result.equals("runOfThreePairs"));
+        assertTrue("shouldBeNoSequenceRun failed 3.5 check ", g_result == null);
+       assertTrue("Two Joker Bomb check failed ", h_result.equals("bomb"));
     }
 }
