@@ -13,206 +13,244 @@ import java.util.HashMap;
 import java.util.Arrays;
 import java.awt.*;
 
+
+
 public class Pattern {
-    public String patternName;
     private static final Logger log = LogManager.getLogger(Server.class.getName());
 
-    //__Constructors__
-    public Pattern() {
+    //__instance variables__
+    public String patternName = null;
+    ArrayList<Card> normalCards = new ArrayList<Card>();
+    ArrayList<Card> jokerCards = new ArrayList<Card>();
+    HashMap<String, ArrayList<Card>> cardsBySuit = new HashMap<String, ArrayList<Card>>(5);
+    HashMap<Integer, ArrayList<Card>> cardsByRank = new HashMap<Integer, ArrayList<Card>>(13);
+    int cardCount = 0;
+    int suitCount = 0;
+    int rankCount = 0;
+    int lowestRank = 0;
+    //int indicatorRunOfSequence = 0;
+
+    //__ Pattern Factory__
+    public Pattern(ArrayList<Card> cards) {
+        for (Card c : cards) {               //check for Jokers and split the cards accordingly
+            if (c.getCardSuit() != "joker") this.normalCards.add(c);
+            if (c.getCardSuit() == "joker") this.jokerCards.add(c);
+        }
+        Collections.sort(this.normalCards);         printCards(this.normalCards);
+
+        Collections.sort(this.jokerCards);          printCards(this.jokerCards);
+
+        this.lowestRank = Collections.min(cards).getCardRank();
+        //this.indicatorRunOfSequence = this.isRunOfSequence();
+        this.cardCount = cards.size();
+        this.setSuitCount();
+        log.debug("suitCount is set by Factory as : "+this.suitCount);
+        this.setRankCount();
+        log.debug("rankCount is set by Factory as : "+this.rankCount);
     }
-    public Pattern (String lvPatternName) {
-        this.patternName = lvPatternName;
+
+    public void setSuitCount() {
+        //called by factory,  splitting cards by suit in different card lists
+        //setting the suitCount and the Hash Map cardsBySuit
+        for (Card c : this.normalCards) {
+            if (!this.cardsBySuit.containsKey(c.getCardSuit())) {
+                this.cardsBySuit.put(c.getCardSuit(), new ArrayList<Card>());
+            }
+            this.cardsBySuit.get(c.getCardSuit()).add(c);
+        }
+        this.suitCount = this.cardsBySuit.keySet().size();
+    }
+
+    public void setRankCount(){
+        //called by factory, splitting cards by rank in different card lists
+        //setting the rankCount and the Hash Map cardsByRank
+        for (Card c : this.normalCards) {
+            if (!this.cardsByRank.containsKey(c.getCardRank())) {
+                this.cardsByRank.put(c.getCardRank(), new ArrayList<Card>());
+                log.debug("new CardRank added"+c.getCardRank());
+            }
+            this.cardsByRank.get(c.getCardRank()).add(c);
+            log.debug("new Card  added"+c.getCardID());
+        }
+        this.rankCount = this.cardsByRank.keySet().size();
+        log.debug("RankCount is "+this.rankCount);
     }
 
     public void setPatternName(String lvPatternName){
         this.patternName = lvPatternName;
     }
 
-    public boolean comparePattern (ArrayList<Card> tableCards, ArrayList<Card> newCards, String activePattern ){
-        return true;
-    }
-    
-    public static String analyzePattern(ArrayList<Card> cards) {
-        Pattern thePattern = new Pattern();
-
-        //check for Jokers and split the cards accordingly
-        ArrayList<Card> normalCards = new ArrayList<Card>();
-        ArrayList<Card> jokerCards = new ArrayList<Card>();
+    public static void printCards(ArrayList<Card> cards ){
         for (Card c : cards) {
-            if (c.getCardSuit() != "joker") normalCards.add(c);
-            if (c.getCardSuit() == "joker") jokerCards.add(c);
+            log.debug(" Card Nr. "+ c.getCardID());
         }
-        //setting local variables__
-        int cardCount = normalCards.size() + jokerCards.size();
+    }
 
-        //__bomb Check__
-        if(isBomb(normalCards, jokerCards)){
-            thePattern.setPatternName("bomb");
-            return thePattern.patternName;
+    /*
+    public static boolean comparePattern (ArrayList<Card> tableCards, ArrayList<Card> newCards, String activePattern ){
+        String newPattern = analyzePattern(newCards);
+        log.debug(newPattern);
+        boolean patternMatch = activePattern.equals(newPattern);
+        log.debug(patternMatch);
+
+        return patternMatch;
+    }
+    */
+
+
+    public String analyzePattern() {
+        this.bombCheck();
+        this.setCheck();
+        this.sequenceCheck();
+        return this.patternName;
+    }
+
+    public void bombCheck(){
+        if(isBomb(this.normalCards, this.jokerCards)){
+            this.setPatternName("bomb");
+        }
+    }
+
+    public void setCheck(){
+        if (this.rankCount == 1) {
+            switch (this.cardCount) {
+                case 1 : this.setPatternName("single");         break;
+                case 2 : this.setPatternName("pair");           break;
+                case 3 : this.setPatternName("threeOfAKind");   break;
+                case 4 : this.setPatternName("fourOfAKind");    break;
+                case 5 : this.setPatternName("fiveOfAKind");    break;
+                case 6 : this.setPatternName("SixOfAKind");     break;
+                case 7 : this.setPatternName("SevenOfAKind");   break;
+            }
+        }
+    }
+
+    public void sequenceCheck()        {   // when indicatorRunOfSequence smaller or equals 0 the Sequence is not valid, else it corresponds to the suitCount
+        int indicatorRunOfSequence = this.isRunOfSequence();
+            //__Run of Singles____
+            if (indicatorRunOfSequence == 1 ) {
+                switch (this.cardCount) {
+                    case 3: this.setPatternName("runOfThreeSingles");       break;
+                    case 4: this.setPatternName("runOfFourSingles");        break;
+                    case 5: this.setPatternName("runOfFiveSingles");        break;
+                    case 6: this.setPatternName("runOfSixSingles");         break;
+                    case 7: this.setPatternName("runOfSevenSingles");       break;
+                    case 8: this.setPatternName("runOfEightSingles");       break;
+                    case 9: this.setPatternName("runOfNineSingles");        break;
+                    case 10: this.setPatternName("runOfTenSingles");        break;
+                    case 11: this.setPatternName("runOfElevenSingles");     break;
+                    case 12: this.setPatternName("runOfTwelveSingles");     break;
+                    case 13: this.setPatternName("runOfThirteenSingles");   break;
+                    case 14: this.setPatternName("runOfFourteenSingles");   break;
+                }
+            }
+
+            //__Run of Pairs____when suitCount result = 2
+            if (indicatorRunOfSequence == 2 ) {
+                switch (this.cardCount) {
+                    case 4: this.setPatternName("runOfTwoPairs");           break;
+                    case 6: this.setPatternName("runOfThreePairs");         break;
+                    case 8: this.setPatternName("runOfFourPairs");          break;
+                    case 10: this.setPatternName("runOfFivePairs");         break;
+                    case 12: this.setPatternName("runOfSixPairs");          break;
+                    case 14: this.setPatternName("runOfEightPairs");        break;
+                }
+            }// end run of pairs
+
+            //__Run of 3 of a Kind  ____when suitCount result = 3
+            if (indicatorRunOfSequence == 3 ) {
+                switch (this.cardCount) {
+                    case 6: this.setPatternName("2ThreeOfAKind");           break;
+                    case 9: this.setPatternName("3ThreeOfAKind");           break;
+                    case 12: this.setPatternName("4ThreeOfAKind");          break;
+                }
+            }
+
+            //__Run of 4 of a Kind  ____when suitCount result = 4
+            if (indicatorRunOfSequence == 4 ) {
+                switch (this.cardCount) {
+                    case 8: this.setPatternName("2FourOfAKind");            break;
+                    case 12: this.setPatternName("3FourOfAKind");           break;
+                }
+            }
         }
 
-        //______ Set Check______
-        if (allSameRank(normalCards)) {
-            switch (cardCount) {
-                    case 1: thePattern.setPatternName("single");
-                        return thePattern.patternName;
-                    case 2: thePattern.setPatternName("pair");
-                        return thePattern.patternName;
-                    case 3: thePattern.setPatternName("threeOfAKind");
-                        return thePattern.patternName;
-                    case 4: thePattern.setPatternName("fourOfAKind");
-                        return thePattern.patternName;
-                    case 5:thePattern.setPatternName("fiveOfAKind");
-                        return thePattern.patternName;
-                    case 6: thePattern.setPatternName("SixOfAKind");
-                        return thePattern.patternName;
-                    case 7: thePattern.setPatternName("SevenOfAKind");
-                        return thePattern.patternName;
-            }
-        } // end of Set Check
 
-        //______Sequence Check_____
-        int suitCount = isRunOfSequence(normalCards, jokerCards); // when suitCount smaller or equals 0 the Sequence is not valid
-
-        //__Run of Singles____when suitCount result = 1
-        if (suitCount == 1 ) {
-            switch (cardCount) {
-                 case 3: thePattern.setPatternName("runOfThreeSingles");
-                     return thePattern.patternName;
-                 case 4: thePattern.setPatternName("runOfFourSingles");
-                     return thePattern.patternName;
-                 case 5: thePattern.setPatternName("runOfFiveSingles");
-                     return thePattern.patternName;
-                 case 6: thePattern.setPatternName("runOfSixSingles");
-                     return thePattern.patternName;
-                 case 7: thePattern.setPatternName("runOfSevenSingles");
-                     return thePattern.patternName;
-                 case 8: thePattern.setPatternName("runOfEightSingles");
-                     return thePattern.patternName;
-                 case 9: thePattern.setPatternName("runOfNineSingles");
-                     return thePattern.patternName;
-                 case 10: thePattern.setPatternName("runOfTenSingles");
-                     return thePattern.patternName;
-                 case 11: thePattern.setPatternName("runOfElevenSingles");
-                     return thePattern.patternName;
-                 case 12: thePattern.setPatternName("runOfTwelveSingles");
-                     return thePattern.patternName;
-                 case 13: thePattern.setPatternName("runOfThirteenSingles");
-                     return thePattern.patternName;
-                 case 14: thePattern.setPatternName("runOfFourteenSingles");
-                     return thePattern.patternName;
-            }
-        }// end run of singles
-
-        //__Run of Pairs____when suitCount result = 2
-        if (suitCount == 2 ) {
-            switch (cardCount) {
-                case 4: thePattern.setPatternName("runOfTwoPairs");
-                    return thePattern.patternName;
-                case 6: thePattern.setPatternName("runOfThreePairs");
-                    return thePattern.patternName;
-                case 8: thePattern.setPatternName("runOfFourPairs");
-                    return thePattern.patternName;
-                case 10: thePattern.setPatternName("runOfFivePairs");
-                    return thePattern.patternName;
-                case 12: thePattern.setPatternName("runOfSixPairs");
-                    return thePattern.patternName;
-                case 14: thePattern.setPatternName("runOfEightPairs");
-                    return thePattern.patternName;
-            }
-        }// end run of pairs
-
-        //__Run of 3 of a Kind  ____when suitCount result = 3
-        if (suitCount == 3 ) {
-            switch (cardCount) {
-                case 6: thePattern.setPatternName("2ThreeOfAKind");
-                    return thePattern.patternName;
-                case 9: thePattern.setPatternName("3ThreeOfAKind");
-                    return thePattern.patternName;
-                case 12: thePattern.setPatternName("4ThreeOfAKind");
-                    return thePattern.patternName;
-            }
-        }// end run of 3 of a Kind
-
-        //__Run of 4 of a Kind  ____when suitCount result = 4
-        if (suitCount == 4 ) {
-            switch (cardCount) {
-                case 8: thePattern.setPatternName("2FourOfAKind");
-                    return thePattern.patternName;
-                case 12: thePattern.setPatternName("3FourOfAKind");
-                    return thePattern.patternName;
-            }
-        }// end run of 4 of a Kind
-
-        return thePattern.patternName;
-    } //end analyze Pattern
-
-    /**
+    /**____ IS RUN OF SEQUENCE____
      * Method checking for all Sequence Patterns, returning an int :
      * 0= no sequence, 1=Run of Singles, 2= Run of Pairs, 3=Run of 3ofAKind, 4= 4oAKind (including jokerCards)
      */
-    public static int isRunOfSequence (ArrayList<Card> normalCards, ArrayList<Card> jokerCards) {
-        Collections.sort(normalCards);
+    public int isRunOfSequence () {
+        //Collections.sort(this.normalCards);
         int isRunOfSequence ;
-        int jokerCount = jokerCards.size();
-        int lowestRank = Collections.min(normalCards).getCardRank();
-
-        log.debug("jokerCount at beginning "+jokerCount);
-        log.debug(lowestRank+" lowest Rank");
-
+        int remainingJokers = this.jokerCards.size();
+        /*
         //__splitting cards by suit in different card lists (hash map)
         HashMap<String, ArrayList<Card>> cardSuits = new HashMap<String, ArrayList<Card>>(5);
-        for (Card c : normalCards) {
+        for (Card c : this.normalCards) {
             if (!cardSuits.containsKey(c.getCardSuit())) {
                 cardSuits.put(c.getCardSuit(), new ArrayList<Card>());
             }
             cardSuits.get(c.getCardSuit()).add(c);
         }
+        */
 
-        //__get maximum amount of cards per suit: defines which kind of pattern will be attempted (with jokers)_ FIXME if different pattern on table - adjust here
+        //__get maximum amount of cards per suit: defines which kind of pattern will be attempted (with jokers)_
+        // FIXME if different pattern on table - adjust here (set as instance variable)
+        // 2 jokers played with pairs : four of a kind || run of Pairs
+        // 2 jokers played with 77 88 : sequence of three pairs - or 2 Three of a Kind etc.
+        //
         int amountOfCardsBySuit = 0;
-        for (ArrayList<Card> cardList : cardSuits.values()) {
-            log.debug(cardList.size()+" cards of suit "+ cardList.get(0).getCardSuit());
-            if (cardList.size() > amountOfCardsBySuit) {
-                amountOfCardsBySuit = cardList.size();
+        for (ArrayList<Card> suitedList : this.cardsBySuit.values()) {
+            if (suitedList.size() > amountOfCardsBySuit) {
+                amountOfCardsBySuit = suitedList.size();
             }
         }
-        log.debug("highest amount of Cards "+amountOfCardsBySuit);
+        log.debug("IS RUN OF SEQUENCE : highest amount of Cards by suit "+amountOfCardsBySuit);
 
         //__Sequence check for each suit__
-        for (ArrayList<Card> cardList : cardSuits.values()){
-            log.debug("Sequence Check for Suit: "+cardList.get(0).getCardSuit()+" remaining Jokers:"+jokerCount);
-            jokerCount = Pattern.inSequence(cardList, jokerCount, lowestRank, amountOfCardsBySuit);
+        for (ArrayList<Card> suitedCards : this.cardsBySuit.values()){
+            log.debug("calling inSequence here ");
+            remainingJokers = Pattern.inSequence(suitedCards, remainingJokers, this.lowestRank, amountOfCardsBySuit);
         }
 
         //__setting the return value__
-        int suitCount = cardSuits.keySet().size();
-        isRunOfSequence = suitCount;
-        if (jokerCount < 0) {
-            isRunOfSequence = jokerCount;
+        log.debug("suitCount coming from INSTANCE VAR "+this.suitCount);
+        log.debug("remaining Jokers and indicator from Patter.inSequence as int  "+remainingJokers);
+
+        isRunOfSequence = this.suitCount;
+
+        if (remainingJokers < 0) {
+            isRunOfSequence = remainingJokers;
+            log.debug("if the jokercount was smaller zero is run of Sequence indicator is set here as: "+isRunOfSequence);
         }
 
-        log.debug("suitCount"+suitCount);
-        log.debug("jokerCount"+jokerCount);
+       // log.debug("suitCount"+suitCount);
+        //log.debug("jokerCount"+jokerCount);
         return isRunOfSequence;
     }
 
-    /**
+
+
+    /**____IN SEQUENCE____
      * int return Check : returns 2, 1, 0 or -1, depending on how many jokers are left at the end of the function (-1 -> false sequence)
      * all in Sequence checks if a regular Sequence is possible including the use of 1 or 2 jokers
      */
     public static int inSequence (ArrayList<Card> cards, int jokerCount, int lowestRank, int amountOfCardsBySuit) {
-        Collections.sort(cards);
+        //Collections.sort(cards);
+        log.debug("inside in Sequence ...");
         int errorTolerance = jokerCount;
         int sequenceBase = lowestRank;
         int i = 0;
         for (Card c : cards) {
                 while (c.getCardRank() != sequenceBase + i) {
-                    System.out.println("gap at Card Nr. " + c.getCardID());
+                    log.debug("gap at Card Nr. " + c.getCardID()+" remaining error Tolerance is "+ errorTolerance);
+
                     if (errorTolerance <= 0) {
                         return errorTolerance -1 ;
                     }
                     errorTolerance -= 1;
+                    log.debug("error Tolerance reduced by one _ now remaining : "+errorTolerance);
                     i++;
                     }
                 i++;
@@ -220,19 +258,21 @@ public class Pattern {
         if(cards.size()<amountOfCardsBySuit){ // Sequence has no gap, but is shorter than required - jokers consumed
             int difference = amountOfCardsBySuit - cards.size();
             errorTolerance -= difference;
-            System.out.println("Sequence too short - difference is "+ difference +" adjusted errorTolerance "+errorTolerance);
+            log.debug("Sequence too short - difference is "+ difference +" adjusted errorTolerance "+errorTolerance);
         }
-        System.out.println("return value"+errorTolerance);
+        log.debug("in Sequence indicator(OK if not negative)returns : "+errorTolerance);
         return errorTolerance;
     }
 
-    /**
+
+
+
+    /**____IS BOMB ?____
      * Boolean Check :
      * is Bomb checking 3-5-7-9 suited or all off suit & 2 or 3 jokers played
      */
     public static boolean isBomb ( ArrayList<Card> normalCards, ArrayList<Card> jokerCards) {
         boolean isBomb = true;
-        System.out.print("xxx to is bomb");
         if (normalCards.size() > 0 && jokerCards.size() > 0 ){
             isBomb = false;
             return isBomb;
@@ -271,44 +311,11 @@ public class Pattern {
         //__joker bombs__
         if(jokerCards.size() > 0   ){
             switch (jokerCards.size()){
-                case 1 : isBomb = false;
-                case 2 : isBomb = true;
-                case 3 : isBomb = true;
+                case 1 : isBomb = false;    break;
+                case 2 : isBomb = true;     break;
+                case 3 : isBomb = true;     break;
             }
         } //end of joker bombs
         return isBomb;
-    }// end of isBomb
-
-
-    /**
-     * Boolean Check :
-     * all same suit
-     */
-    public static boolean allSameSuit (ArrayList<Card> cards) {
-        boolean sameSuit = true;
-        String comparableSuit = cards.get(0).getCardSuit();
-        for (Card c : cards) {
-            if (!c.getCardSuit().equals(comparableSuit)) {
-                sameSuit = false;
-                break;
-            }
-        }
-        return sameSuit;
-    }
-
-    /**
-     * Boolean Check :
-     * all same rank
-     */
-    public static boolean allSameRank(ArrayList<Card> normalCards){
-        boolean sameRank = true;
-        int comparableRank = normalCards.get(0).getCardRank();
-        for (Card c : normalCards) {
-            if (c.getCardRank() != comparableRank) {
-                sameRank = false;
-                break;
-            }
-        }
-        return sameRank;
     }
 }
