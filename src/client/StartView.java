@@ -159,58 +159,6 @@ public class StartView extends JFrame implements ActionListener {
 		tblLogginPlayer = new JTable(model);
 		panelStatusPlayer.add(tblLogginPlayer, BorderLayout.CENTER);
 		
-		/**Vector<String> vPlayingPlayer = new Vector<String>();
-		vPlayingPlayer.add("Player1");
-		vPlayingPlayer.add("Player2");
-		vPlayingPlayer.add("Player3");
-		vPlayingPlayer.add("Status:");
-
-		Vector<String> vTableTitle = new Vector<String>();
-		vTableTitle.add("Joined Player");
-		//DefaultTableModel model = new DefaultTableModel(vPlayingPlayer, vTableTitle);
-		//model.addColumn(vTableTitle, vPlayingPlayer);
-		//model.addColumn("Joined Player", vPlayingPlayer);
-		JTable tblLogginPlayer = new JTable(vPlayingPlayer, vTableTitle); //data, title
-
-		//JTable tblLogginPlayer = new JTable(model); //data, title
-		panelStatusPlayer.add(tblLogginPlayer, BorderLayout.CENTER);
-		
-		
-		String[] columnName = {"Joined Player"};
-		Object[] joinedPlayer = {"Player1", "Player2", "Player3"};
-		
-		JTable tblJoinedPlayer = new JTable(joinedPlayer, columnName);
-		panelStatusPlayer.add(tblJoinedPlayer,BorderLayout.CENTER);
-		**/
-
-	
-		/**String[] emptyPlayerList = {" "," "," "};
-		
-		//for player in player token => addElement()
-		listPlayingPlayer = new DefaultListModel<String>();
-		listPlayingPlayer.addElement("Player1");
-		listPlayingPlayer.addElement("Player1");
-		listPlayingPlayer.addElement("Player1");
-		
-		//JList<String> list = new JList(emptyPlayerList);		    
-		// should be JList<String> but windowbuilder fails with that
-		//JList<String> list = new JList(emptyPlayerList);		    
-		
-	    JList<String> listLogginPlayer = new JList(listPlayingPlayer);
-		listLogginPlayer.setBorder(BorderFactory.createLineBorder(Color.black));
-		//DefaultListSelectionModel m = new DefaultListSelectionModel();
-		listLogginPlayer.setVisibleRowCount(5);
-		//listLogginPlayer.setSelectionModel(m);
-		listLogginPlayer.setPreferredSize(new Dimension(20, 20));
-		//m.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		//m.setLeadAnchorNotificationEnabled(false);
-		
-		
-		lblWaitingForPlayer = new JLabel("Status: Waiting for Player...");
-		lblWaitingForPlayer.setFont(text);
-		lblWaitingForPlayer.setHorizontalAlignment(SwingConstants.CENTER);
-		panelStatusPlayer.add(lblWaitingForPlayer, BorderLayout.NORTH);
-		**/
 		
 		// -- Card Image (2.2)
 		panelImageContainer = new JPanel();

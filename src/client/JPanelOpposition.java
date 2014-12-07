@@ -60,6 +60,10 @@ public class JPanelOpposition extends JPanel{
 	
 	private static final Logger log = LogManager.getLogger( JPanelOpposition.class.getName() );
 	
+	public JPanelOpposition() {
+		
+	}
+	
 	public JPanelOpposition(TableView view, String oppositionSide)  {
 
 		this.view = view;
