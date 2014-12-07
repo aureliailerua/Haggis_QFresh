@@ -104,6 +104,7 @@ public class GameState extends Observable implements Serializable {
 		this.playerList.add(new Player(token));
 		log.debug("Player created: "+playerList.get(playerList.size()-1).getToken());
 		this.numPlayers = this.numPlayers+1;
+		this.setChanged();
 		return token;
 	}
 	

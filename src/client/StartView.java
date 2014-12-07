@@ -78,30 +78,17 @@ public class StartView extends JFrame implements ActionListener {
 	JLabel lblLogginPlayer;
 	JLabel imgLableCard;
 	
+	Vector<String> joinedPlayer;
+	JTable tblLogginPlayer;
+	DefaultTableModel model; 
+	
 	private static final Logger log = LogManager.getLogger( TableController.class.getName() );
 	
     //private DefaultListModel listPlayingPlayer;
 	
-	TableController controller;
+	StartController controller;
 
-
-	/*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					StartView window = new StartView();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	*/
-
-	public StartView(TableController controller) {
-	//public StartView() {
+	public StartView(StartController controller) {
 		this.controller = controller;
 		
 		// Define Font's
@@ -165,14 +152,11 @@ public class StartView extends JFrame implements ActionListener {
         UIManager.put("Table.alternateRowColor", Color.PINK);
         //UIManager.put("Table.border", BorderFactory.createLineBorder(Color.BLACK));
 		
-		Vector<String> joinedPlayer = new Vector<String>();
-		joinedPlayer.add("Player1");
-		joinedPlayer.add("Player2");
-		joinedPlayer.add("Player3");
-		joinedPlayer.add("Status:");
-		DefaultTableModel model = new DefaultTableModel();
+		joinedPlayer = new Vector<String>();
+		joinedPlayer.add("Waiting for Players...");
+		model = new DefaultTableModel();
 		model.addColumn(lblLogginPlayer, joinedPlayer);
-		JTable tblLogginPlayer = new JTable(model);
+		tblLogginPlayer = new JTable(model);
 		panelStatusPlayer.add(tblLogginPlayer, BorderLayout.CENTER);
 		
 		/**Vector<String> vPlayingPlayer = new Vector<String>();
@@ -272,7 +256,7 @@ public class StartView extends JFrame implements ActionListener {
 		
 
 		/**
-		 * Button Container (3)
+		 * Button CardContainer (3)
 		 */
 		panelButton = new JPanel();
 		panelButton.setOpaque(false);
@@ -282,6 +266,7 @@ public class StartView extends JFrame implements ActionListener {
 		
 		panelBtnStart = new JPanel();
 		panelBtnStart.setOpaque(false);
+		panelBtnStart.setEnabled(false);
 		FlowLayout flBtnStart = (FlowLayout) panelBtnStart.getLayout();
 		flBtnStart.setAlignment(FlowLayout.LEFT);
 		panelButton.add(panelBtnStart);
@@ -289,10 +274,10 @@ public class StartView extends JFrame implements ActionListener {
 		btnStart = new JButton("Start Game");
 		btnStart.setFont(button);
 		btnStart.setPreferredSize(new Dimension(130, 58));
-		//btnStart.addActionListener(this);
+		btnStart.addActionListener(controller);
 		panelBtnStart.add(btnStart);
 		
-		// -- Button Container (3.2)
+		// -- Button CardContainer (3.2)
 		panelBtnContainer = new JPanel();
 		panelBtnContainer.setOpaque(false);
 		FlowLayout flBtnContainer = (FlowLayout) panelBtnContainer.getLayout();
@@ -319,14 +304,7 @@ public class StartView extends JFrame implements ActionListener {
 	public JFrame getJFrame(){
 		return frame;
 	}
-	/**
-	 * Method to set the controller
-	 * @param controller
-	 */
-	public void setController(TableController controller){
-		this.controller = controller;	
-	}
-	
+		
 	/**
 	 * Method to display Rules with scrollbar
 	 */
@@ -354,23 +332,7 @@ public class StartView extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getSource() == btnRules) {
 	    	displayRules();
-	    }
-	    
-	    if (e.getSource() == btnStart) {
-	    	try {
-				
-				ServerHandlerMock handler = new ServerHandlerMock(new Socket());
-				TableController controller = new TableController(handler);
-				TableView view = new TableView(controller);
-				controller.setView(view);
-				view.getJFrame().pack();
-				view.getJFrame().setVisible(true);
-				handler.sendGameState();
-				
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-	    }
+	    }	    
 	}
 
 }

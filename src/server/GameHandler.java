@@ -28,9 +28,6 @@ public class GameHandler {
 		this.gameState = new GameState();
 	}
 
-
-
-
     /**
 	 * FIXME some more logic will be needed here to start the game when enough players are connected. 
 	 * 
@@ -38,7 +35,6 @@ public class GameHandler {
 	public PlayerToken addPlayer(ClientHandler client) throws MaxPlayerException{ 
 		PlayerToken token = gameState.addPlayer();
 		gameState.addObserver(client);
-		
 		return token;
 	}
 
@@ -46,8 +42,8 @@ public class GameHandler {
 	 * checks if enough players are joined and starts the game.
 	 * #FIXME this function should be renamed
 	 */
-	private void startGame() {
-		if (gameState.getNumPlayers() >=3) {
+	public void startGame() {
+		if (gameState.getNumPlayers() >=2) {
 			gameState.setActivePlayer(PlayerToken.one);
 			gameState.setState(GameState.State.running);
 			gameState.activeCardDeck = new CardDeck(gameState.getNumPlayers());
@@ -62,6 +58,7 @@ public class GameHandler {
 			log.debug("starting game");
 		}
 	}
+
 	public synchronized GameState getGameState(){
 		return this.gameState;
 	}
@@ -70,7 +67,7 @@ public class GameHandler {
 	 * @param move
 	 * Applies move Object to the GameState Object
 	 */
-	public synchronized void newMove(Container lvContainer) {
+	public synchronized void newMove(CardContainer lvContainer) {
 		if ( lvContainer.getToken() == gameState.getActivePlayer() &&
 				gameState.getState() == State.running){
 			
@@ -147,8 +144,11 @@ public class GameHandler {
 	 * should be started
 	 */
 	public void playerAdded() {
-		System.out.println("player Added");
-		startGame();
+		log.debug("player Added");
+		gameState.notifyObservers();
+		if (gameState.getNumPlayers() >2) {
+			startGame();
+		}
 	}
 	
 	public Player getPlayerObject(PlayerToken lvToken){

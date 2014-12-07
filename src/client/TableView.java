@@ -336,7 +336,7 @@ public class TableView extends JFrame implements ActionListener{
 		btnPlay.addActionListener(controller); //generiert Listener
 		panelBtnPlay.add(btnPlay);
 		
-		// -- Control Container with Buttons (3.4.E)
+		// -- Control CardContainer with Buttons (3.4.E)
 		panelControlContainer = new JPanel();
 		panelControlContainer.setOpaque(false);
 		panelControlContainer.setPreferredSize(new Dimension(300,120));

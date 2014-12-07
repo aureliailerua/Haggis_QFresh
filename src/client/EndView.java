@@ -199,7 +199,7 @@ public class EndView extends JFrame {
 		
 
 		/**
-		 * Button Container (3)
+		 * Button CardContainer (3)
 		 */
 		panelButton = new JPanel();
 		panelButton.setOpaque(false);
@@ -219,7 +219,7 @@ public class EndView extends JFrame {
 		//btnStart.addActionListener(this);
 		panelBtnStart.add(btnStart);
 		
-		// -- Button Container (3.2)
+		// -- Button CardContainer (3.2)
 		panelBtnContainer = new JPanel();
 		panelBtnContainer.setOpaque(false);
 		FlowLayout flBtnContainer = (FlowLayout) panelBtnContainer.getLayout();

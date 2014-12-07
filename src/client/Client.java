@@ -40,11 +40,11 @@ public class Client {
 	public void startup() throws IOException{
 		Socket socket = new Socket(address,port);
 		this.handler = new ServerHandler(socket);
-		TableController controller = new TableController(handler);
-		TableView view = new TableView(controller);
-		controller.setView(view);
-		view.getJFrame().pack();
-		view.getJFrame().setVisible(true);
+		StartController startController = new StartController(handler,this);
+		StartView startView = new StartView(startController);
+		startController.setView(startView);
+		startView.getJFrame().pack();
+		startView.getJFrame().setVisible(true);
 		handler.initialize();
 		new Thread(this.handler).start();
 	}
@@ -64,5 +64,14 @@ public class Client {
 	
 	public static void main(String[] args) {
 		Client.startGui();
+	}
+
+	public void startGame() {
+		TableController tableController = new TableController(handler);
+		TableView view = new TableView(tableController);
+		tableController.setView(view);
+		view.getJFrame().pack();
+		view.getJFrame().setVisible(true);
+		tableController.drawGameState();
 	}
 }

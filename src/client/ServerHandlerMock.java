@@ -3,12 +3,13 @@ package client;
 import java.util.ArrayList;
 
 import library.Card;
-import library.Container;
+import library.CardContainer;
 import library.CardDeck;
-import library.Container;
+import library.CardContainer;
 import library.GameState;
 import library.Player;
 
+import library.Container;
 import java.net.Socket;
 
 import server.Move;
@@ -51,7 +52,7 @@ public class ServerHandlerMock extends ServerHandler {
 	
 	@Override
 	public void send(Container container){
-		Container cardContainer = (Container)container;
+		CardContainer cardContainer = (CardContainer)container;
 		for (Card card: cardContainer.getPlayCards()){
 			if (card.getCardSuit() == "joker"){
 				this.gameState.getPlayer(token).getPlayerJokers().remove(card);

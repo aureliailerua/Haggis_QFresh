@@ -10,8 +10,10 @@ import java.util.Observer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import library.CardContainer;
 import library.GameState;
 import library.Container;
+import library.StartContainer;
 
 /**
  * @author benjamin.indermuehle
@@ -51,7 +53,7 @@ public class ClientHandler extends Thread implements Observer {
 			System.out.println(e.getMessage());
 			this.finalize();
 		}
-		System.out.println("sending token");
+		log.debug("sending token");
 		out.writeObject(token);
 		out.flush();
 		out.reset();
@@ -84,17 +86,25 @@ public class ClientHandler extends Thread implements Observer {
 	 */
 	public void readInput() throws IOException{
 		while (true){
-			Container move;
+			Object o;
     		try{
-    			 move = (Container) this.in.readObject();
-    			 log.debug("recieved new Container");
-    			 move.setToken(this.token);
-    	    	this.dealer.newMove(move);
+    			o = this.in.readObject();
+    			try {
+    				CardContainer move = (CardContainer) o;
+    				log.debug("recieved new CardContainer");
+    				move.setToken(this.token);
+    				this.dealer.newMove(move);
+    			}catch (ClassCastException e){}
+    			try{
+    				StartContainer start = (StartContainer) o;
+    				log.debug("recieved startContainer");
+    				dealer.startGame();
+    			}catch (ClassCastException e){}
     		} catch (ClassNotFoundException e) {
-    			//TODO Auto-generated catch block
     			e.printStackTrace();
     			System.exit(1);	
     		}
+    		
 		}
 	}
 	

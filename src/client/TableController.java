@@ -18,7 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import library.Card;
-import library.Container;
+import library.CardContainer;
 import library.CardDeck;
 import library.GameState;
 import library.GameState.PlayerToken;
@@ -28,7 +28,6 @@ import client.TableView;
 
 public class TableController implements ActionListener,Observer{
 	TableView view;
-	StartView startview;
 	ServerHandler handler;
 	boolean mockup;
 	private static final Logger log = LogManager.getLogger( TableController.class.getName() );
@@ -42,14 +41,6 @@ public class TableController implements ActionListener,Observer{
 		this.view = view;
 	}
 	
-	
-	public void setStartView(StartView view){
-		this.startview = view;
-	}
-	
-	/*public void drawStartTable() {
-		startview.getJFrame();
-	}*/
 	public void drawGameState(){
 		log.debug("drawing new GameState");
 		view.drawGameState(getGameState());
@@ -67,7 +58,7 @@ public class TableController implements ActionListener,Observer{
 		if (((cards.size() != 0) && (buttonCheck.equals("Play"))) || ((cards.size() == 0) && (buttonCheck.equals("Pass")))){
 		//if((cards.size() != 0) && (buttonCheck.equals("Play"))) {
 			log.debug("sending cards");
-			Container container = new Container(cards);
+			CardContainer container = new CardContainer(cards);
 			handler.send(container);
 		} else {
 			log.debug("play emtpy card");

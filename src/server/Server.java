@@ -11,7 +11,7 @@ import java.util.Observer;
 import org.apache.logging.log4j.*;
 
 import library.GameState;
-import library.Container;
+import library.CardContainer;
 import library.PropertyFile;
 
 public class Server extends Thread{
