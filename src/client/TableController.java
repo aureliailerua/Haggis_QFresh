@@ -130,6 +130,7 @@ public class TableController implements ActionListener,Observer{
 		return getGameState().playerList.get(index+1);
 	}
 	
+	// VERSUCH Opposition dynamisch Anzeigen
 	/*
 	public int getPlayerCount(Player player) {
 		return getGameState().playerList.indexOf(player);

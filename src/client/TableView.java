@@ -183,7 +183,7 @@ public class TableView extends JFrame implements ActionListener{
 		/**
 		 * 2nd Opposition Player (3.E)
 		*/
-	
+		// VERSUCH Opposition dynamisch Anzeigen
 		/* int playerCount = controller.getPlayerCount(controller.getPlayer());
 		log.debug("!!!! TableView - player Count "+playerCount );
 		if (playerCount == 3) {
