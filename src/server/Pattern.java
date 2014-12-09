@@ -1,5 +1,4 @@
 package server;
-
 /**
  * Created by Riya on 17.11.2014.
  */
@@ -13,45 +12,46 @@ import java.util.HashMap;
 import java.util.Arrays;
 import java.awt.*;
 
-
-
 public class Pattern {
     private static final Logger log = LogManager.getLogger(Server.class.getName());
-
     //__instance variables__
-    public String patternName = null;
-    ArrayList<Card> normalCards = new ArrayList<Card>();
-    ArrayList<Card> jokerCards = new ArrayList<Card>();
-    HashMap<String, ArrayList<Card>> cardsBySuit = new HashMap<String, ArrayList<Card>>(5);
-    HashMap<Integer, ArrayList<Card>> cardsByRank = new HashMap<Integer, ArrayList<Card>>(13);
-    int cardCount = 0;
-    int suitCount = 0;
-    int rankCount = 0;
-    int lowestRank = 0;
-    //int indicatorRunOfSequence = 0;
+        public String patternName = null;
+        ArrayList<Card> normalCards = new ArrayList<Card>();
+        ArrayList<Card> jokerCards = new ArrayList<Card>();
+        HashMap<String, ArrayList<Card>> cardsBySuit = new HashMap<String, ArrayList<Card>>(5);
+        HashMap<Integer, ArrayList<Card>> cardsByRank = new HashMap<Integer, ArrayList<Card>>(13);
+        int cardCount = 0;
+        int suitCount = 0;
+        int rankCount = 0;
+        int lowestRank = 0;
+        int highestRank = 0;
+        int maxSequenceLength = 0;
+
 
     //__ Pattern Factory__
     public Pattern(ArrayList<Card> cards) {
-        for (Card c : cards) {               //check for Jokers and split the cards accordingly
+        for (Card c : cards) {
             if (c.getCardSuit() != "joker") this.normalCards.add(c);
             if (c.getCardSuit() == "joker") this.jokerCards.add(c);
         }
         Collections.sort(this.normalCards);         printCards(this.normalCards);
-
         Collections.sort(this.jokerCards);          printCards(this.jokerCards);
 
         this.lowestRank = Collections.min(cards).getCardRank();
-        //this.indicatorRunOfSequence = this.isRunOfSequence();
+        this.highestRank = Collections.max(cards).getCardRank();
+        this.maxSequenceLength = (this.highestRank - this.lowestRank +1);
+
         this.cardCount = cards.size();
         this.setSuitCount();
-        log.debug("suitCount is set by Factory as : "+this.suitCount);
         this.setRankCount();
-        log.debug("rankCount is set by Factory as : "+this.rankCount);
+
+            log.debug("suitCount is set by Factory as : "+this.suitCount);
+            log.debug("rankCount is set by Factory as : "+this.rankCount);
+            log.debug("maxCardsBySuit is set by Factory as : "+this.maxSequenceLength);
     }
 
+
     public void setSuitCount() {
-        //called by factory,  splitting cards by suit in different card lists
-        //setting the suitCount and the Hash Map cardsBySuit
         for (Card c : this.normalCards) {
             if (!this.cardsBySuit.containsKey(c.getCardSuit())) {
                 this.cardsBySuit.put(c.getCardSuit(), new ArrayList<Card>());
@@ -62,18 +62,16 @@ public class Pattern {
     }
 
     public void setRankCount(){
-        //called by factory, splitting cards by rank in different card lists
-        //setting the rankCount and the Hash Map cardsByRank
         for (Card c : this.normalCards) {
             if (!this.cardsByRank.containsKey(c.getCardRank())) {
                 this.cardsByRank.put(c.getCardRank(), new ArrayList<Card>());
-                log.debug("new CardRank added"+c.getCardRank());
+                    log.debug("new CardRank added"+c.getCardRank());
             }
             this.cardsByRank.get(c.getCardRank()).add(c);
-            log.debug("new Card  added"+c.getCardID());
+                log.debug("new Card  added"+c.getCardID());
         }
         this.rankCount = this.cardsByRank.keySet().size();
-        log.debug("RankCount is "+this.rankCount);
+            log.debug("RankCount is "+this.rankCount);
     }
 
     public void setPatternName(String lvPatternName){
@@ -86,27 +84,70 @@ public class Pattern {
         }
     }
 
-    /*
-    public static boolean comparePattern (ArrayList<Card> tableCards, ArrayList<Card> newCards, String activePattern ){
-        String newPattern = analyzePattern(newCards);
-        log.debug(newPattern);
-        boolean patternMatch = activePattern.equals(newPattern);
-        log.debug(patternMatch);
+    public boolean comparePatternTEMP (Pattern tablePattern ) {
+        boolean levelingOK;
+        boolean patternMatch = false;
 
+        //__naturally matching patterns are detected here__
+        this.analyzePattern();                                                 log.debug("incoming Cards analyzed result naturally in "+this.patternName);
+        if(tablePattern.lowestRank < this.lowestRank){  levelingOK = true;     log.debug("leveling ok ? "+levelingOK);}
+        if(this.patternName.equals(tablePattern.patternName) && tablePattern.lowestRank < this.lowestRank) {
+            patternMatch = true;
+            return patternMatch;
+        }
         return patternMatch;
     }
-    */
+
+
+
+    public boolean comparePattern (Pattern tablePattern ){
+                boolean levelingOK;
+        boolean patternMatch = false;
+
+        //__naturally matching patterns are detected here__
+        this.analyzePattern();                                                 log.debug("incoming Cards analyzed result naturally in "+this.patternName);
+        if(tablePattern.lowestRank < this.lowestRank){  levelingOK = true;     log.debug("leveling ok ? "+levelingOK);}
+        if(this.patternName.equals(tablePattern.patternName) && tablePattern.lowestRank < this.lowestRank){
+            patternMatch = true;
+            return patternMatch;
+        }
+
+        /*
+        int sequenceLength = tablePattern.maxCardsBySuit;
+        int sequenceDepth = tablePattern.isRunOfSequence(sequenceLength);
+
+        */
+
+        //__this adjusts the patternCheck attempting to match the table Pattern (if 2 jokers have been played)
+        if(this.jokerCards.size() > 1) {
+            int tableSequenceDepth = tablePattern.isRunOfSequence(tablePattern.maxSequenceLength); //retrieve the sequence target value from table pattern
+                if (tableSequenceDepth > 0) {
+                int playedSequenceDepth = this.isRunOfSequence(this.maxSequenceLength); // redundant - if both depth are the same, the patterns would match naturally
+                //calling isRunOfSequence with the target Depth from the table cards
+                int attemptSequenceDepth = this.isRunOfSequence(tableSequenceDepth); //analyzing if the sequence can be build in sufficient depth
+                log.debug("COMPARE table sequence depth: " + tableSequenceDepth +" played sequence depth: "+playedSequenceDepth+" attempting sequence Depth"+attemptSequenceDepth);
+
+                if (true){ //if the built match is ok, set the new Patterns name (make sure adjusted patterns get their instance variables set correctly as they differ from analyze pattern)
+                    this.sequenceCheck(attemptSequenceDepth);
+                    this.maxSequenceLength = attemptSequenceDepth;
+                }
+            }
+        }//end of playedCards had at least 2 Jokers
+        return patternMatch;
+    }
+
 
 
     public String analyzePattern() {
         this.bombCheck();
         this.setCheck();
-        this.sequenceCheck();
+        int sequenceDepth = this.isRunOfSequence(this.maxSequenceLength);
+        this.sequenceCheck(sequenceDepth);
         return this.patternName;
     }
 
     public void bombCheck(){
-        if(isBomb(this.normalCards, this.jokerCards)){
+        if(this.isBomb()){
             this.setPatternName("bomb");
         }
     }
@@ -125,10 +166,10 @@ public class Pattern {
         }
     }
 
-    public void sequenceCheck()        {   // when indicatorRunOfSequence smaller or equals 0 the Sequence is not valid, else it corresponds to the suitCount
-        int indicatorRunOfSequence = this.isRunOfSequence();
+    public void sequenceCheck(int sequenceDepth){  // when the sequenceDepth <=0 the Sequence is not valid, else it corresponds to the suitCount
+        //int indicatorRunOfSequence = this.isRunOfSequence();
             //__Run of Singles____
-            if (indicatorRunOfSequence == 1 ) {
+            if (sequenceDepth == 1 ) {
                 switch (this.cardCount) {
                     case 3: this.setPatternName("runOfThreeSingles");       break;
                     case 4: this.setPatternName("runOfFourSingles");        break;
@@ -145,8 +186,8 @@ public class Pattern {
                 }
             }
 
-            //__Run of Pairs____when suitCount result = 2
-            if (indicatorRunOfSequence == 2 ) {
+            //__Run of Pairs____when suitCount (indicatorROS) result = 2
+            if (sequenceDepth == 2 ) {
                 switch (this.cardCount) {
                     case 4: this.setPatternName("runOfTwoPairs");           break;
                     case 6: this.setPatternName("runOfThreePairs");         break;
@@ -155,10 +196,10 @@ public class Pattern {
                     case 12: this.setPatternName("runOfSixPairs");          break;
                     case 14: this.setPatternName("runOfEightPairs");        break;
                 }
-            }// end run of pairs
+            }
 
-            //__Run of 3 of a Kind  ____when suitCount result = 3
-            if (indicatorRunOfSequence == 3 ) {
+            //__Run of 3 of a Kind  ____when suitCount (indicatorROS) result = 3
+            if (sequenceDepth == 3 ) {
                 switch (this.cardCount) {
                     case 6: this.setPatternName("2ThreeOfAKind");           break;
                     case 9: this.setPatternName("3ThreeOfAKind");           break;
@@ -166,139 +207,94 @@ public class Pattern {
                 }
             }
 
-            //__Run of 4 of a Kind  ____when suitCount result = 4
-            if (indicatorRunOfSequence == 4 ) {
+            //__Run of 4 of a Kind  ____when suitCount (indicatorROS) result = 4
+            if (sequenceDepth == 4 ) {
                 switch (this.cardCount) {
                     case 8: this.setPatternName("2FourOfAKind");            break;
                     case 12: this.setPatternName("3FourOfAKind");           break;
                 }
             }
         }
-
-
     /**____ IS RUN OF SEQUENCE____
-     * Method checking for all Sequence Patterns, returning an int :
-     * 0= no sequence, 1=Run of Singles, 2= Run of Pairs, 3=Run of 3ofAKind, 4= 4oAKind (including jokerCards)
+     * checking for sequences, returning an int meaning 0 = no sequence, 1=Run of Singles,
+     * 2= Run of Pairs, 3=Run of 3ofAKind, 4= 4oAKind (including jokerCards)
      */
-    public int isRunOfSequence () {
-        //Collections.sort(this.normalCards);
+    public int isRunOfSequence (int lvMaxSequenceLength) {// when the indicatorRunOfSequence <=0 the Sequence is not valid, else it corresponds to the suitCount
         int isRunOfSequence ;
         int remainingJokers = this.jokerCards.size();
-        /*
-        //__splitting cards by suit in different card lists (hash map)
-        HashMap<String, ArrayList<Card>> cardSuits = new HashMap<String, ArrayList<Card>>(5);
-        for (Card c : this.normalCards) {
-            if (!cardSuits.containsKey(c.getCardSuit())) {
-                cardSuits.put(c.getCardSuit(), new ArrayList<Card>());
-            }
-            cardSuits.get(c.getCardSuit()).add(c);
-        }
-        */
 
-        //__get maximum amount of cards per suit: defines which kind of pattern will be attempted (with jokers)_
-        // FIXME if different pattern on table - adjust here (set as instance variable)
-        // 2 jokers played with pairs : four of a kind || run of Pairs
-        // 2 jokers played with 77 88 : sequence of three pairs - or 2 Three of a Kind etc.
-        //
-        int amountOfCardsBySuit = 0;
-        for (ArrayList<Card> suitedList : this.cardsBySuit.values()) {
-            if (suitedList.size() > amountOfCardsBySuit) {
-                amountOfCardsBySuit = suitedList.size();
-            }
-        }
-        log.debug("IS RUN OF SEQUENCE : highest amount of Cards by suit "+amountOfCardsBySuit);
-
-        //__Sequence check for each suit__
+        //__Sequence check for each suited List
         for (ArrayList<Card> suitedCards : this.cardsBySuit.values()){
-            log.debug("calling inSequence here ");
-            remainingJokers = Pattern.inSequence(suitedCards, remainingJokers, this.lowestRank, amountOfCardsBySuit);
+                log.debug("calling inSequence here ");
+            remainingJokers = this.inSequence(suitedCards, remainingJokers, this.lowestRank, this.highestRank, lvMaxSequenceLength);
         }
 
         //__setting the return value__
-        log.debug("suitCount coming from INSTANCE VAR "+this.suitCount);
-        log.debug("remaining Jokers and indicator from Patter.inSequence as int  "+remainingJokers);
+            log.debug("suitCount coming from INSTANCE VAR "+this.suitCount);
+            log.debug("remaining Jokers and indicator from Patter.inSequence as int  "+remainingJokers);
 
         isRunOfSequence = this.suitCount;
-
         if (remainingJokers < 0) {
             isRunOfSequence = remainingJokers;
-            log.debug("if the jokercount was smaller zero is run of Sequence indicator is set here as: "+isRunOfSequence);
+                log.debug("if the jokercount was smaller zero is run of Sequence indicator is set here as: "+isRunOfSequence);
         }
-
-       // log.debug("suitCount"+suitCount);
-        //log.debug("jokerCount"+jokerCount);
         return isRunOfSequence;
     }
 
-
-
-    /**____IN SEQUENCE____
+    /**____IN SEQUENCE ?____
      * int return Check : returns 2, 1, 0 or -1, depending on how many jokers are left at the end of the function (-1 -> false sequence)
      * all in Sequence checks if a regular Sequence is possible including the use of 1 or 2 jokers
      */
-    public static int inSequence (ArrayList<Card> cards, int jokerCount, int lowestRank, int amountOfCardsBySuit) {
-        //Collections.sort(cards);
-        log.debug("inside in Sequence ...");
+    public static int inSequence (ArrayList<Card> cards, int jokerCount, int lowestRank, int highestRank, int lvMaxSequenceLength) {
+            log.debug("inside in Sequence ...");
         int errorTolerance = jokerCount;
         int sequenceBase = lowestRank;
+        int sequenceEnd = highestRank;
         int i = 0;
-        for (Card c : cards) {
+        for (Card c : cards) {                  //sequence continuity is checked - consuming jokers at gaps
                 while (c.getCardRank() != sequenceBase + i) {
-                    log.debug("gap at Card Nr. " + c.getCardID()+" remaining error Tolerance is "+ errorTolerance);
-
+                        log.debug("gap at Card Nr. " + c.getCardID()+" remaining error Tolerance is "+ errorTolerance);
                     if (errorTolerance <= 0) {
                         return errorTolerance -1 ;
                     }
                     errorTolerance -= 1;
-                    log.debug("error Tolerance reduced by one _ now remaining : "+errorTolerance);
+                        log.debug("error Tolerance reduced by one _ now remaining : "+errorTolerance);
                     i++;
                     }
                 i++;
         }
-        if(cards.size()<amountOfCardsBySuit){ // Sequence has no gap, but is shorter than required - jokers consumed
-            int difference = amountOfCardsBySuit - cards.size();
-            errorTolerance -= difference;
-            log.debug("Sequence too short - difference is "+ difference +" adjusted errorTolerance "+errorTolerance);
+// Sequence has no gap, but is shorter than required (comparing the highest ranking normal card of the current suitedList with the sequence End) -> jokers consumed
+        if(cards.size()<lvMaxSequenceLength){
+            int difference = lvMaxSequenceLength - cards.size();
+            if( sequenceEnd > cards.get((cards.size())-1).getCardRank() ){
+                errorTolerance -= difference;
+                log.debug(cards.get(0).getCardSuit()+" cards Sequence too short - difference is "+ difference +" adjusted errorTolerance "+errorTolerance);
+            }
         }
-        log.debug("in Sequence indicator(OK if not negative)returns : "+errorTolerance);
+            log.debug("in Sequence indicator(OK if not negative)returns : "+errorTolerance);
         return errorTolerance;
     }
-
-
-
-
     /**____IS BOMB ?____
      * Boolean Check :
-     * is Bomb checking 3-5-7-9 suited or all off suit & 2 or 3 jokers played
+     * checks for sequence 3-5-7-9 (suited or 4suits) and 2 or 3 jokers played
      */
-    public static boolean isBomb ( ArrayList<Card> normalCards, ArrayList<Card> jokerCards) {
+    public boolean isBomb () {
         boolean isBomb = true;
-        if (normalCards.size() > 0 && jokerCards.size() > 0 ){
+        if (this.normalCards.size() > 0 && this.jokerCards.size() > 0 ){
             isBomb = false;
             return isBomb;
         }
 
-        //__bomb sequence of 3-5-7-9
-        if(normalCards.size() > 0  ){
-            int lowestRank = normalCards.get(0).getCardRank();
-            if (normalCards.get(0).getCardRank() == 3 && normalCards.size() ==4 ){
-                for (int i = 0; i < normalCards.size(); i++) {
-                    if (normalCards.get(i).getCardRank() != lowestRank + i * 2) {
+        //__bomb sequence of 3-5-7-9 - to be a bomb cards must be all suited or all different suit
+        if(this.normalCards.size() > 0  ){
+            int lowestRank = this.normalCards.get(0).getCardRank();
+            if (this.normalCards.get(0).getCardRank() == 3 && this.normalCards.size() ==4 ){
+                for (int i = 0; i < this.normalCards.size(); i++) {
+                    if (this.normalCards.get(i).getCardRank() != lowestRank + i * 2) {
                         isBomb = false;
                     }
                 }
-
-                //____splitting cards by suit in different card lists to count suits
-                HashMap<String, ArrayList<Card>> cardSuits = new HashMap<String, ArrayList<Card>>(5);
-                for (Card c : normalCards) {
-                    if (!cardSuits.containsKey(c.getCardSuit())) {
-                        cardSuits.put(c.getCardSuit(), new ArrayList<Card>());
-                    }
-                    cardSuits.get(c.getCardSuit()).add(c);
-                }
-                //____if Sequence is ok, cards must be all suited or all different suit
-                int suitCount = cardSuits.keySet().size();
-                if (suitCount == 2 || suitCount == 3){
+                if (this.suitCount == 2 || this.suitCount == 3){
                     isBomb = false;
                 }
             }
@@ -306,16 +302,16 @@ public class Pattern {
                 isBomb = false;
             }
             return isBomb;
-        } //end of bomb sequence 3-5-7-9
+        }
 
         //__joker bombs__
-        if(jokerCards.size() > 0   ){
-            switch (jokerCards.size()){
+        if(this.jokerCards.size() > 0   ){
+            switch (this.jokerCards.size()){
                 case 1 : isBomb = false;    break;
                 case 2 : isBomb = true;     break;
                 case 3 : isBomb = true;     break;
             }
-        } //end of joker bombs
+        }
         return isBomb;
     }
 }

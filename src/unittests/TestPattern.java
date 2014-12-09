@@ -34,18 +34,21 @@ import server.Server;
     @BeforeClass
     public static void setupBeforeClass() throws Exception {
     }
-    /*
+
     @Test
     public void testComparePattern() throws IOException, MaxPlayerException {
         CardDeck lvCardDeck = new CardDeck(3);
 
-        ArrayList<Card> set4oaK = new ArrayList<Card>();
+        ArrayList<Card> set4oaK = new ArrayList<Card>();                        // Standard patterns
         set4oaK.add(lvCardDeck.getCardById(135));
         set4oaK.add(lvCardDeck.getCardById(50));
         set4oaK.add(lvCardDeck.getCardById(52));
         set4oaK.add(lvCardDeck.getCardById(53));
 
-        String table4oaK = Pattern.analyzePattern(set4oaK);
+        Pattern tablePattern = new Pattern (set4oaK);
+        String basePat_result  =   tablePattern.analyzePattern();
+
+            log.debug("table Pattern results in: "+basePat_result);
 
         ArrayList<Card> set4oaK2 = new ArrayList<Card>();
         set4oaK2.add(lvCardDeck.getCardById(64));
@@ -53,12 +56,36 @@ import server.Server;
         set4oaK2.add(lvCardDeck.getCardById(62));
         set4oaK2.add(lvCardDeck.getCardById(63));
 
-        boolean matchOK = Pattern.comparePattern(set4oaK, set4oaK2, table4oaK);
-        log.debug("match OK ? "+matchOK);
+        Pattern incomingPattern = new Pattern(set4oaK2);
+        boolean matchOK = incomingPattern.comparePattern(tablePattern);
+            log.debug("match OK ? "+matchOK);
+
+        //Testing Ambivalent Patterns table: 777 888  played: 77 88 JJ
+
+        ArrayList<Card> three7three8 = new ArrayList<Card>();
+        three7three8.add(lvCardDeck.getCardById(74));
+        three7three8.add(lvCardDeck.getCardById(72));
+        three7three8.add(lvCardDeck.getCardById(71));
+        three7three8.add(lvCardDeck.getCardById(84));
+        three7three8.add(lvCardDeck.getCardById(82));
+        three7three8.add(lvCardDeck.getCardById(81));
+            Pattern ambiTable = new Pattern(three7three8);
+
+        ArrayList<Card> two7two8twoJ = new ArrayList<Card>();
+        two7two8twoJ.add(lvCardDeck.getCardById(74));
+        two7two8twoJ.add(lvCardDeck.getCardById(72));
+        two7two8twoJ.add(lvCardDeck.getCardById(82));
+        two7two8twoJ.add(lvCardDeck.getCardById(84));
+        two7two8twoJ.add(lvCardDeck.getCardById(115));
+        two7two8twoJ.add(lvCardDeck.getCardById(125));
+            Pattern nextPattern = new Pattern (two7two8twoJ);
+
+        boolean ambiOk = ambiTable.comparePattern(nextPattern);
+        log.debug("ambi OK ? "+ambiOk);
+
 
     }
-    */
-
+/*
     @Test
     public void testAnalyzePattern() throws IOException, MaxPlayerException {
 
@@ -156,4 +183,5 @@ import server.Server;
         assertTrue("shouldBeNoSequenceRun failed 3.5 check ", g_result == null);
        assertTrue("Two Joker Bomb check failed ", h_result.equals("bomb"));
     }
+    */
 }
