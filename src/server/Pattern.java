@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import java.util.Arrays;
-import java.awt.*;
-
 public class Pattern {
     private static final Logger log = LogManager.getLogger(Server.class.getName());
     //__instance variables__
@@ -26,6 +23,7 @@ public class Pattern {
         int lowestRank = 0;
         int highestRank = 0;
         int maxSequenceLength = 0;
+        int maxSequenceDepth= 0;
 
 
     //__ Pattern Factory__
@@ -120,39 +118,38 @@ public class Pattern {
 
         //__this adjusts the patternCheck attempting to match the table Pattern (if 2 jokers have been played)
         if(this.jokerCards.size() > 1) {
-            int tableSequenceDepth = tablePattern.isRunOfSequence(tablePattern.maxSequenceLength); //retrieve the sequence target value from table pattern
-                if (tableSequenceDepth > 0) {
-                int playedSequenceDepth = this.isRunOfSequence(this.maxSequenceLength); // redundant - if both depth are the same, the patterns would match naturally
+            int tableSequenceDepth = tablePattern.isRunOfSequence(tablePattern.maxSequenceLength);                          //retrieve the sequence target value from table pattern
+            if (tableSequenceDepth > 0) {
+                int playedSequenceDepth = this.isRunOfSequence(this.maxSequenceLength);                                     // redundant - if both depth are the same, the patterns would match naturally
                 //calling isRunOfSequence with the target Depth from the table cards
-                int attemptSequenceDepth = this.isRunOfSequence(tableSequenceDepth); //analyzing if the sequence can be build in sufficient depth
+                int attemptSequenceDepth = this.isRunOfSequence(tableSequenceDepth);                                        //analyzing if the sequence can be build in sufficient depth
                 log.debug("COMPARE table sequence depth: " + tableSequenceDepth +" played sequence depth: "+playedSequenceDepth+" attempting sequence Depth"+attemptSequenceDepth);
 
-                if (true){ //if the built match is ok, set the new Patterns name (make sure adjusted patterns get their instance variables set correctly as they differ from analyze pattern)
-                    this.sequenceCheck(attemptSequenceDepth);
-                    this.maxSequenceLength = attemptSequenceDepth;
+                if (tableSequenceDepth == attemptSequenceDepth){                                                            //if the built match is ok, set the new Patterns name (make sure adjusted patterns get their instance variables set correctly as they differ from analyze pattern)
+                    this.setSequence(attemptSequenceDepth);
+                    this.maxSequenceLength = tablePattern.maxSequenceLength;
+                    this.maxSequenceDepth = attemptSequenceDepth;
                 }
             }
         }//end of playedCards had at least 2 Jokers
         return patternMatch;
     }
 
-
-
     public String analyzePattern() {
-        this.bombCheck();
-        this.setCheck();
+        this.setBomb();
+        this.setSet();
         int sequenceDepth = this.isRunOfSequence(this.maxSequenceLength);
-        this.sequenceCheck(sequenceDepth);
+        this.setSequence(sequenceDepth);
         return this.patternName;
     }
 
-    public void bombCheck(){
+    public void setBomb(){
         if(this.isBomb()){
             this.setPatternName("bomb");
         }
     }
 
-    public void setCheck(){
+    public void setSet(){
         if (this.rankCount == 1) {
             switch (this.cardCount) {
                 case 1 : this.setPatternName("single");         break;
@@ -166,7 +163,7 @@ public class Pattern {
         }
     }
 
-    public void sequenceCheck(int sequenceDepth){  // when the sequenceDepth <=0 the Sequence is not valid, else it corresponds to the suitCount
+    public void setSequence(int sequenceDepth){  // when the sequenceDepth <=0 the Sequence is not valid, else it corresponds to the suitCount
         //int indicatorRunOfSequence = this.isRunOfSequence();
             //__Run of Singles____
             if (sequenceDepth == 1 ) {
@@ -219,14 +216,14 @@ public class Pattern {
      * checking for sequences, returning an int meaning 0 = no sequence, 1=Run of Singles,
      * 2= Run of Pairs, 3=Run of 3ofAKind, 4= 4oAKind (including jokerCards)
      */
-    public int isRunOfSequence (int lvMaxSequenceLength) {// when the indicatorRunOfSequence <=0 the Sequence is not valid, else it corresponds to the suitCount
+    public int isRunOfSequence (int lvMaxSequenceLength) {                  // when the indicatorRunOfSequence <=0 the Sequence is not valid, else it corresponds to the suitCount
         int isRunOfSequence ;
         int remainingJokers = this.jokerCards.size();
 
         //__Sequence check for each suited List
         for (ArrayList<Card> suitedCards : this.cardsBySuit.values()){
                 log.debug("calling inSequence here ");
-            remainingJokers = this.inSequence(suitedCards, remainingJokers, this.lowestRank, this.highestRank, lvMaxSequenceLength);
+            remainingJokers = this.inSequence(suitedCards, remainingJokers, this.lowestRank, lvMaxSequenceLength);
         }
 
         //__setting the return value__
@@ -234,9 +231,10 @@ public class Pattern {
             log.debug("remaining Jokers and indicator from Patter.inSequence as int  "+remainingJokers);
 
         isRunOfSequence = this.suitCount;
+        if (remainingJokers == 2 ){}
         if (remainingJokers < 0) {
             isRunOfSequence = remainingJokers;
-                log.debug("if the jokercount was smaller zero is run of Sequence indicator is set here as: "+isRunOfSequence);
+                log.debug("if the jokerCount was smaller zero is run of Sequence indicator is set here as: "+isRunOfSequence);
         }
         return isRunOfSequence;
     }
@@ -245,35 +243,22 @@ public class Pattern {
      * int return Check : returns 2, 1, 0 or -1, depending on how many jokers are left at the end of the function (-1 -> false sequence)
      * all in Sequence checks if a regular Sequence is possible including the use of 1 or 2 jokers
      */
-    public static int inSequence (ArrayList<Card> cards, int jokerCount, int lowestRank, int highestRank, int lvMaxSequenceLength) {
+    public static int inSequence (ArrayList<Card> cards, int jokerCount, int lowestRank, int lvMaxSequenceLength) {
             log.debug("inside in Sequence ...");
         int errorTolerance = jokerCount;
-        int sequenceBase = lowestRank;
-        int sequenceEnd = highestRank;
-        int i = 0;
-        for (Card c : cards) {                  //sequence continuity is checked - consuming jokers at gaps
-                while (c.getCardRank() != sequenceBase + i) {
-                        log.debug("gap at Card Nr. " + c.getCardID()+" remaining error Tolerance is "+ errorTolerance);
-                    if (errorTolerance <= 0) {
-                        return errorTolerance -1 ;
-                    }
+        for (int i = 0; i < lvMaxSequenceLength; i++){
+            for (Card c : cards) {
+                if (c.getCardRank() != lowestRank + i) {
                     errorTolerance -= 1;
-                        log.debug("error Tolerance reduced by one _ now remaining : "+errorTolerance);
-                    i++;
-                    }
-                i++;
-        }
-// Sequence has no gap, but is shorter than required (comparing the highest ranking normal card of the current suitedList with the sequence End) -> jokers consumed
-        if(cards.size()<lvMaxSequenceLength){
-            int difference = lvMaxSequenceLength - cards.size();
-            if( sequenceEnd > cards.get((cards.size())-1).getCardRank() ){
-                errorTolerance -= difference;
-                log.debug(cards.get(0).getCardSuit()+" cards Sequence too short - difference is "+ difference +" adjusted errorTolerance "+errorTolerance);
+                    log.debug("gap at Card Nr. " + c.getCardID() + " remaining error Tolerance is " + errorTolerance);
+                    log.debug("error Tolerance reduced by one _ now remaining : " + errorTolerance);
+                }
             }
         }
-            log.debug("in Sequence indicator(OK if not negative)returns : "+errorTolerance);
         return errorTolerance;
     }
+
+
     /**____IS BOMB ?____
      * Boolean Check :
      * checks for sequence 3-5-7-9 (suited or 4suits) and 2 or 3 jokers played

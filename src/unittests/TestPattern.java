@@ -85,7 +85,7 @@ import server.Server;
 
 
     }
-/*
+
     @Test
     public void testAnalyzePattern() throws IOException, MaxPlayerException {
 
@@ -183,5 +183,5 @@ import server.Server;
         assertTrue("shouldBeNoSequenceRun failed 3.5 check ", g_result == null);
        assertTrue("Two Joker Bomb check failed ", h_result.equals("bomb"));
     }
-    */
+
 }
