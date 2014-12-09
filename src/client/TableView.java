@@ -463,18 +463,18 @@ public class TableView extends JFrame implements ActionListener{
 		panelTable.removeAll();
 		
 		if (gameState.roundList.size() > 0){
+			int gridy = 0;
+			int gridx = 0;
 			for (int i = 0; i < gameState.getTopCards().size(); i++) {
 				BtnCard btnCard = new BtnCard(gameState.getTopCards().get(i));
+
+				if (i >=7) { gridy = 1; gridx= 7; }
 				btnCardTable.add(btnCard);
-				cTable.gridx = i;
-				cTable.gridy = 0;
+				cTable.gridx = i - gridx;
+				cTable.gridy = gridy;
 				cTable.ipady = 10;
 				cTable.insets = new Insets(0,0,0,0); //Padding top, left, bottom, right
 				panelTable.add(btnCard,cTable);
-				// --- not finish yet
-				if (i >= 7) {
-					//panelTable.setPreferredSize(new Dimension());
-				} 
 			}
 		}
 		frame.getContentPane().revalidate();
