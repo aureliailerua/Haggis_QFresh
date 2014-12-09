@@ -184,14 +184,14 @@ public class TableView extends JFrame implements ActionListener{
 		 * 2nd Opposition Player (3.E)
 		*/
 		// VERSUCH Opposition dynamisch Anzeigen
-		/* int playerCount = controller.getPlayerCount(controller.getPlayer());
-		log.debug("!!!! TableView - player Count "+playerCount );
-		if (playerCount == 3) {
+		if (controller.getGameState().playerList.size() == 3) {
+			log.debug("Playerlist Size: "+ controller.getGameState().playerList.size());
 		panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
-		} else if (playerCount == 2){
+		} else {
 			panel2ndOpposition = new JPanelOpposition();
-		}*/
-		panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
+		}
+		
+		//panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
 		panel2ndOpposition.setPreferredSize(new Dimension(300, 320));
 		panel2ndOpposition.setOpaque(false);
 		frame.getContentPane().add(panel2ndOpposition, BorderLayout.EAST);
