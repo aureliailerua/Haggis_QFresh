@@ -209,6 +209,7 @@ public class EndView extends JFrame {
 		btnStart = new JButton("Start Game");
 		btnStart.setFont(button);
 		btnStart.setPreferredSize(new Dimension(130, 58));
+		btnStart.setBackground(Color.WHITE);
 		btnStart.addActionListener(controller);
 		panelBtnStart.add(btnStart);
 		
@@ -223,6 +224,7 @@ public class EndView extends JFrame {
 		btnExit = new JButton();
 		btnExit.setIcon(new ImageIcon(StartView.class.getResource(pathImgExit)));
 		btnExit.setPreferredSize(new Dimension (58,58));
+		btnExit.setBackground(Color.WHITE);
 		btnExit.addActionListener(controller);
 		panelBtnContainer.add(btnExit);
 		

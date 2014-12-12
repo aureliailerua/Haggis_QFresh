@@ -130,9 +130,12 @@ public class TableView extends JFrame implements ActionListener{
 		// Define the path of the images
 		String pathImgBackSmall = "/gameContent/back_small.jpg";
 		String pathImgCrown = "/gameContent/crown.png";
-		String pathImgHomeBtn = "/icons/home.png";
+		String pathImgExitBtn = "/icons/power53.png";
 		String pathImgSortBtn = "/icons/sort.png";
 		String pathImgRulesBtn ="/icons/rules.png";
+		String path15betInactiv = "/gameContent/15bet_inactive.png";
+		String path30betInactiv = "/gameContent/30bet_inactive.png";
+
 		
 		// Define Fonts
 		Font player = new Font("Comic Sans MS", Font.BOLD, 18);
@@ -183,15 +186,15 @@ public class TableView extends JFrame implements ActionListener{
 		/**
 		 * 2nd Opposition Player (3.E)
 		*/
-		// VERSUCH Opposition dynamisch Anzeigen
+		
+		// Identify if a 3rd player is enter the game
 		if (controller.getGameState().playerList.size() == 3) {
 			log.debug("Playerlist Size: "+ controller.getGameState().playerList.size());
-		panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
+			panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
 		} else {
 			panel2ndOpposition = new JPanelOpposition();
 		}
 		
-		//panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
 		panel2ndOpposition.setPreferredSize(new Dimension(300, 320));
 		panel2ndOpposition.setOpaque(false);
 		frame.getContentPane().add(panel2ndOpposition, BorderLayout.EAST);
@@ -257,6 +260,7 @@ public class TableView extends JFrame implements ActionListener{
 		btnPass.setText("Pass");
 		btnPass.setFont(button);
 		btnPass.setPreferredSize(new Dimension(130, 58));
+		btnPass.setBackground(Color.WHITE);
 		btnPass.setEnabled(true);
 		btnPass.setVisible(true);
 		btnPass.addActionListener(controller); //generiert Listener
@@ -339,6 +343,7 @@ public class TableView extends JFrame implements ActionListener{
 		btnPlay.setText("Play");
 		btnPlay.setFont(button);
 		btnPlay.setPreferredSize(new Dimension(130, 58));
+		btnPlay.setBackground(Color.WHITE);
 		btnPlay.setEnabled(true);
 		btnPlay.setVisible(true);
 		btnPlay.addActionListener(controller); //generiert Listener
@@ -365,6 +370,7 @@ public class TableView extends JFrame implements ActionListener{
 		btnSort = new JButton();
 		btnSort.setIcon(new ImageIcon(TableView.class.getResource(pathImgSortBtn)));
 		btnSort.setPreferredSize(new Dimension(58,58));
+		btnSort.setBackground(Color.WHITE);
 		btnSort.addActionListener(this);
 		cContainer = new GridBagConstraints();
 		cContainer.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
@@ -377,6 +383,7 @@ public class TableView extends JFrame implements ActionListener{
 		btnRules = new JButton();
 		btnRules.setIcon(new ImageIcon(TableView.class.getResource(pathImgRulesBtn)));
 		btnRules.setPreferredSize(new Dimension (58,58));
+		btnRules.setBackground(Color.WHITE);
 		btnRules.addActionListener(this);
 		cContainer = new GridBagConstraints();
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
@@ -403,7 +410,7 @@ public class TableView extends JFrame implements ActionListener{
 		 * Optinal Bet funciton
 		 */
 		btnBet30 = new JButton();
-		ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/30bet_inactive.png"));
+		ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource(path30betInactiv));
 		btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
 		btnBet30.setPreferredSize(new Dimension(35,35));
 		btnBet30.setBorder(null);
@@ -411,8 +418,7 @@ public class TableView extends JFrame implements ActionListener{
 		panelBet.add(btnBet30);
 
 		btnBet15 = new JButton();
-		ImageIcon imageIcon = new ImageIcon(TableView.class.getResource("/gameContent/15bet_inactive.png"));
-
+		ImageIcon imageIcon = new ImageIcon(TableView.class.getResource(path15betInactiv));
 		btnBet15.setIcon(new ImageIcon(imageIcon.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
 		btnBet15.setPreferredSize(new Dimension(35,35));
 		btnBet15.setBorder(null);
@@ -421,8 +427,11 @@ public class TableView extends JFrame implements ActionListener{
 		/****/
 		
 		btnExit = new JButton();
-		btnExit.setIcon(new ImageIcon(TableView.class.getResource(pathImgHomeBtn)));
+		ImageIcon imageIconExit = new ImageIcon(TableView.class.getResource(pathImgExitBtn));
+		btnExit.setIcon(new ImageIcon(imageIconExit.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
+		//btnExit.setIcon(new ImageIcon(TableView.class.getResource(pathImgExitBtn)));
 		btnExit.setPreferredSize(new Dimension(58,58));
+		btnExit.setBackground(Color.WHITE);
 		btnExit.addActionListener(controller);
 		cContainer = new GridBagConstraints();
 		cContainer.fill = GridBagConstraints.HORIZONTAL;
@@ -468,7 +477,7 @@ public class TableView extends JFrame implements ActionListener{
 			for (int i = 0; i < gameState.getTopCards().size(); i++) {
 				BtnCard btnCard = new BtnCard(gameState.getTopCards().get(i));
 
-				if (i >=7) { gridy = 1; gridx= 7; }
+				if (i >=8) { gridy = 1; gridx= 8; }
 				btnCardTable.add(btnCard);
 				cTable.gridx = i - gridx;
 				cTable.gridy = gridy;
@@ -481,6 +490,10 @@ public class TableView extends JFrame implements ActionListener{
 		frame.getContentPane().repaint();
 	}
 	
+	/**
+	 * Method to get the existing card in my hand after the a trick
+	 * @param player
+	 */
 	public void updatePlayerHand(Player player){
 		panelCardHand.removeAll();
 		panelJoker.removeAll();
@@ -532,6 +545,7 @@ public class TableView extends JFrame implements ActionListener{
 		Player player2 = controller.getNextPlayer(controller.getPlayer());
 		panel1stOpposition.updatePlayer(player2,activePlayerToken);				//invoke updatePlayer of Opposition
 		log.debug("Player 1 = "+ controller.getPlayer().getToken() + " Player 2 = " +player2.getToken());
+		//Update 3rd player only if he exist
 		if ( controller.getGameState().playerList.size() == 3){
 			Player player3 = controller.getNextPlayer(player2);
 			panel2ndOpposition.updatePlayer(player3,activePlayerToken);			//invoke updatePlayer of Opposition
@@ -566,7 +580,7 @@ public class TableView extends JFrame implements ActionListener{
 	
 	
 	/**
-	 * Method to open the combination card
+	 * Method to open the combination rule card
 	 */
 	public void displayRules(){
     	JFrame frameRules = new JFrame ("Haggis Rules");
@@ -584,7 +598,12 @@ public class TableView extends JFrame implements ActionListener{
 	 * @param message
 	 */
 	public void displayClientInfo(String message) {
-		
+			
+		panelClientInfo.removeAll();
+		panelClientInfo.revalidate();
+		frame.getContentPane().revalidate();
+
+
 		//if (!message.isEmpty()) {
 			StyleContext context = new StyleContext();
 		    StyledDocument document = new DefaultStyledDocument(context);
@@ -617,6 +636,9 @@ public class TableView extends JFrame implements ActionListener{
 		    textPane.setEditable(false);
 		    panelClientInfo.add(textPane);
 		//} 
+		    
+		panelClientInfo.repaint();
+
 	}
 	/**
 	 * Method to remove the client information message

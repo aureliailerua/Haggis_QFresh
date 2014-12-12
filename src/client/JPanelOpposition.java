@@ -203,15 +203,7 @@ public class JPanelOpposition extends JPanel{
 		panelOppCards.setLayout(new BorderLayout(0, 0));
 		add(panelOppCards, BorderLayout.CENTER);
 
-		/*panelCardBack = new JPanel();
-		panelCardBack.setOpaque(false);
-		panelCardBack.setBorder(null);
-		panelOppCards.add(panelCardBack, BorderLayout.NORTH);
-		GridBagLayout gbl_BackCards = new GridBagLayout();
-		GridBagConstraints cOppCards = new GridBagConstraints();
-		panelCardBack.setLayout(gbl_BackCards);*/
-		
-		
+				
 		// --CardBack (1.2.1.N)
 		
 		panelCardBack = new JPanel();
@@ -223,63 +215,7 @@ public class JPanelOpposition extends JPanel{
 		fl_panelCardBack.setHgap(0);
 		fl_panelCardBack.setVgap(0);
 		jBack = new ArrayList<JLabel>();
-		/*
-		String pathImgBack = "/gameContent/back.jpg";
 		
-		for(int i=0; i < 3; i++) {
-			lbCardBack = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathImgBack)));
-			if (i == 3-1) {
-				lbCardBack.setPreferredSize(new Dimension(51,79));
-			} else {
-				lbCardBack.setPreferredSize(new Dimension(24,79));
-			}
-			lbCardBack.setHorizontalAlignment(SwingConstants.LEFT);
-			lbCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-			jBack.add(lbCardBack);
-			panelCardBack.add(lbCardBack);
-		}*/
-		
-		/*
-		lbCardBack = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathImgBack)));
-		lbCardBack.setPreferredSize(new Dimension(24,79));
-		lbCardBack.setHorizontalAlignment(SwingConstants.LEFT);
-		lbCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		cOppCards.anchor = GridBagConstraints.NORTH;
-		cOppCards.fill = GridBagConstraints.BOTH;
-		cOppCards.gridwidth = 1;
-		cOppCards.gridx = 0;
-		cOppCards.gridy = 0;
-		cOppCards.anchor = GridBagConstraints.NORTH;
-		// Check for the padding of the card back
-		//if (gameFildSide == "LEFT") { cOppCardBack.insets = new Insets(0,20,0,0); }
-		//panelOppCards.add(imgLabelCardBack, cOppCards);
-		panelCardBack.add(lbCardBack, cOppCards);
-
-		lbCardBack = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathImgBack)));
-		lbCardBack.setHorizontalAlignment(SwingConstants.LEFT);
-		lbCardBack.setPreferredSize(new Dimension(24,79));
-		lbCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		cOppCards = new GridBagConstraints();
-		cOppCards.fill = GridBagConstraints.BOTH;
-		cOppCards.gridx = 1;
-		cOppCards.gridy = 0;
-		cOppCards.anchor = GridBagConstraints.NORTH;
-		//panelOppCards.add(imgLabelCardBack, cOppCards);
-		panelCardBack.add(lbCardBack, cOppCards);
-
-		
-		lbCardBack = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathImgBack)));
-		lbCardBack.setPreferredSize(new Dimension(50,79));
-		lbCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		cOppCards = new GridBagConstraints();
-		cOppCards.fill = GridBagConstraints.BOTH;
-		cOppCards.gridx = 2;
-		cOppCards.gridy = 0;
-		cOppCards.anchor = GridBagConstraints.NORTH;
-		//if (gameFildSide == "RIGHT") {cOppCardBack.insets = new Insets(0,0,0,20);} //Padding vom Displayrand (top, left, bottom, right)
-		//panelOppCards.add(imgLabelCardBack, cOppCards);
-		panelCardBack.add(lbCardBack, cOppCards);
-		*/
 		
 		// -- Joker (1.2.1.C)
 		panelJoker = new JPanel();
