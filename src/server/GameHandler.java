@@ -53,6 +53,7 @@ public class GameHandler {
 				player.setPlayerJokers(gameState.activeCardDeck.give3Jokers());
 			}
 			gameState.roundList.add(new Round());
+			gameState.newTick();
 			gameState.setActivePattern("");
 			gameState.notifyObservers();
 			log.debug("starting game");
@@ -94,9 +95,16 @@ public class GameHandler {
 			}
 			//at this point the move is commited or rejected. 
 			//Now for the Round/Tick mechanic....
-			if(gameState.checkEndRound() && gameState.checkEndTick()){
+			if(gameState.checkEndRound()){
+				gameState.endActiveTick();
 				gameState.newRound();
+				gameState.newTick();
+				for (Player p : gameState.playerList){
+					p.setPlayerIsfinished(false);
+					log.debug("Resetting Player "+p.getToken()+" Flag for being finished");
+				}
 			} else if (gameState.checkEndTick()){
+				gameState.endActiveTick();
 				gameState.newTick();
 			} 
 			gameState.notifyObservers();

@@ -76,6 +76,7 @@ public class TestGameState {
 		gameState.playerList.add(new Player(GameState.PlayerToken.three));
 		gameState.setNumPlayers(3);
 		gameState.newRound();
+		gameState.newTick();
 		
 		//create deck and add build some cardlists
 		gameState.activeCardDeck = new CardDeck(gameState.playerList.size());
@@ -103,8 +104,6 @@ public class TestGameState {
 		ArrayList<Card> lvPass = new ArrayList<Card>();
 		
 		//commit some moves and check passes 
-		assertFalse("bla",gameState.getActiveRound().getActiveTick().checkPass(2));
-		assertFalse("bla",gameState.getActiveRound().getActiveTick().checkPass(3));
 		gameState.commitMove(PlayerToken.one, lvCards1);
 		assertFalse("bla",gameState.getActiveRound().getActiveTick().checkPass(2));
 		assertFalse("bla",gameState.getActiveRound().getActiveTick().checkPass(3));
@@ -141,15 +140,17 @@ public class TestGameState {
 	
 	@Test
 	public void testTopCards() throws IOException, MaxPlayerException {
-		//init
+		//INIT
 		GameState gameState = new GameState();
-		gameState.roundList.add(new Round());
+	
 		
 		//create three players with tokens
 		gameState.playerList.add(new Player(GameState.PlayerToken.one));
 		gameState.playerList.add(new Player(GameState.PlayerToken.two));
 		gameState.playerList.add(new Player(GameState.PlayerToken.three));
 		gameState.setNumPlayers(3);
+		gameState.newRound();
+		gameState.newTick();
 		
 		//create deck and add build some cardlists
 		gameState.activeCardDeck = new CardDeck(gameState.playerList.size());
@@ -195,6 +196,7 @@ public class TestGameState {
 		
 		//new round and check topcards
 		gameState.newRound();
+		gameState.newTick();
 		assertTrue("blah",gameState.getTopCards().isEmpty());
 		gameState.commitMove(PlayerToken.one, lvCards4);
 		assertSame("blah",gameState.getTopCards(),lvCards4);

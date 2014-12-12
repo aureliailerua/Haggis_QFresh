@@ -139,9 +139,14 @@ public class GameState extends Observable implements Serializable {
 	public boolean checkEndRound(){
 		if (numPlayers == 2){
 			if (playerList.get(0).isFinished() || playerList.get(1).isFinished()){
+				log.debug("get0 "+playerList.get(0).isFinished()+"   get1 "+playerList.get(1).isFinished());
 				return true;
 			}
 		} else if (numPlayers == 3){
+			log.debug("Checkj for PLAYER being finished - "
+					+"   one: "+playerList.get(0).isFinished()
+					+"   two: "+playerList.get(1).isFinished()
+					+"   three"+playerList.get(2).isFinished());
 			if (playerList.get(0).isFinished() && playerList.get(1).isFinished()){
 				return true;
 			} else if (playerList.get(0).isFinished() && playerList.get(2).isFinished()){
@@ -173,7 +178,8 @@ public class GameState extends Observable implements Serializable {
 		return (getActiveRound().getActiveTick().checkPass(this.numPlayers-outOfCardsPlayers));
 	}
 	
-	public void newTick(){
+	public void endActiveTick(){
+		//work out tickwinner
 		ArrayList<Move> lvMoveList = getActiveRound().getActiveTick().moveList;
 		PlayerToken lvTickWinner = null;
 		for (int i =  lvMoveList.size()-1; i >=0; i--){
@@ -184,14 +190,22 @@ public class GameState extends Observable implements Serializable {
 				break;
 			}
 		}
-		log.debug("TICK - Points before counting: "+ getPlayerObject(lvTickWinner).getPlayerPoints());
+		
+		//add cardpoints to tickwinner
+		log.debug("TICK - Points of Player "+lvTickWinner+" before counting: "+ getPlayerObject(lvTickWinner).getPlayerPoints());
 		for (Move lvMove : lvMoveList){
 			for (Card lvCard : lvMove.getCardList()){
 				getPlayerObject(lvTickWinner).addPoints(lvCard.getCardPoint());
 				log.debug("TICK - Counting Points - ID: "+lvCard.getCardID()+" Points: "+lvCard.getCardPoint());
 			}
 		}
-		log.debug("TICK - Points after counting: "+ getPlayerObject(lvTickWinner).getPlayerPoints());
+		log.debug("TICK - Points of Player "+lvTickWinner+" after counting: "+ getPlayerObject(lvTickWinner).getPlayerPoints());
+		
+		//set tickwinner as activePlayer
+		setActivePlayer(lvTickWinner);
+	}
+	
+	public void newTick(){
 		getActiveRound().addNewTick();
 		setActivePattern("");
 	}

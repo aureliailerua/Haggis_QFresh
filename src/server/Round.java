@@ -32,7 +32,6 @@ public class Round implements Serializable {
 	public Round(){
 		log.debug("ROUND - new Round");
 		tickList = new ArrayList<Tick>();
-		addNewTick();
 	}
 
 	/**
