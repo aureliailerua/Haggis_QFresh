@@ -5,6 +5,7 @@ package library;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,7 +16,7 @@ import library.GameState.PlayerToken;
  * This class will be instantiated for each Player in the game.
  * It holds their numbered Cards, Jokers and the points.
  */
-public class Player implements Serializable {
+public class Player implements Serializable, Comparable {
 	ArrayList<Card> playerCards;
 	ArrayList<Card> playerJokers;
 	private int playerPoints;
@@ -113,5 +114,14 @@ public class Player implements Serializable {
 	 */
 	public void setPlayerIsfinished(boolean playerIsfinished) {
 		this.playerIsfinished = playerIsfinished;
+	}
+	
+	/**
+	 * ACHTUNG ist neu!!
+	 */
+	@Override
+	public int compareTo(Object o) {
+		Player player = (Player)o;
+		return getPlayerPoints()-player.getPlayerPoints();
 	}
 }//Player
