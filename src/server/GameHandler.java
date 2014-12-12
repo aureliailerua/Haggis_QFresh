@@ -54,7 +54,7 @@ public class GameHandler {
 			}
 			gameState.roundList.add(new Round());
 			gameState.newTick();
-			gameState.setActivePattern("");
+//TODO RESET PATTERN
 			gameState.notifyObservers();
 			log.debug("starting game");
 		}

@@ -8,14 +8,14 @@ import org.apache.logging.log4j.*;
 
 import server.MaxPlayerException;
 import server.Move;
+import server.Pattern;
 import server.Round;
 import server.Tick;
 
 
 /**
  * @author benjamin.indermuehle / andreas.denger
- * This is a prototype class and needs to be changed.
- * in the current state it manages a number internally
+ * 
  */
 public class GameState extends Observable implements Serializable {
 
@@ -30,11 +30,12 @@ public class GameState extends Observable implements Serializable {
 	private int outOfCardsPlayers = 0;
 	private String clientInfo = "";
 	
+	private Pattern activePattern;
+	
 	public ArrayList<Player> playerList;
 	public CardDeck activeCardDeck;
 	public ArrayList<Round> roundList;
 	
-	private String activePattern;
 	
 	private static final Logger log = LogManager.getLogger( GameState.class.getName() );
 	
@@ -176,10 +177,8 @@ public class GameState extends Observable implements Serializable {
 	}
 	
 	public void newRound(){
-		//TODO set RoundWinner		
 		roundList.add(new Round());
-		setActivePattern("");
-		
+//TODO RESET ACTIVE PATTERN???
 		activeCardDeck = new CardDeck(getNumPlayers());
 		
 		for (Player player : playerList){
@@ -222,36 +221,42 @@ public class GameState extends Observable implements Serializable {
 	
 	public void newTick(){
 		getActiveRound().addNewTick();
-		setActivePattern("");
 	}
 
 	public boolean checkMove(ArrayList<Card> lvCards) {
 		
-		//TODO many checks and set pattern
-		// - card count
-		// - lowest card
-		// - analyze pattern
-		// - compare pattern
-		//return true (commmit) or false (reject)
-	
+		//TODO call analyzePattern or comparePattern
+		//FIXME NullPointerException at server.Pattern.comparePatternTEMP(Pattern.java:95)
+		/*
+		// analyzePattern if its the first move of the trick
+		if (getActiveRound().getActiveTick().moveList.isEmpty()){
+			log.debug("PATTERN - attempting analyzePattern");
+			String lvPatternString = "";
+			activePattern = new Pattern(lvCards);
+			lvPatternString = activePattern.analyzePattern();
+			
+			if (lvPatternString == null){
+				return false;
+			} else {
+				log.debug("Player "+activePlayer+" plays " +lvPatternString);
+				return true;
+			}
+			
+			
+		} else {  // comparePattern if its NOT the first move of the trick
+			log.debug("PATTERN - attempting comparePattern");
+			Pattern newPattern = new Pattern(lvCards);
+			if (newPattern.comparePatternTEMP(activePattern)){
+				setActivePattern(newPattern);
+				log.debug("Player "+activePlayer+" plays " +getActivePattern().patternName);
+				return true;
+			} else {
+				return false;
+			}
+		}*/
 		return true;
 	}
 
-	/**
-	 * @return the activePattern
-	 */
-	public String getActivePattern() {
-		return activePattern;
-	}
-
-	/**
-	 * @param activePattern the activePattern to set
-	 */
-	public void setActivePattern(String activePattern) {
-		this.activePattern = activePattern;
-	}
-	
-	
 	public ArrayList<Card> getTopCards(){
 		ArrayList<Move> lvMoveList = getActiveRound().getActiveTick().moveList;
 		for (int i =  lvMoveList.size()-1; i >=0; i--){
@@ -302,5 +307,13 @@ public class GameState extends Observable implements Serializable {
 
 	public void setClientInfo(String clientInfo) {
 		this.clientInfo = clientInfo;
+	}
+
+	public Pattern getActivePattern() {
+		return activePattern;
+	}
+
+	public void setActivePattern(Pattern activePattern) {
+		this.activePattern = activePattern;
 	}
 }
