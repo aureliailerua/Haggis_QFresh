@@ -28,6 +28,7 @@ public class GameState extends Observable implements Serializable {
 	private int numPlayers;
 	private int number;
 	private int outOfCardsPlayers = 0;
+	private String clientInfo = "";
 	
 	public ArrayList<Player> playerList;
 	public CardDeck activeCardDeck;
@@ -293,5 +294,13 @@ public class GameState extends Observable implements Serializable {
 	}
 	public int getPlayerPoints(PlayerToken lvToken){
 		return getPlayerObject(lvToken).getPlayerPoints();
+	}
+
+	public String getClientInfo() {
+		return clientInfo;
+	}
+
+	public void setClientInfo(String clientInfo) {
+		this.clientInfo = clientInfo;
 	}
 }

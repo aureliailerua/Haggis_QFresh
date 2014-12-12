@@ -81,6 +81,7 @@ public class GameHandler {
 					gameState.commitMove(lvToken, lvCards);
 					setNextActivePlayer();
 				} else {
+					gameState.setClientInfo("Move of Player "+lvToken+" not valid, please try again.");
 					gameState.rejectMove();
 				}
 			} else {
@@ -92,6 +93,7 @@ public class GameHandler {
 						if (gameState.getActiveRound().getRoundWinner() == null){
 							log.debug("ROUND - set roundWinner Player "+lvToken);
 							gameState.getActiveRound().setRoundWinner(lvToken);
+							gameState.setClientInfo("Player "+lvToken+" finished first and will win the Haggis-stack.");
 						}
 					}
 					
@@ -114,6 +116,7 @@ public class GameHandler {
 				}
 			} else if (gameState.checkEndTick()){
 				gameState.endActiveTick();
+				gameState.setClientInfo("Player "+gameState.getActiveRound().getActiveTick().getTickWinner()+" wins the Trick");
 				gameState.newTick();
 			} 
 			gameState.notifyObservers();
