@@ -21,9 +21,14 @@ public class CardDeck implements Serializable {
 		this.cardDeck = buildDeck(lvNumPlayers);
 	}
 	
-	public void setcardDeck(ArrayList<Card> cardDeck) {
+	public void setCardDeck(ArrayList<Card> cardDeck) {
 		this.cardDeck = cardDeck;
 	}	
+	
+	public ArrayList<Card> getCardDeck(){
+		return this.cardDeck;
+	}
+	
 	public Card getCardById (int lvCardId){
 		for (Card lvCard : this.cardDeck){
 			if (lvCard.getCardID() == lvCardId){

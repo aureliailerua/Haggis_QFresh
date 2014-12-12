@@ -86,7 +86,15 @@ public class GameHandler {
 			} else {
 				if (gameState.checkMove(lvCards)){
 					gameState.commitMove(lvToken, lvCards);
-					gameState.checkIsPlayerFinished(lvToken);
+					
+					//set RoundWinner, if player is the first to be out of cards
+					if (gameState.checkIsPlayerFinished(lvToken)){
+						if (gameState.getActiveRound().getRoundWinner() == null){
+							log.debug("ROUND - set roundWinner Player "+lvToken);
+							gameState.getActiveRound().setRoundWinner(lvToken);
+						}
+					}
+					
 					setNextActivePlayer();
 				} else{
 					gameState.rejectMove();
@@ -97,6 +105,7 @@ public class GameHandler {
 			//Now for the Round/Tick mechanic....
 			if(gameState.checkEndRound()){
 				gameState.endActiveTick();
+				gameState.endActiveRound();
 				gameState.newRound();
 				gameState.newTick();
 				for (Player p : gameState.playerList){

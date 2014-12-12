@@ -138,15 +138,17 @@ public class GameState extends Observable implements Serializable {
 	
 	public boolean checkEndRound(){
 		if (numPlayers == 2){
+			log.debug("Check for PLAYER being finished - "
+					+"   one: "+playerList.get(0).isFinished()
+					+"   two: "+playerList.get(1).isFinished());
 			if (playerList.get(0).isFinished() || playerList.get(1).isFinished()){
-				log.debug("get0 "+playerList.get(0).isFinished()+"   get1 "+playerList.get(1).isFinished());
 				return true;
 			}
 		} else if (numPlayers == 3){
-			log.debug("Checkj for PLAYER being finished - "
+			log.debug("Check for PLAYER being finished - "
 					+"   one: "+playerList.get(0).isFinished()
 					+"   two: "+playerList.get(1).isFinished()
-					+"   three"+playerList.get(2).isFinished());
+					+"   three: "+playerList.get(2).isFinished());
 			if (playerList.get(0).isFinished() && playerList.get(1).isFinished()){
 				return true;
 			} else if (playerList.get(0).isFinished() && playerList.get(2).isFinished()){
@@ -158,6 +160,18 @@ public class GameState extends Observable implements Serializable {
 			throw new IllegalArgumentException("numPlayers not as expected");
 		}
 		return false;
+	}
+	
+	public void endActiveRound(){
+		log.debug("ROUND - size of Haggis stack: "+activeCardDeck.getCardDeck().size());
+		log.debug("ROUND - adding Haggis to roundWinner Player "+ getActiveRound().getRoundWinner());
+		log.debug("ROUND - Points of Player "+getActiveRound().getRoundWinner()+" before Haggis: "+ getPlayerObject(getActiveRound().getRoundWinner()).getPlayerPoints());
+		for (Card lvCard : activeCardDeck.getCardDeck()){
+			getPlayerObject(getActiveRound().getRoundWinner()).addPoints(lvCard.getCardPoint());
+			log.debug("ROUND - Counting Points - ID: "+lvCard.getCardID()+" Points: "+lvCard.getCardPoint());
+		}
+
+		log.debug("ROUND - Points of Player "+getActiveRound().getRoundWinner()+" after Haggis: "+ getPlayerObject(getActiveRound().getRoundWinner()).getPlayerPoints());
 	}
 	
 	public void newRound(){
