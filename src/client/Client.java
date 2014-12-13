@@ -28,7 +28,7 @@ public class Client {
 	public Client() throws IOException{
 	
 		prop = new PropertyFile();
-		this.address  = InetAddress.getByName(prop.getProperty("server.address"));
+		this.address  = InetAddress.getByName(prop.getProperty("client.address"));
 		this.port = Integer.parseInt(prop.getProperty("port"));
 	}
 	
