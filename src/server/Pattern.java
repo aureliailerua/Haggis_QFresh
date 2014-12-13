@@ -31,6 +31,7 @@ public class Pattern implements Serializable{
         int builtSequenceLength = 0;
         int builtSequenceDepth = 0;
         int deepeningJokers =0;
+        int bombIndex =0;
 
     //__ Pattern Factory__
     public Pattern(ArrayList<Card> cards) {
@@ -86,6 +87,12 @@ public class Pattern implements Serializable{
         log.debug("tablePaTTERN lowest Rank"+ tablePattern.lowestRank+" this lowest Rank "+ this.lowestRank);
         boolean patternMatch = false;
 
+        //__catch bombs___
+        if(this.isBomb() && ( tablePattern.bombIndex < this.bombIndex) ) {
+            this.setBomb();
+            patternMatch = true;
+        }
+
         //__naturally matching patterns are detected here__
         this.analyzePattern();
         log.debug("incoming Cards naturally is"+this.patternName+" while tablePattern is "+tablePattern.patternName+" while leveling is "+levelingOK);
@@ -133,12 +140,12 @@ public class Pattern implements Serializable{
     public void setBomb(){
         if(this.isBomb() && this.jokerCards.size()>0){
             //log.debug("is bomb ok - nr. of joker cards "+this.jokerCards.size());
-            int bombIndex =0;
+
             for (Card c : this.jokerCards) {
-                bombIndex += c.getCardID();
+                this.bombIndex += c.getCardID();
                 //log.debug(bombIndex+" BI ..incremented ");
             }
-            switch (bombIndex) {
+            switch (this.bombIndex) {
                 case 240 : this.setPatternName("JQBomb");         break;
                 case 250 : this.setPatternName("JKBomb");         break;
                 case 260 : this.setPatternName("QKBomb");         break;
@@ -147,10 +154,13 @@ public class Pattern implements Serializable{
         }
         if(this.isBomb() && this.normalCards.size()>0){
             if(this.suitCount==1){
+                this.bombIndex = 400;
                 this.setPatternName("suitedBomb");
             }
-            else if(this.suitCount==4)
+            else if(this.suitCount==4){
+                this.bombIndex = 200;
                 this.setPatternName("unsuitedBomb");
+            }
         }
     }
 /*
