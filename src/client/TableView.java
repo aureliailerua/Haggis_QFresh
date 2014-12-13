@@ -66,7 +66,8 @@ public class TableView extends JFrame implements ActionListener{
 											//Layer
 	JPanelOpposition panel1stOpposition;	//1W
 	JPanel panelTable;						//2 C
-	JPanelOpposition panel2stOpposition; 	//3E
+	JPanelOpposition panel2ndOpposition; 	//3E
+	JPanel panelEmpty;						//3E alternative
 	JPanel panelPlayer;						//4 N
 	
 	JPanel panelCardHand; 					//3.1
@@ -159,13 +160,13 @@ public class TableView extends JFrame implements ActionListener{
 		
 		/** 
 		 * 1st Opposite Player (1.W)
-		 */
+		*/
 		panel1stOpposition = new JPanelOpposition(this, "LEFT");
 		panel1stOpposition.setOpaque(false);
 		panel1stOpposition.setPreferredSize(new Dimension(300, 320));
 		frame.getContentPane().add(panel1stOpposition, BorderLayout.WEST);
 		//bgt panelBG.add(panel1stOpposition, BorderLayout.WEST);
-		
+
 		
 		/**
 		 * Table (Card Desk) (2.C)
@@ -181,12 +182,22 @@ public class TableView extends JFrame implements ActionListener{
 		
 		/**
 		 * 2nd Opposition Player (3.E)
-		 */
-		panel2stOpposition = new JPanelOpposition(this, "RIGHT");
-		panel2stOpposition.setPreferredSize(new Dimension(300, 320));
-		panel2stOpposition.setOpaque(false);
-		frame.getContentPane().add(panel2stOpposition, BorderLayout.EAST);
-		//bgt panelBG.add(panel2stOpposition, BorderLayout.EAST);
+		*/
+		// VERSUCH Opposition dynamisch Anzeigen
+		if (controller.getGameState().playerList.size() == 3) {
+			log.debug("Playerlist Size: "+ controller.getGameState().playerList.size());
+		panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
+		} else {
+			panel2ndOpposition = new JPanelOpposition();
+		}
+		
+		//panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
+		panel2ndOpposition.setPreferredSize(new Dimension(300, 320));
+		panel2ndOpposition.setOpaque(false);
+		frame.getContentPane().add(panel2ndOpposition, BorderLayout.EAST);
+		//bgt panelBG.add(panel2ndOpposition, BorderLayout.EAST);
+		
+
 		
 		/**
 		 * Player (4.N)
@@ -208,7 +219,7 @@ public class TableView extends JFrame implements ActionListener{
 		btnCardHand = new ArrayList<BtnCard>();
 		panelPlayer.add(panelCardHand, BorderLayout.NORTH);
 		
-		// - Empty Space Left (3.2.W)
+		// - ClientInfo Left (3.2.W)
 		panelClientInfo = new JPanel();
 		panelClientInfo.setOpaque(false);
 		FlowLayout fl_panelClientInfo = (FlowLayout) panelClientInfo.getLayout();
@@ -446,7 +457,6 @@ public class TableView extends JFrame implements ActionListener{
 		updatePlayerHand(controller.getPlayer());
 		updateTable(gameState);
 		updatePlayers();
-
 	}
 	public void updateTable(GameState gameState){
 		
@@ -524,9 +534,10 @@ public class TableView extends JFrame implements ActionListener{
 		log.debug("Player 1 = "+ controller.getPlayer().getToken() + " Player 2 = " +player2.getToken());
 		if ( controller.getGameState().playerList.size() == 3){
 			Player player3 = controller.getNextPlayer(player2);
-			panel2stOpposition.updatePlayer(player3,activePlayerToken);			//invoke updatePlayer of Opposition
+			panel2ndOpposition.updatePlayer(player3,activePlayerToken);			//invoke updatePlayer of Opposition
 		}
 		
+		// Set playername, cardcount and points
 		getPlayerName(controller.getPlayer());
 		lbCardCount.setText(Integer.toString(getPlayerCardCount(controller.getPlayer())));
 		lbPoint.setText(Integer.toString(getPlayerPoints(controller.getPlayer())));
@@ -574,7 +585,7 @@ public class TableView extends JFrame implements ActionListener{
 	 */
 	public void displayClientInfo(String message) {
 		
-		if (!message.isEmpty()) {
+		//if (!message.isEmpty()) {
 			StyleContext context = new StyleContext();
 		    StyledDocument document = new DefaultStyledDocument(context);
 	
@@ -605,7 +616,7 @@ public class TableView extends JFrame implements ActionListener{
 		    textPane.setBorder(BorderFactory.createLineBorder(new Color(19, 79, 92), 2, true));
 		    textPane.setEditable(false);
 		    panelClientInfo.add(textPane);
-		} 
+		//} 
 	}
 	/**
 	 * Method to remove the client information message
@@ -641,7 +652,7 @@ public class TableView extends JFrame implements ActionListener{
 	public void displayBorder() {
 		panel1stOpposition.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelTable.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panel2stOpposition.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		panel2ndOpposition.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelPlayer.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		
 		panelCardHand.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));

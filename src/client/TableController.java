@@ -56,7 +56,6 @@ public class TableController implements ActionListener,Observer{
 	}
 	private void playCards(ArrayList<Card> cards, String buttonCheck){
 		if (((cards.size() != 0) && (buttonCheck.equals("Play"))) || ((cards.size() == 0) && (buttonCheck.equals("Pass")))){
-		//if((cards.size() != 0) && (buttonCheck.equals("Play"))) {
 			log.debug("sending cards");
 			CardContainer container = new CardContainer(cards);
 			handler.send(container);
@@ -75,10 +74,6 @@ public class TableController implements ActionListener,Observer{
 	public Player getPlayer(){
 		return getGameState().getPlayer(getToken());
 	}
-	
-	/**
-	 * Sort Cards
-	 */
 	
 	public void actionPerformed(ActionEvent e) {
         
@@ -135,6 +130,12 @@ public class TableController implements ActionListener,Observer{
 		return getGameState().playerList.get(index+1);
 	}
 	
+	// VERSUCH Opposition dynamisch Anzeigen
+	/*
+	public int getPlayerCount(Player player) {
+		return getGameState().playerList.indexOf(player);
+	}
+	*/
 	
 
 	

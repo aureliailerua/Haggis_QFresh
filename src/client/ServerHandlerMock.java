@@ -34,7 +34,7 @@ public class ServerHandlerMock extends ServerHandler {
 		//create three players with tokens
 		this.gameState.playerList.add(new Player(GameState.PlayerToken.one));
 		this.gameState.playerList.add(new Player(GameState.PlayerToken.two));
-		this.gameState.playerList.add(new Player(GameState.PlayerToken.three));
+	//	this.gameState.playerList.add(new Player(GameState.PlayerToken.three));
 		
 		//create deck and add cards / jokers to players
 		this.gameState.activeCardDeck = new CardDeck(this.gameState.playerList.size());
