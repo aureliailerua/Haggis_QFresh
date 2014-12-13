@@ -71,6 +71,7 @@ public class GameHandler {
 		if ( lvContainer.getToken() == gameState.getActivePlayer() &&
 				gameState.getState() == State.running){
 			
+			gameState.setClientInfo("");
 			gameState.setNewRound(false);
 			ArrayList<Card> lvCards = lvContainer.getPlayCards();
 			PlayerToken lvToken = lvContainer.getToken();
