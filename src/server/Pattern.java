@@ -24,7 +24,7 @@ public class Pattern implements Serializable{
         int cardCount = 0;
         int suitCount = 0;
         int rankCount = 0;
-        int lowestRank = 0;
+        public int lowestRank = 0;
         int highestRank = 0;
         int maxSequenceLength = 0;
         //__after Pattern is built according to table pattern target (possibly with Jokers) determined pattern parameters are stored here:
@@ -35,13 +35,14 @@ public class Pattern implements Serializable{
     //__ Pattern Factory__
     public Pattern(ArrayList<Card> cards) {
         for (Card c : cards) {
+            printCards(cards);
             if ( !  c.getCardSuit().equals("joker")) this.normalCards.add(c);
             if (    c.getCardSuit().equals("joker")) this.jokerCards.add(c);
         }
         Collections.sort(this.normalCards);         printCards(this.normalCards);
         Collections.sort(this.jokerCards);          printCards(this.jokerCards);
-        if (normalCards.size()>0){
-            this.lowestRank = Collections.min(cards).getCardRank();
+        this.lowestRank = Collections.min(cards).getCardRank();
+        if (normalCards.size()>0) {
             this.highestRank = Collections.max(normalCards).getCardRank();
             this.maxSequenceLength = (this.highestRank - this.lowestRank +1);
         }
@@ -82,6 +83,7 @@ public class Pattern implements Serializable{
 
     public boolean comparePattern (Pattern tablePattern ){
         boolean levelingOK = (tablePattern.lowestRank < this.lowestRank);
+        log.debug("tablePaTTERN lowest Rank"+ tablePattern.lowestRank+" this lowest Rank "+ this.lowestRank);
         boolean patternMatch = false;
 
         //__naturally matching patterns are detected here__
