@@ -39,29 +39,53 @@ import server.Server;
     public void testComparePattern() throws IOException, MaxPlayerException {
         CardDeck lvCardDeck = new CardDeck(3);
 
+        //____________Compare 7777 with 8JJJ _____
+        ArrayList<Card> fourSeven = new ArrayList<Card>();                        // Standard patterns
+        fourSeven.add(lvCardDeck.getCardById(70));
+        fourSeven.add(lvCardDeck.getCardById(73));
+        fourSeven.add(lvCardDeck.getCardById(72));
+        fourSeven.add(lvCardDeck.getCardById(71));
+        Pattern tablePattern = new Pattern (fourSeven);
+        String basePat_result  =   tablePattern.analyzePattern();
+        log.debug("table Pattern results in: "+basePat_result);
+
+        ArrayList<Card> jjj8 = new ArrayList<Card>();
+        jjj8.add(lvCardDeck.getCardById(82));
+        jjj8.add(lvCardDeck.getCardById(72));
+        jjj8.add(lvCardDeck.getCardById(125));
+        jjj8.add(lvCardDeck.getCardById(135));
+        Pattern incomingPattern = new Pattern(jjj8);
+        boolean matchOK = incomingPattern.comparePattern(tablePattern);
+        log.debug("match OK ? "+matchOK);
+        //______________________________________________________
+        assertTrue("7777 vs. 78JJ ", matchOK == false);
+
+
+
+
+        //____________Compare set___four of a kind___
         ArrayList<Card> set4oaK = new ArrayList<Card>();                        // Standard patterns
         set4oaK.add(lvCardDeck.getCardById(135));
         set4oaK.add(lvCardDeck.getCardById(50));
         set4oaK.add(lvCardDeck.getCardById(52));
         set4oaK.add(lvCardDeck.getCardById(53));
-
-        Pattern tablePattern = new Pattern (set4oaK);
-        String basePat_result  =   tablePattern.analyzePattern();
-
-            log.debug("table Pattern results in: "+basePat_result);
+            Pattern tablePattern2 = new Pattern (set4oaK);
+            String basePat2_result  =   tablePattern2.analyzePattern();
+            log.debug("table Pattern results in: "+basePat2_result);
 
         ArrayList<Card> set4oaK2 = new ArrayList<Card>();
         set4oaK2.add(lvCardDeck.getCardById(64));
         set4oaK2.add(lvCardDeck.getCardById(60));
         set4oaK2.add(lvCardDeck.getCardById(62));
         set4oaK2.add(lvCardDeck.getCardById(63));
+            Pattern incomingPattern2 = new Pattern(set4oaK2);
+            boolean matchOK2 = incomingPattern2.comparePattern(tablePattern2);
+            log.debug("match OK ? "+matchOK2);
+        //______________________________________________________
+        assertTrue("555J vs 6666 ", matchOK2 == true);
 
-        Pattern incomingPattern = new Pattern(set4oaK2);
-        boolean matchOK = incomingPattern.comparePattern(tablePattern);
-            log.debug("match OK ? "+matchOK);
 
         //Testing Ambivalent Patterns table: 777 888  played: 77 88 JJ
-
         ArrayList<Card> three7three8 = new ArrayList<Card>();
         three7three8.add(lvCardDeck.getCardById(74));
         three7three8.add(lvCardDeck.getCardById(72));
@@ -70,6 +94,8 @@ import server.Server;
         three7three8.add(lvCardDeck.getCardById(82));
         three7three8.add(lvCardDeck.getCardById(81));
             Pattern ambiTable = new Pattern(three7three8);
+            ambiTable.analyzePattern();
+            log.debug("ambiTable should be two 3 of a kind "+ambiTable.patternName);
 
         ArrayList<Card> two7two8twoJ = new ArrayList<Card>();
         two7two8twoJ.add(lvCardDeck.getCardById(74));
@@ -79,12 +105,13 @@ import server.Server;
         two7two8twoJ.add(lvCardDeck.getCardById(115));
         two7two8twoJ.add(lvCardDeck.getCardById(125));
             Pattern nextPattern = new Pattern (two7two8twoJ);
-
-        boolean ambiOk = ambiTable.comparePattern(nextPattern);
-        log.debug("ambi OK ? "+ambiOk);
+            log.debug(nextPattern.analyzePattern()+"-> resulting from analyze 7788JJ");
+            boolean ambiOk = nextPattern.comparePattern(ambiTable);
+            log.debug("ambi OK ? "+ambiOk+" result ambiTable with newPattern name is "+nextPattern.patternName);
+        //______________________________________________________
+        assertTrue("777888 vs 7788JJ ", matchOK2 == true);
 
         //__compare 789 suited with 8JJ__
-
         ArrayList<Card> runOfThree = new ArrayList<Card>();
         runOfThree.add(lvCardDeck.getCardById(72));
         runOfThree.add(lvCardDeck.getCardById(82));
@@ -99,10 +126,10 @@ import server.Server;
             Pattern i = new Pattern(twoJoker8);
             String i_result = i.analyzePattern();
             log.debug("_________compare 789 suited with 8JJ second pattern :"+i_result);
-            boolean result = i.comparePatternTEMP(j);
+            boolean result = i.comparePattern(j);
             log.debug("result of compare 789 with 8JJ" +result);
-        //_____
-
+        //______________________________________________________
+        assertTrue("777888 vs 7788JJ ", result == true);
 
 
     }
@@ -112,6 +139,16 @@ import server.Server;
 
         //__Checking the SET pattern___
         CardDeck lvCardDeck = new CardDeck(3);
+
+        ArrayList<Card> unsuitedSequenceBomb = new ArrayList<Card>();
+        unsuitedSequenceBomb.add(lvCardDeck.getCardById(30));
+        unsuitedSequenceBomb.add(lvCardDeck.getCardById(51));
+        unsuitedSequenceBomb.add(lvCardDeck.getCardById(72));
+        unsuitedSequenceBomb.add(lvCardDeck.getCardById(93));
+        Pattern z  = new Pattern (unsuitedSequenceBomb);
+        String z_result =   z.analyzePattern();
+        log.debug("__ b Pattern result : "+z_result);
+        log.debug("_________End of Z Check - return value from unsuited Sequence Bomb : "+z_result);
 
         ArrayList<Card> bombCards = new ArrayList<Card>();
         bombCards.add(lvCardDeck.getCardById(115));
@@ -211,20 +248,22 @@ import server.Server;
         Pattern j = new Pattern(runOfThree);
         String j_result = j.analyzePattern();
 
-        log.debug("_________End of J Check - r return value from two Joker Bomb :"+j_result);
+        log.debug("_________End of J Check - 789 :"+j_result);
 
 
         //_________________________
-        assertTrue("Joker Bomb check failed ", a_result.equals("bomb"));
-        assertTrue("Sequence Bomb check failed ", b_result.equals("bomb"));
-        assertTrue("SET check failed ", c_result.equals("fourOfAKind"));
+        assertTrue("unsuitedBomb check failed ", z_result.equals("unsuitedBomb"));
+        assertTrue("suitedBomb check failed ", a_result.equals("JQKBomb"));
+        assertTrue("Sequence suitedBomb check failed ", b_result.equals("suitedBomb"));
+        assertTrue("fourOfAKind check failed ", c_result.equals("fourOfAKind"));
         assertTrue("noPattern check failed ", d_result.equals("nix"));
         assertTrue("Sequence check failed ", e_result.equals("runOfFourSingles"));
-        assertTrue("Parallel Sequence check failed ", f_result.equals("runOfThreePairs"));
-        assertTrue("shouldBeNoSequenceRun failed 3.5 check ", g_result.equals("nix"));
-        assertTrue("Two Joker Bomb check failed ", h_result.equals("bomb"));
-        assertTrue("Two Jokers and an 8 failed ", i_result.equals("runOfThreeSingles"));
+        assertTrue("runOfThreePairs check failed ", f_result.equals("runOfThreePairs"));
+        assertTrue("nix check failed 3.5 check ", g_result.equals("nix"));
+        assertTrue("JQBomb check failed ", h_result.equals("JQBomb"));
+        assertTrue("threeOfAKind failed ", i_result.equals("threeOfAKind"));
+        assertTrue("runOfThreeSingles failed ", j_result.equals("runOfThreeSingles"));
+
 
     }
-
 }
