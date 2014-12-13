@@ -12,6 +12,7 @@ import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import library.GameState;
@@ -34,8 +35,10 @@ public class EndController implements ActionListener,Observer{
 		displayWinner();
 		if (IsGameEnd()){
 			view.btnButton.setIcon(view.iconExit);
-			view.btnButton.setPreferredSize(new Dimension(58, 58));
+			view.btnButton.setText("Beer!");
+			view.btnButton.setPreferredSize(new Dimension(130, 58));
 		}else{
+			view.btnButton.setIcon(view.iconRepeat);
 			view.btnButton.setText("Continue");
 			view.btnButton.setPreferredSize(new Dimension(130, 58));
 		}
@@ -77,10 +80,8 @@ public class EndController implements ActionListener,Observer{
 	
 		
 		ArrayList<Player> rankList = new ArrayList<Player>();
-		rankList = handler.gameState.playerList;
-		
-		Collections.sort(rankList);
-		
+		rankList = getSortedPlayerList();
+				
 		for (int i = rankList.size()-1; i >= 0; i--) {
 			String rank = Integer.toString(rankList.size()-i);
 			String name = getPlayerName(rankList.get(i));
@@ -93,24 +94,35 @@ public class EndController implements ActionListener,Observer{
 		view.repaint();
 		
 	}
+	private ArrayList<Player> getSortedPlayerList() {
+		ArrayList<Player> rankList = new ArrayList<Player>();
+		rankList = handler.gameState.playerList;
+		Collections.sort(rankList);
+		
+		return rankList;
+	}
 	private void displayWinner(){
 		if (IsGameEnd() ){
+			view.lblEndGameStatusTitle.setHorizontalAlignment(SwingConstants.CENTER);
+
 			if (getWinner()) {
 				view.lblEndGameStatusTitle.setText("Congratulation " + getPlayerName(getPlayer()) +" you're the winner!");
-				view.imgResult = new JLabel(view.iconWinner);
-				
+				view.imgResult.setIcon(view.iconWinner);				
 			} else {
-				view.imgResult = new JLabel(view.iconLoser);
 				view.lblEndGameStatusTitle.setText("Sorry  " + getPlayerName(getPlayer()) +" you lost!");
+				view.imgResult.setIcon(view.iconLoser);
+
 			}
 		} else {
 			view.lblEndGameStatusTitle.setText("Gameresult");
+			view.lblEndGameStatusTitle.setHorizontalAlignment(SwingConstants.LEFT);
+
 		}
 	}
 	
 	private boolean IsGameEnd() {
 		for ( Player p : handler.getGameState().playerList){
-			if ( p.getPlayerPoints() > 40 ){
+			if ( p.getPlayerPoints() > 20 ){	//POINTS => 250
 				return true;
 			}
 		}
@@ -120,7 +132,7 @@ public class EndController implements ActionListener,Observer{
 	public boolean getWinner() {
 		boolean winner = false;
 
-		 if (getPlayer().equals(getPlayerList().get(0))) // Winner
+		 if (getPlayer().equals(getSortedPlayerList().get(getSortedPlayerList().size() - 1))) // Winner
 		{
 			winner = true;
 		}

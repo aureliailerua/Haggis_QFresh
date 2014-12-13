@@ -80,6 +80,7 @@ public class EndView extends JDialog {
 	protected ImageIcon iconWinner;
 	protected ImageIcon iconLoser;
 	protected ImageIcon iconExit;
+	protected ImageIcon iconRepeat;
 
 	
 
@@ -109,20 +110,17 @@ public class EndView extends JDialog {
 		String pathImgWinner = "/icons/winner.png";
 		String pathImgLoser = "/icons/loser.png";
 		String pathImgPodium = "/icons/podium.png";
+		String pathImgRepeat = "/icons/repeat.png";
 		
 		iconWinner = new ImageIcon(EndView.class.getResource(pathImgWinner));
 		iconLoser = new ImageIcon(EndView.class.getResource(pathImgLoser));
 		iconExit = new ImageIcon(EndView.class.getResource(pathImgExit));
+		iconRepeat = new ImageIcon(EndView.class.getResource(pathImgRepeat));
 
-
-		//frame = new JFrame("QFresh Haggis Game - Game Results");
-		//dialog = new JDialog();
 		
-		//dialog = new JDialog( , "QFresh Haggis Game - Game Results");
 		setBounds(0, 0, 1000, 500); // x, y, breite, höhe
 		setPreferredSize(new Dimension(1000, 500));
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		getContentPane().setBackground(Color.WHITE);
 		setAlwaysOnTop (true);
@@ -134,9 +132,10 @@ public class EndView extends JDialog {
 		panelTitle.setOpaque(false);
 		panelTitle.setBorder(new EmptyBorder(20, 0, 0, 10));
 		getContentPane().add(panelTitle, BorderLayout.NORTH);
-		lblPoduium = new JLabel(new ImageIcon(EndView.class.getResource(pathImgPodium)));
+		//lblPoduium = new JLabel(new ImageIcon(EndView.class.getResource(pathImgPodium)));
 		lblEndGameStatusTitle = new JLabel();
-		panelTitle.add(lblPoduium);
+		lblEndGameStatusTitle.setFont(title);
+		//panelTitle.add(lblPoduium);
 		panelTitle.add(lblEndGameStatusTitle);
 
 
@@ -155,6 +154,7 @@ public class EndView extends JDialog {
 		panelGameResults.setOpaque(false);
 		panelContent.add(panelGameResults);
 		panelGameResults.setLayout(new BorderLayout(0, 0));
+	
 		
 		// --- Game result table
 		UIManager.put("Table.font", new FontUIResource(text));
@@ -192,10 +192,15 @@ public class EndView extends JDialog {
 		// -- Result Image (2.2)
 		panelImgResult = new JPanel();
 		panelImgResult.setOpaque(false);
+		panelImgResult.setPreferredSize(new Dimension(300,262));
 		panelContent.add(panelImgResult);
 		panelImgResult.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
 
+		imgResult = new JLabel();
+		imgResult.setHorizontalAlignment(SwingConstants.CENTER);
+		panelImgResult.add(imgResult);
+		
+		
 		/**
 		 * Button CardContainer (3)
 		 */
@@ -213,47 +218,6 @@ public class EndView extends JDialog {
 		btnButton.setBackground(Color.WHITE);
 		btnButton.addActionListener(controller);
 		panelButton.add(btnButton);
-		
-		/*
-		panelBtnStart = new JPanel();
-		panelBtnStart.setOpaque(false);
-		FlowLayout flBtnStart = (FlowLayout) panelBtnStart.getLayout();
-		flBtnStart.setAlignment(FlowLayout.LEFT);
-		panelButton.add(panelBtnStart);
-		
-		btnStart = new JButton("Start Game");
-		btnStart.setFont(button);
-		btnStart.setPreferredSize(new Dimension(130, 58));
-		btnStart.setBackground(Color.WHITE);
-		btnStart.addActionListener(controller);
-		panelBtnStart.add(btnStart);
-		
-		// -- Button CardContainer (3.2)
-		panelBtnContainer = new JPanel();
-		panelBtnContainer.setOpaque(false);
-		FlowLayout flBtnContainer = (FlowLayout) panelBtnContainer.getLayout();
-		flBtnContainer.setAlignment(FlowLayout.RIGHT);
-		panelButton.add(panelBtnContainer);
-		
-		
-		btnExit = new JButton();
-		btnExit.setIcon(new ImageIcon(StartView.class.getResource(pathImgExit)));
-		btnExit.setPreferredSize(new Dimension (58,58));
-		btnExit.setBackground(Color.WHITE);
-		btnExit.addActionListener(controller);
-		panelBtnContainer.add(btnExit);
-		*/
-		// ---- Setup screen for winner or loser
-		lblEndGameStatusTitle = new JLabel("");
-		imgResult = new JLabel("");
-		
-		lblEndGameStatusTitle.setFont(title);
-		lblEndGameStatusTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		panelTitle.add(lblEndGameStatusTitle);
-		
-		imgResult.setHorizontalAlignment(SwingConstants.CENTER);
-		panelImgResult.add(imgResult);
-		
 		
 	}
 	
