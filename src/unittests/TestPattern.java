@@ -83,6 +83,27 @@ import server.Server;
         boolean ambiOk = ambiTable.comparePattern(nextPattern);
         log.debug("ambi OK ? "+ambiOk);
 
+        //__compare 789 suited with 8JJ__
+
+        ArrayList<Card> runOfThree = new ArrayList<Card>();
+        runOfThree.add(lvCardDeck.getCardById(72));
+        runOfThree.add(lvCardDeck.getCardById(82));
+        runOfThree.add(lvCardDeck.getCardById(92));
+            Pattern j = new Pattern(runOfThree);
+            String j_result = j.analyzePattern();
+            log.debug("_________compare 789 suited with 8JJ first pattern :"+j_result);
+        ArrayList<Card> twoJoker8 = new ArrayList<Card>();
+        twoJoker8.add(lvCardDeck.getCardById(115));
+        twoJoker8.add(lvCardDeck.getCardById(125));
+        twoJoker8.add(lvCardDeck.getCardById(81));
+            Pattern i = new Pattern(twoJoker8);
+            String i_result = i.analyzePattern();
+            log.debug("_________compare 789 suited with 8JJ second pattern :"+i_result);
+            boolean result = i.comparePatternTEMP(j);
+            log.debug("result of compare 789 with 8JJ" +result);
+        //_____
+
+
 
     }
 
@@ -172,8 +193,28 @@ import server.Server;
         twoJokerCards.add(lvCardDeck.getCardById(125));
             Pattern h = new Pattern(twoJokerCards);
             String h_result = h.analyzePattern();
-            log.debug("_________End of G Check - r return value from two Joker Bomb :"+h_result);
+            log.debug("_________End of H Check - r return value from two Joker Bomb :"+h_result);
 
+        //_________________________
+        ArrayList<Card> twoJoker8 = new ArrayList<Card>();
+        twoJoker8.add(lvCardDeck.getCardById(115));
+        twoJoker8.add(lvCardDeck.getCardById(125));
+        twoJoker8.add(lvCardDeck.getCardById(81));
+        Pattern i = new Pattern(twoJoker8);
+            String i_result = i.analyzePattern();
+            log.debug("_________End of I Check - r return value from runOfThree singles :"+i_result);
+
+        ArrayList<Card> runOfThree = new ArrayList<Card>();
+        runOfThree.add(lvCardDeck.getCardById(72));
+        runOfThree.add(lvCardDeck.getCardById(82));
+        runOfThree.add(lvCardDeck.getCardById(92));
+        Pattern j = new Pattern(runOfThree);
+        String j_result = j.analyzePattern();
+
+        log.debug("_________End of J Check - r return value from two Joker Bomb :"+j_result);
+
+
+        //_________________________
         assertTrue("Joker Bomb check failed ", a_result.equals("bomb"));
         assertTrue("Sequence Bomb check failed ", b_result.equals("bomb"));
         assertTrue("SET check failed ", c_result.equals("fourOfAKind"));
@@ -181,7 +222,9 @@ import server.Server;
         assertTrue("Sequence check failed ", e_result.equals("runOfFourSingles"));
         assertTrue("Parallel Sequence check failed ", f_result.equals("runOfThreePairs"));
         assertTrue("shouldBeNoSequenceRun failed 3.5 check ", g_result.equals("nix"));
-       assertTrue("Two Joker Bomb check failed ", h_result.equals("bomb"));
+        assertTrue("Two Joker Bomb check failed ", h_result.equals("bomb"));
+        assertTrue("Two Jokers and an 8 failed ", i_result.equals("runOfThreeSingles"));
+
     }
 
 }
