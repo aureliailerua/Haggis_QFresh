@@ -1,9 +1,11 @@
 package client;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -77,7 +79,14 @@ public class AuthorView extends JFrame {
 
 		
 		JTextArea txtrHi = new JTextArea();
-		txtrHi.setText("Hi! /n Wir sind die Gruppe QFresh. Unser Gruppenname stammt vom schweizer Beer Quell Fresch und wurde in einer kreativen Phase zu diesem JAVA Projekt bestimmt. /n Die Autoren des Haggis Game sind: /n Aurelia /n Benjamin /n Andi /n Felicita /n Wir wünschen euch viel Spass mit unserem Spiel!");
+		txtrHi.setText("Hi! \n Wir sind die Gruppe QFresh. Unser Gruppenname stammt vom schweizer Beer Quell Fresch und wurde in einer kreativen Phase zu diesem JAVA Projekt bestimmt. \n Die Autoren des Haggis Game sind: \n Aurelia \n Benjamin \n Andi \n Felicita \n Wir wünschen euch viel Spass mit unserem Spiel!");
+		txtrHi.setBackground(Color.BLACK);
+		txtrHi.setFont(text);
+		txtrHi.setForeground(Color.WHITE);
+		txtrHi.setLineWrap(true);
+		//txtrHi.setPreferredSize(new Dimension(400, 100));
+		txtrHi.setMargin(new Insets(5,5,5,5));
+		
 		panelText.add(txtrHi, BorderLayout.NORTH);
 		
 		JPanel panelIcons = new JPanel();
