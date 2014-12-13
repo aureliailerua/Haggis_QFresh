@@ -61,7 +61,7 @@ public class TableController implements ActionListener,Observer{
 			handler.send(container);
 		} else {
 			log.debug("play emtpy card");
-			view.displayClientInfo("you have not selected any cards! And you shoult play a cards when you push the play button" );
+			view.displayClientInfo("Please select a card." );
 		}
 	}
 	private ArrayList<BtnCard> playerCards(){
@@ -119,8 +119,21 @@ public class TableController implements ActionListener,Observer{
 	
 	@Override
 	public void update(Observable o, Object arg) {
+		checkNewRound();
 		view.drawGameState(handler.getGameState());
 		view.getJFrame().getContentPane().revalidate();
+	}
+	private void checkNewRound() {
+		if (handler.getGameState().isNewRound()) {
+			view.displayClientInfo("");		//Clean clientInfo
+			EndController endController = new EndController(handler);
+			EndView endView = new EndView(endController,view.getJFrame());
+			endController.updateView();
+			endView.setModal(true);
+			endView.pack();
+			endView.setVisible(true);
+		}
+		
 	}
 	public Player getNextPlayer(Player player) {
 		int index = getGameState().playerList.indexOf(player);
