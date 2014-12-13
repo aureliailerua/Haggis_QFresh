@@ -266,7 +266,7 @@ public class GameState extends Observable implements Serializable {
 		} else {  // comparePattern if its NOT the first move of the trick
 			log.debug("PATTERN - attempting comparePattern");
 			Pattern newPattern = new Pattern(lvCards);
-			if (newPattern.comparePatternTEMP(activePattern)){
+			if (newPattern.comparePattern(activePattern)){
 				setActivePattern(newPattern);
 				log.debug("Player "+activePlayer+" plays " +getActivePattern().patternName);
 				return true;
