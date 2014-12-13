@@ -91,7 +91,7 @@ public class JPanelOpposition extends JPanel{
 		pathJoker[0] = "/gameContent/joker/opp_joker11.jpg";
 		pathJoker[1] = "/gameContent/joker/opp_joker12.jpg";
 		pathJoker[2] = "/gameContent/joker/opp_joker13.jpg";
-		pathJoker[3] = "/gameContent/joker/opp_empty.png";
+
 		
 		// Define Fonts
 		Font player = new Font("Comic Sans MS", Font.BOLD, 15);
@@ -235,7 +235,7 @@ public class JPanelOpposition extends JPanel{
 		panelOppSpacer.setPreferredSize(new Dimension(210,80));
 		add(panelOppSpacer, BorderLayout.SOUTH);
 		
-		displayBorder();	
+		//displayBorder();	
 }
 	
 	/**
@@ -378,9 +378,6 @@ public class JPanelOpposition extends JPanel{
 		panelOppCards.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelOppBet.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelOppStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		//panelCardBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		//panelJoker.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-
 	}
 	
 }

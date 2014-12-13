@@ -53,9 +53,9 @@ import java.util.Vector;
 import library.Player;
 import library.GameState.PlayerToken;
 
-public class EndView extends JFrame {
+public class EndView extends JDialog {
 
-	private JFrame frame;
+	//private JFrame frame;
 	
 	JPanel panelTitle;			//1
 	JPanel panelContent;		//2
@@ -68,14 +68,20 @@ public class EndView extends JFrame {
 	JPanel panelBtnContainer;	//3.2
 	
 	JButton btnExit;
-	JButton btnRules;
 	JButton btnStart;
+	JButton btnButton;
 	
 	JLabel lblEndGameStatusTitle;
 	JLabel lblWaitingForPlayer;
 	JLabel lblLogginPlayer;
 	JLabel imgResult;
 	JLabel lblPoduium;
+	
+	protected ImageIcon iconWinner;
+	protected ImageIcon iconLoser;
+	protected ImageIcon iconExit;
+	protected ImageIcon iconRepeat;
+
 	
 
 	Vector<Vector> rowData;
@@ -87,9 +93,12 @@ public class EndView extends JFrame {
 	
 	EndController controller;
 
-	public EndView(EndController controller) {
+	public EndView(EndController controller,JFrame frame) {
+		//super(frame, "text", ModalityType.APPLICATION_MODAL);
+		super(frame, true);
 		this.controller = controller;
-
+		controller.setEndView(this);
+	
 		
 		// Define Font's
 		Font title = new Font("Comic Sans MS", Font.BOLD, 24);
@@ -101,15 +110,20 @@ public class EndView extends JFrame {
 		String pathImgWinner = "/icons/winner.png";
 		String pathImgLoser = "/icons/loser.png";
 		String pathImgPodium = "/icons/podium.png";
-		//String pathImgTrophy = "/icons/trophy.png";
-		//String pathImg2ndAward = "/icons/award.png";
+		String pathImgRepeat = "/icons/repeat.png";
+		
+		iconWinner = new ImageIcon(EndView.class.getResource(pathImgWinner));
+		iconLoser = new ImageIcon(EndView.class.getResource(pathImgLoser));
+		iconExit = new ImageIcon(EndView.class.getResource(pathImgExit));
+		iconRepeat = new ImageIcon(EndView.class.getResource(pathImgRepeat));
 
-		frame = new JFrame("QFresh Haggis Game - Game Results");
-		frame.setBounds(0, 0, 1000, 500); // x, y, breite, höhe
-		frame.setPreferredSize(new Dimension(1000, 500));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		frame.getContentPane().setBackground(Color.WHITE);
+		
+		setBounds(0, 0, 1000, 500); // x, y, breite, höhe
+		setPreferredSize(new Dimension(1000, 500));
+        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		getContentPane().setLayout(new BorderLayout(0, 0));
+		getContentPane().setBackground(Color.WHITE);
+		setAlwaysOnTop (true);
 
 		/**
 		 * Title (1)
@@ -117,9 +131,12 @@ public class EndView extends JFrame {
 		panelTitle = new JPanel();
 		panelTitle.setOpaque(false);
 		panelTitle.setBorder(new EmptyBorder(20, 0, 0, 10));
-		frame.getContentPane().add(panelTitle, BorderLayout.NORTH);
-		lblPoduium = new JLabel(new ImageIcon(EndView.class.getResource(pathImgPodium)));
-		panelTitle.add(lblPoduium);
+		getContentPane().add(panelTitle, BorderLayout.NORTH);
+		//lblPoduium = new JLabel(new ImageIcon(EndView.class.getResource(pathImgPodium)));
+		lblEndGameStatusTitle = new JLabel();
+		lblEndGameStatusTitle.setFont(title);
+		//panelTitle.add(lblPoduium);
+		panelTitle.add(lblEndGameStatusTitle);
 
 
 		/**
@@ -127,7 +144,7 @@ public class EndView extends JFrame {
 		 */
 		panelContent = new JPanel();
 		panelContent.setOpaque(false);
-		frame.getContentPane().add(panelContent, BorderLayout.CENTER);
+		getContentPane().add(panelContent, BorderLayout.CENTER);
 		panelContent.setLayout(new GridLayout(1, 2, 0, 0));
 		panelContent.setBorder(new EmptyBorder(10, 20, 20, 20) ); 	//top, left, bottom, right
 		
@@ -137,6 +154,7 @@ public class EndView extends JFrame {
 		panelGameResults.setOpaque(false);
 		panelContent.add(panelGameResults);
 		panelGameResults.setLayout(new BorderLayout(0, 0));
+	
 		
 		// --- Game result table
 		UIManager.put("Table.font", new FontUIResource(text));
@@ -148,14 +166,8 @@ public class EndView extends JFrame {
 		UIManager.getDefaults().put("Table.background", Color.LIGHT_GRAY);
 		//UIManager.getDefaults().put("Table.border", BorderFactory.createLineBorder(Color.BLACK));
 				
-		//Vector<String> row1 = new Vector<String>();
-		//row1.add("1");
-		//row1.add("Player2");
-		//row1.add("250");
-
 		
 		rowData = new Vector<Vector>();
-		//rowData.add(row1);
 
 		
 		columnNames = new Vector<String>();
@@ -175,81 +187,38 @@ public class EndView extends JFrame {
 		JScrollPane scrollePane = new JScrollPane(tblRanking);
 		scrollePane.setBorder(null);
 		panelGameResults.add(scrollePane);
-		model.addRow(new Object[] {"1", "Player3", "250"});
-		model.addRow(new Object[] {"2", "Player1", "150"});
-		model.addRow(new Object[] {"3", "Player2", "50"});
-	
-		// FUNKTIONIERT NOCH NICHT
-		//controller.fillRankTable();
 
-		
 		
 		// -- Result Image (2.2)
 		panelImgResult = new JPanel();
 		panelImgResult.setOpaque(false);
+		panelImgResult.setPreferredSize(new Dimension(300,262));
 		panelContent.add(panelImgResult);
 		panelImgResult.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
 
+		imgResult = new JLabel();
+		imgResult.setHorizontalAlignment(SwingConstants.CENTER);
+		panelImgResult.add(imgResult);
+		
+		
 		/**
 		 * Button CardContainer (3)
 		 */
 		panelButton = new JPanel();
 		panelButton.setOpaque(false);
-		frame.getContentPane().add(panelButton, BorderLayout.SOUTH);
-		panelButton.setLayout(new GridLayout(1, 2, 0, 0));
+		getContentPane().add(panelButton, BorderLayout.SOUTH);
+		FlowLayout fl_panelButton = (FlowLayout) panelButton.getLayout();
+		fl_panelButton.setAlignment(FlowLayout.LEFT);
+		//panelButton.setLayout(new GridLayout(1, 2, 0, 0));
 		panelButton.setBorder(new EmptyBorder(20, 20, 20, 10) ); 
 		
-		panelBtnStart = new JPanel();
-		panelBtnStart.setOpaque(false);
-		FlowLayout flBtnStart = (FlowLayout) panelBtnStart.getLayout();
-		flBtnStart.setAlignment(FlowLayout.LEFT);
-		panelButton.add(panelBtnStart);
+		btnButton = new JButton();
+		btnButton.setFont(button);
+		btnButton.setPreferredSize(new Dimension(130, 58));
+		btnButton.setBackground(Color.WHITE);
+		btnButton.addActionListener(controller);
+		panelButton.add(btnButton);
 		
-		btnStart = new JButton("Start Game");
-		btnStart.setFont(button);
-		btnStart.setPreferredSize(new Dimension(130, 58));
-		btnStart.setBackground(Color.WHITE);
-		btnStart.addActionListener(controller);
-		panelBtnStart.add(btnStart);
-		
-		// -- Button CardContainer (3.2)
-		panelBtnContainer = new JPanel();
-		panelBtnContainer.setOpaque(false);
-		FlowLayout flBtnContainer = (FlowLayout) panelBtnContainer.getLayout();
-		flBtnContainer.setAlignment(FlowLayout.RIGHT);
-		panelButton.add(panelBtnContainer);
-		
-		
-		btnExit = new JButton();
-		btnExit.setIcon(new ImageIcon(StartView.class.getResource(pathImgExit)));
-		btnExit.setPreferredSize(new Dimension (58,58));
-		btnExit.setBackground(Color.WHITE);
-		btnExit.addActionListener(controller);
-		panelBtnContainer.add(btnExit);
-		
-		// ---- Setup screen for winner or loser
-		if (getWinner()) {
-			lblEndGameStatusTitle = new JLabel("Congratulation " + getPlayerName(controller.getPlayer()) +" you're the winner!");
-			imgResult = new JLabel(new ImageIcon(EndView.class.getResource(pathImgWinner)));
-			
-		} else {
-			imgResult = new JLabel(new ImageIcon(EndView.class.getResource(pathImgLoser)));
-			lblEndGameStatusTitle = new JLabel("Sorry  " + getPlayerName(controller.getPlayer()) +" you lost!");
-		}
-		
-		lblEndGameStatusTitle.setFont(title);
-		lblEndGameStatusTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		panelTitle.add(lblEndGameStatusTitle);
-		
-		imgResult.setHorizontalAlignment(SwingConstants.CENTER);
-		panelImgResult.add(imgResult);
-		
-		
-	}
-	
-	public JFrame getJFrame(){
-		return frame;
 	}
 	
 	public void setController(EndController controller){
@@ -262,20 +231,5 @@ public class EndView extends JFrame {
 		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1; //?
 		return name+playerNum;
 	}
-	
-	public boolean getWinner() {
-		boolean winner = false;
-		/* EINSCHALTEN!
-		 * if (controller.getPlayer().equals(controller.getPlayerList().get(0))) // Winner
-		{
-			winner = true;
-		} */
-		return winner;
-	}
-	
-	public void actionPerformed(ActionEvent e) {
-		
-	}
-
 
 }

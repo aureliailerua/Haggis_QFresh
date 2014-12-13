@@ -240,7 +240,6 @@ public class GameState extends Observable implements Serializable {
 	}
 
 	public boolean checkMove(ArrayList<Card> lvCards) {
-		
 		//TODO call analyzePattern or comparePattern
 		//FIXME NullPointerException at server.Pattern.comparePatternTEMP(Pattern.java:95)
 

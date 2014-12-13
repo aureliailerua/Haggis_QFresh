@@ -146,7 +146,6 @@ public class TableView extends JFrame implements ActionListener{
 		active = new Color(147,196,125); 	//Green
 		inactive = new Color(234,153,153);	//Red
 		
-		//bgt String pathImgBackground = "/icons/wood_table.jpg";
 		frame = new JFrame("QFresh Haggis Game - Gametable");
 		frame.setBounds(0, 0, 1280, 720); // x-Position, y-Position, breite und höhe des Fenster
 		frame.setPreferredSize(new Dimension(1280,720));
@@ -154,12 +153,6 @@ public class TableView extends JFrame implements ActionListener{
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().setBackground(Color.WHITE);
 		
-		//Background Image Test
-		//bgt JLabel lblBackground = new JLabel(new ImageIcon(pathImgBackground));
-		//bgt JLabel lblBackground = new JLabel(new ImageIcon(TableView.class.getResource(pathImgBackground)));
-		//bgt JPanel panelBG = new JPanel();
-		//bgt panelBG.add(lblBackground);
-		//bgt frame.getContentPane().add(panelBG);
 		
 		/** 
 		 * 1st Opposite Player (1.W)
@@ -168,7 +161,6 @@ public class TableView extends JFrame implements ActionListener{
 		panel1stOpposition.setOpaque(false);
 		panel1stOpposition.setPreferredSize(new Dimension(300, 320));
 		frame.getContentPane().add(panel1stOpposition, BorderLayout.WEST);
-		//bgt panelBG.add(panel1stOpposition, BorderLayout.WEST);
 
 		
 		/**
@@ -181,7 +173,6 @@ public class TableView extends JFrame implements ActionListener{
 		panelTable.setOpaque(false);
 		frame.getContentPane().add(panelTable, BorderLayout.CENTER);
 		btnCardTable = new ArrayList<BtnCard>();
-		//bgt panelBG.add(panelTable, BorderLayout.CENTER);
 		
 		/**
 		 * 2nd Opposition Player (3.E)
@@ -198,7 +189,6 @@ public class TableView extends JFrame implements ActionListener{
 		panel2ndOpposition.setPreferredSize(new Dimension(300, 320));
 		panel2ndOpposition.setOpaque(false);
 		frame.getContentPane().add(panel2ndOpposition, BorderLayout.EAST);
-		//bgt panelBG.add(panel2ndOpposition, BorderLayout.EAST);
 		
 
 		
@@ -210,7 +200,6 @@ public class TableView extends JFrame implements ActionListener{
 		panelPlayer.setOpaque(false);
 		panelPlayer.setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().add(panelPlayer, BorderLayout.SOUTH);
-		//bgt panelBG.add(panelPlayer, BorderLayout.SOUTH);
 		
 		// - Card Hand (3.1.N)
 		panelCardHand = new JPanel();
@@ -429,7 +418,6 @@ public class TableView extends JFrame implements ActionListener{
 		btnExit = new JButton();
 		ImageIcon imageIconExit = new ImageIcon(TableView.class.getResource(pathImgExitBtn));
 		btnExit.setIcon(new ImageIcon(imageIconExit.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
-		//btnExit.setIcon(new ImageIcon(TableView.class.getResource(pathImgExitBtn)));
 		btnExit.setPreferredSize(new Dimension(58,58));
 		btnExit.setBackground(Color.WHITE);
 		btnExit.addActionListener(controller);
@@ -442,7 +430,7 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.insets = new Insets(12,0,5,5); //Abstand vom Displayrand (top, left, bottom, right)
 		panelControlContainer.add(btnExit,cContainer);
 		
-		displayBorder();
+		//displayBorder();
 
 	}
 	
@@ -466,6 +454,7 @@ public class TableView extends JFrame implements ActionListener{
 		updatePlayerHand(controller.getPlayer());
 		updateTable(gameState);
 		updatePlayers();
+		displayClientInfo(gameState.getClientInfo());
 	}
 	public void updateTable(GameState gameState){
 		
@@ -586,7 +575,8 @@ public class TableView extends JFrame implements ActionListener{
     	JFrame frameRules = new JFrame ("Haggis Rules");
     	frameRules.setBounds(200, 200, 510, 326); // x-Position, y-Position, breite und höhe des Fenster
         frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
-        JLabel imgLabelRules = new JLabel(new ImageIcon(TableView.class.getResource("/gameContent/rules/combination.jpg")));
+        ImageIcon combinationCard = new ImageIcon(TableView.class.getResource("/gameContent/rules/combination.jpg"));
+        JLabel imgLabelRules = new JLabel(new ImageIcon(combinationCard.getImage().getScaledInstance(510, 326,  java.awt.Image.SCALE_SMOOTH)));
 		imgLabelRules.setPreferredSize(new Dimension(510,326));
         frameRules.getContentPane().add(imgLabelRules);
         frameRules.pack();
@@ -604,7 +594,7 @@ public class TableView extends JFrame implements ActionListener{
 		frame.getContentPane().revalidate();
 
 
-		//if (!message.isEmpty()) {
+		if (!message.isEmpty()) {
 			StyleContext context = new StyleContext();
 		    StyledDocument document = new DefaultStyledDocument(context);
 	
@@ -635,16 +625,10 @@ public class TableView extends JFrame implements ActionListener{
 		    textPane.setBorder(BorderFactory.createLineBorder(new Color(19, 79, 92), 2, true));
 		    textPane.setEditable(false);
 		    panelClientInfo.add(textPane);
-		//} 
+		} 
 		    
 		panelClientInfo.repaint();
 
-	}
-	/**
-	 * Method to remove the client information message
-	 */
-	public void cleanClientInfo() {
-			panelClientInfo.removeAll();
 	}
 	
 	/**

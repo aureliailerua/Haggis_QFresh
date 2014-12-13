@@ -1,5 +1,6 @@
 package client;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -9,6 +10,9 @@ import java.util.Comparator;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import library.GameState;
@@ -26,6 +30,19 @@ public class EndController implements ActionListener,Observer{
 	Client client;
 	private static final Logger log = LogManager.getLogger( TableController.class.getName() );
 	
+	public void updateView() {
+		fillRankTable();
+		displayWinner();
+		if (IsGameEnd()){
+			view.btnButton.setIcon(view.iconExit);
+			view.btnButton.setText("Beer!");
+			view.btnButton.setPreferredSize(new Dimension(130, 58));
+		}else{
+			view.btnButton.setIcon(view.iconRepeat);
+			view.btnButton.setText("Continue");
+			view.btnButton.setPreferredSize(new Dimension(130, 58));
+		}
+	}
 	
 	public void setEndView(EndView view){
 		this.view = view;
@@ -60,27 +77,66 @@ public class EndController implements ActionListener,Observer{
 	}
 
 	public void fillRankTable(){
-		/**
-		view.model.addRow(new Object[] {"1", "Player3", "250"});
-		view.model.addRow(new Object[] {"2", "Player1", "150"});
-		view.model.addRow(new Object[] {"3", "Player2", "50"});
-
-		view.model.fireTableDataChanged();
-		view.tblRanking.repaint();
-		view.getJFrame().repaint();
-		
+	
 		
 		ArrayList<Player> rankList = new ArrayList<Player>();
-		rankList = handler.gameState.playerList;
-		
-		Collections.sort(rankList);
-		
-		for (int i = 0; i < rankList.size(); i++) {
-			String rank = Integer.toString(i + 1);
+		rankList = getSortedPlayerList();
+				
+		for (int i = rankList.size()-1; i >= 0; i--) {
+			String rank = Integer.toString(rankList.size()-i);
 			String name = getPlayerName(rankList.get(i));
 			String points = Integer.toString(rankList.get(i).getPlayerPoints());
 			view.model.addRow(new Object[] {rank, name, points});
-		}**/
+		}
+		
+		view.model.fireTableDataChanged();
+		view.tblRanking.repaint();
+		view.repaint();
+		
+	}
+	private ArrayList<Player> getSortedPlayerList() {
+		ArrayList<Player> rankList = new ArrayList<Player>();
+		rankList = handler.gameState.playerList;
+		Collections.sort(rankList);
+		
+		return rankList;
+	}
+	private void displayWinner(){
+		if (IsGameEnd() ){
+			view.lblEndGameStatusTitle.setHorizontalAlignment(SwingConstants.CENTER);
+
+			if (getWinner()) {
+				view.lblEndGameStatusTitle.setText("Congratulation " + getPlayerName(getPlayer()) +" you're the winner!");
+				view.imgResult.setIcon(view.iconWinner);				
+			} else {
+				view.lblEndGameStatusTitle.setText("Sorry  " + getPlayerName(getPlayer()) +" you lost!");
+				view.imgResult.setIcon(view.iconLoser);
+
+			}
+		} else {
+			view.lblEndGameStatusTitle.setText("Gameresult");
+			view.lblEndGameStatusTitle.setHorizontalAlignment(SwingConstants.LEFT);
+
+		}
+	}
+	
+	private boolean IsGameEnd() {
+		for ( Player p : handler.getGameState().playerList){
+			if ( p.getPlayerPoints() > 20 ){	//POINTS => 250
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean getWinner() {
+		boolean winner = false;
+
+		 if (getPlayer().equals(getSortedPlayerList().get(getSortedPlayerList().size() - 1))) // Winner
+		{
+			winner = true;
+		}
+		return winner;
 	}
 	
 	@Override
@@ -91,8 +147,16 @@ public class EndController implements ActionListener,Observer{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == view.btnExit ){
-			System.exit(0);
+		if(e.getSource() == view.btnButton ){
+			if (IsGameEnd()){
+				if (view.btnButton.getText().equals("Continue")) {
+
+				}
+				System.exit(0);
+			}else{
+				view.dispose();
+			}
+				
 		}
 	}
 
