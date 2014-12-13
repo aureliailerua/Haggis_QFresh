@@ -122,7 +122,7 @@ public class EndController implements ActionListener,Observer{
 	
 	private boolean IsGameEnd() {
 		for ( Player p : handler.getGameState().playerList){
-			if ( p.getPlayerPoints() > 20 ){	//POINTS => 250
+			if ( p.getPlayerPoints() > 100 ){	//POINTS => 250
 				return true;
 			}
 		}
