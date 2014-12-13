@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Pattern {
     private static final Logger log = LogManager.getLogger(Server.class.getName());
     //__instance variables__
-        public String patternName = null;
+        public String patternName = "nix";
         ArrayList<Card> normalCards = new ArrayList<Card>();
         ArrayList<Card> jokerCards = new ArrayList<Card>();
         HashMap<String, ArrayList<Card>> cardsBySuit = new HashMap<String, ArrayList<Card>>(5);
@@ -34,10 +34,11 @@ public class Pattern {
         }
         Collections.sort(this.normalCards);         printCards(this.normalCards);
         Collections.sort(this.jokerCards);          printCards(this.jokerCards);
-
-        this.lowestRank = Collections.min(cards).getCardRank();
-        this.highestRank = Collections.max(cards).getCardRank();
-        this.maxSequenceLength = (this.highestRank - this.lowestRank +1);
+        if (normalCards.size()>0){
+            this.lowestRank = Collections.min(normalCards).getCardRank();
+            this.highestRank = Collections.max(normalCards).getCardRank();
+            this.maxSequenceLength = (this.highestRank - this.lowestRank +1);
+        }
 
         this.cardCount = cards.size();
         this.setSuitCount();
@@ -45,7 +46,7 @@ public class Pattern {
 
             log.debug("suitCount is set by Factory as : "+this.suitCount);
             log.debug("rankCount is set by Factory as : "+this.rankCount);
-            log.debug("maxCardsBySuit is set by Factory as : "+this.maxSequenceLength);
+            log.debug("maxCardsBySuit is set by Factory as : highest card "+this.highestRank+" minus lowest"+this.lowestRank+" plus one equals"+this.maxSequenceLength);
     }
 
 
@@ -244,17 +245,28 @@ public class Pattern {
      * all in Sequence checks if a regular Sequence is possible including the use of 1 or 2 jokers
      */
     public static int inSequence (ArrayList<Card> cards, int jokerCount, int lowestRank, int lvMaxSequenceLength) {
-            log.debug("inside in Sequence ...");
+            log.debug("inside in Sequence ... first print cards as they come in");
+            printCards(cards);
+        int lengthController = 0;
         int errorTolerance = jokerCount;
-        for (int i = 0; i < lvMaxSequenceLength; i++){
+        //for (int i = 0; i < lvMaxSequenceLength; i++){
+        int i = 0;
             for (Card c : cards) {
                 if (c.getCardRank() != lowestRank + i) {
                     errorTolerance -= 1;
+                    i++;
                     log.debug("gap at Card Nr. " + c.getCardID() + " remaining error Tolerance is " + errorTolerance);
                     log.debug("error Tolerance reduced by one _ now remaining : " + errorTolerance);
                 }
+                lengthController ++;
+                i++;
             }
-        }
+            int difference = lvMaxSequenceLength - (lengthController+1);
+                log.debug("difference " +difference+"maxSequenceLength "+lvMaxSequenceLength+"length Controller "+lengthController);
+            if (difference>0){
+                errorTolerance = errorTolerance - difference;
+            }
+        //}
         return errorTolerance;
     }
 

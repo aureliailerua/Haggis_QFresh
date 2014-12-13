@@ -177,10 +177,10 @@ import server.Server;
         assertTrue("Joker Bomb check failed ", a_result.equals("bomb"));
         assertTrue("Sequence Bomb check failed ", b_result.equals("bomb"));
         assertTrue("SET check failed ", c_result.equals("fourOfAKind"));
-        assertTrue("noPattern check failed ", d_result == null);
+        assertTrue("noPattern check failed ", d_result.equals("nix"));
         assertTrue("Sequence check failed ", e_result.equals("runOfFourSingles"));
         assertTrue("Parallel Sequence check failed ", f_result.equals("runOfThreePairs"));
-        assertTrue("shouldBeNoSequenceRun failed 3.5 check ", g_result == null);
+        assertTrue("shouldBeNoSequenceRun failed 3.5 check ", g_result.equals("nix"));
        assertTrue("Two Joker Bomb check failed ", h_result.equals("bomb"));
     }
 
