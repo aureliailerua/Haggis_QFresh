@@ -72,6 +72,7 @@ public class GameHandler {
 		if ( lvContainer.getToken() == gameState.getActivePlayer() &&
 				gameState.getState() == State.running){
 			
+			gameState.setNewRound(false);
 			ArrayList<Card> lvCards = lvContainer.getPlayCards();
 			PlayerToken lvToken = lvContainer.getToken();
 						
@@ -100,7 +101,6 @@ public class GameHandler {
 					setNextActivePlayer();
 				} else{
 					gameState.rejectMove();
-					// TODO:geht das so?!?
 				}
 			}
 			//at this point the move is commited or rejected. 
@@ -114,6 +114,7 @@ public class GameHandler {
 					p.setPlayerIsfinished(false);
 					log.debug("Resetting Player "+p.getToken()+" Flag for being finished");
 				}
+				gameState.setNewRound(true);
 			} else if (gameState.checkEndTick()){
 				gameState.endActiveTick();
 				gameState.setClientInfo("Player "+gameState.getActiveRound().getActiveTick().getTickWinner()+" wins the Trick");

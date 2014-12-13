@@ -29,6 +29,7 @@ public class GameState extends Observable implements Serializable {
 	private int number;
 	private int outOfCardsPlayers = 0;
 	private String clientInfo = "";
+	private boolean newRound; 
 	
 	private Pattern activePattern;
 	
@@ -227,7 +228,7 @@ public class GameState extends Observable implements Serializable {
 		
 		//TODO call analyzePattern or comparePattern
 		//FIXME NullPointerException at server.Pattern.comparePatternTEMP(Pattern.java:95)
-		/*
+		
 		// analyzePattern if its the first move of the trick
 		if (getActiveRound().getActiveTick().moveList.isEmpty()){
 			log.debug("PATTERN - attempting analyzePattern");
@@ -235,7 +236,7 @@ public class GameState extends Observable implements Serializable {
 			activePattern = new Pattern(lvCards);
 			lvPatternString = activePattern.analyzePattern();
 			
-			if (lvPatternString == null){
+			if (lvPatternString.equals("nix")){
 				return false;
 			} else {
 				log.debug("Player "+activePlayer+" plays " +lvPatternString);
@@ -253,8 +254,7 @@ public class GameState extends Observable implements Serializable {
 			} else {
 				return false;
 			}
-		}*/
-		return true;
+		}
 	}
 
 	public ArrayList<Card> getTopCards(){
@@ -315,5 +315,13 @@ public class GameState extends Observable implements Serializable {
 
 	public void setActivePattern(Pattern activePattern) {
 		this.activePattern = activePattern;
+	}
+
+	public boolean isNewRound() {
+		return newRound;
+	}
+
+	public void setNewRound(boolean newRound) {
+		this.newRound = newRound;
 	}
 }

@@ -3,13 +3,16 @@ package server;
  * Created by Riya on 17.11.2014.
  */
 import library.Card;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class Pattern {
+public class Pattern implements Serializable {
     private static final Logger log = LogManager.getLogger(Server.class.getName());
     //__instance variables__
         public String patternName = "nix";
