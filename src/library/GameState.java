@@ -234,6 +234,8 @@ public class GameState extends Observable implements Serializable {
 			}
 		}
 		log.debug("TICK - Points of Player "+lvTickWinner+" after counting: "+ getPlayerObject(lvTickWinner).getPlayerPoints());
+		//reset PatterInfo for GUI
+		this.setPatternInfo("");
 	}
 	
 	public void newTick(){
