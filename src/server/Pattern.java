@@ -33,8 +33,8 @@ public class Pattern implements Serializable{
     //__ Pattern Factory__
     public Pattern(ArrayList<Card> cards) {
         for (Card c : cards) {
-            if (c.getCardSuit() != "joker") this.normalCards.add(c);
-            if (c.getCardSuit() == "joker") this.jokerCards.add(c);
+            if ( ! c.getCardSuit().equals("joker")) this.normalCards.add(c);
+            if ( c.getCardSuit().equals("joker")) this.jokerCards.add(c);
         }
         Collections.sort(this.normalCards);         printCards(this.normalCards);
         Collections.sort(this.jokerCards);          printCards(this.jokerCards);
