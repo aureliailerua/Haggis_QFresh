@@ -27,7 +27,6 @@ public class GameState extends Observable implements Serializable {
 	private State state;
 	private int numPlayers;
 	private int number;
-	private int outOfCardsPlayers = 0;
 	private String clientInfo = "";
 	private boolean newRound; 
 	
@@ -166,6 +165,23 @@ public class GameState extends Observable implements Serializable {
 	}
 	
 	public void endActiveRound(){
+		//extracting remaining Cards of the "losing" Player and add the Points to the roundWinner
+		for (Player lvPlayer : playerList){
+			ArrayList<Card> lvCombinedList = new ArrayList<Card>();
+			lvCombinedList.addAll(lvPlayer.getPlayerCards());
+			lvCombinedList.addAll(lvPlayer.getPlayerCards());
+			if (lvCombinedList.size()>0){
+				log.debug("ROUND - remaining Cards of Player "+lvPlayer.getToken()+": "+lvCombinedList.size());
+				log.debug("ROUND - adding remaining Cards to roundWinner Player "+ getActiveRound().getRoundWinner());
+
+				for (Card lvCard : lvCombinedList){
+					getPlayerObject(getActiveRound().getRoundWinner()).addPoints(lvCard.getCardPoint());
+					log.debug("ROUND - Counting Points - ID: "+lvCard.getCardID()+" Points: "+lvCard.getCardPoint());
+				}
+			}
+		}
+		
+		//extracting Haggis-Cards  and add the Points to the roundWinner
 		log.debug("ROUND - size of Haggis stack: "+activeCardDeck.getCardDeck().size());
 		log.debug("ROUND - adding Haggis to roundWinner Player "+ getActiveRound().getRoundWinner());
 		log.debug("ROUND - Points of Player "+getActiveRound().getRoundWinner()+" before Haggis: "+ getPlayerObject(getActiveRound().getRoundWinner()).getPlayerPoints());
@@ -186,11 +202,13 @@ public class GameState extends Observable implements Serializable {
 			player.setPlayerCards(activeCardDeck.give14Cards());
 			player.setPlayerJokers(activeCardDeck.give3Jokers());
 		}
-		outOfCardsPlayers = 0;
 	}
 	
 	public boolean checkEndTick(){
-		return (getActiveRound().getActiveTick().checkPass(this.numPlayers-outOfCardsPlayers));
+		if (getActiveRound().getRoundWinner()!=null){
+			return (getActiveRound().getActiveTick().checkPass(playerList.size()-1));
+		}
+		return (getActiveRound().getActiveTick().checkPass(playerList.size()));
 	}
 	
 	public void endActiveTick(){
@@ -215,9 +233,6 @@ public class GameState extends Observable implements Serializable {
 			}
 		}
 		log.debug("TICK - Points of Player "+lvTickWinner+" after counting: "+ getPlayerObject(lvTickWinner).getPlayerPoints());
-		
-		//set tickwinner as activePlayer
-		setActivePlayer(lvTickWinner);
 	}
 	
 	public void newTick(){
@@ -228,6 +243,10 @@ public class GameState extends Observable implements Serializable {
 		
 		//TODO call analyzePattern or comparePattern
 		//FIXME NullPointerException at server.Pattern.comparePatternTEMP(Pattern.java:95)
+
+		for (Card c : lvCards){
+			log.debug("CHECKMOVE -   ID "+ c.getCardID()+"    Suit: "+c.getCardSuit());
+		}
 		
 		// analyzePattern if its the first move of the trick
 		if (getActiveRound().getActiveTick().moveList.isEmpty()){
@@ -272,7 +291,6 @@ public class GameState extends Observable implements Serializable {
 				if (p.getPlayerCards().size() + p.getPlayerJokers().size() == 0){
 					p.setPlayerIsfinished(true);
 					log.debug("PLAYER "+p.getToken()+" - is out of cards");
-					outOfCardsPlayers+=1;
 					return true;
 				}
 			}

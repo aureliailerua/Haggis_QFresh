@@ -54,7 +54,6 @@ public class GameHandler {
 			}
 			gameState.roundList.add(new Round());
 			gameState.newTick();
-//TODO RESET PATTERN
 			gameState.notifyObservers();
 			log.debug("starting game");
 		}
@@ -108,6 +107,7 @@ public class GameHandler {
 			if(gameState.checkEndRound()){
 				gameState.endActiveTick();
 				gameState.endActiveRound();
+				gameState.setActivePlayer(gameState.getActiveRound().getRoundWinner());
 				gameState.newRound();
 				gameState.newTick();
 				for (Player p : gameState.playerList){
@@ -121,15 +121,8 @@ public class GameHandler {
 				gameState.newTick();
 			} 
 			gameState.notifyObservers();
-			//moveEnd
-			//	setNextActivePlayer();
-			//	gameState.notifyObservers();
 		}
 	}
-	
-
-    //all pattern related checks moved to class Pattern
-
 
     private void setNextActivePlayer() {
     	log.debug("old activePlayer: " +gameState.getActivePlayer());
@@ -138,6 +131,20 @@ public class GameHandler {
     			gameState.setActivePlayer(PlayerToken.two);
     		} else {
     			gameState.setActivePlayer( PlayerToken.one);
+    		}
+    	} else if (gameState.getNumPlayers() == 3 && gameState.getActiveRound().getRoundWinner() != null){
+    		if (gameState.getActivePlayer() == PlayerToken.one && gameState.getActiveRound().getRoundWinner() == PlayerToken.two){
+    			gameState.setActivePlayer(PlayerToken.three);
+    		} else if (gameState.getActivePlayer() == PlayerToken.two && gameState.getActiveRound().getRoundWinner() == PlayerToken.three){
+    			gameState.setActivePlayer(PlayerToken.one);
+    		} else if (gameState.getActivePlayer() == PlayerToken.three && gameState.getActiveRound().getRoundWinner() == PlayerToken.one){
+    			gameState.setActivePlayer(PlayerToken.two);
+    		} else if (gameState.getActivePlayer() == PlayerToken.one){
+    			gameState.setActivePlayer(PlayerToken.two);
+    		} else if (gameState.getActivePlayer() == PlayerToken.two){
+    			gameState.setActivePlayer(PlayerToken.three);
+    		} else if (gameState.getActivePlayer() == PlayerToken.three){
+    			gameState.setActivePlayer(PlayerToken.one);
     		}
     	} else if (gameState.getNumPlayers() == 3){
     		if (gameState.getActivePlayer() == PlayerToken.one && getPlayerObject(PlayerToken.two).isFinished()){
