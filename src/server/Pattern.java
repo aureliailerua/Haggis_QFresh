@@ -12,8 +12,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class Pattern implements Serializable {
-    private static final Logger log = LogManager.getLogger(Server.class.getName());
+public class Pattern implements Serializable{
+    private static final Logger log = LogManager.getLogger(Pattern.class.getName());
+
     //__instance variables__
         public String patternName = "nix";
         ArrayList<Card> normalCards = new ArrayList<Card>();
@@ -49,7 +50,7 @@ public class Pattern implements Serializable {
 
             log.debug("suitCount is set by Factory as : "+this.suitCount);
             log.debug("rankCount is set by Factory as : "+this.rankCount);
-            log.debug("maxCardsBySuit is set by Factory as : highest card "+this.highestRank+" minus lowest"+this.lowestRank+" plus one equals"+this.maxSequenceLength);
+            log.debug("maxSequenceLength is set by Factory as : highest card "+this.highestRank+" minus lowest"+this.lowestRank+" plus one equals"+this.maxSequenceLength);
     }
 
 
