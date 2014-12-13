@@ -347,6 +347,7 @@ public class JPanelOpposition extends JPanel{
 		revalidate();
 		
 		noneCards = false;
+		int displayCardCount = 0;
 		String pathImgBack = "/gameContent/back.jpg";
 		jBack = new ArrayList<JLabel>();
 		
@@ -354,9 +355,15 @@ public class JPanelOpposition extends JPanel{
 		if (cardCount == 0){
 			noneCards = true;
 		} else {
-			for(int i=0; i < (cardCount/2); i++) {
+			if (cardCount >=7) {
+				displayCardCount = 7;
+			} else if (cardCount < 7) {
+				displayCardCount = cardCount;
+			}
+			
+			for(int i=0; i < displayCardCount; i++) {
 				lbCardBack = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathImgBack)));
-				if (i == (cardCount/2)-1) {
+				if (i == (displayCardCount-1)) {
 					lbCardBack.setPreferredSize(new Dimension(51,79));
 				} else {
 					lbCardBack.setPreferredSize(new Dimension(24,79));
