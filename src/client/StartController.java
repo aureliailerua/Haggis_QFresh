@@ -65,6 +65,7 @@ public class StartController implements ActionListener,Observer{
 		}else{
 			view.btnStart.setEnabled(true);
 		}
+		//Update all elements
 		view.model.fireTableDataChanged();
 		view.tblLogginPlayer.repaint();
 		view.getJFrame().repaint();
@@ -79,6 +80,10 @@ public class StartController implements ActionListener,Observer{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == view.btnStart ){
 			handler.send(new StartContainer());
+		}
+		
+		if(e.getSource() == view.btnExit ){
+			System.exit(0);
 		}
 		
 	}

@@ -15,6 +15,13 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 
 import java.awt.GridLayout;
 
@@ -29,6 +36,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
@@ -49,6 +57,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import library.StartContainer;
+
 
 /**
  * 
@@ -59,9 +69,12 @@ public class StartView extends JFrame implements ActionListener {
 
 	private JFrame frame;
 	
-	JPanel panelTitle;			//1
+	JPanel panelHeader;			//1
 	JPanel panelContent;		//2
 	JPanel panelButton;			//3
+	
+	JPanel panelTitle;			//1.1
+	JPanel panelInfo;			//1.2
 	
 	JPanel panelStatusPlayer;	//2.1
 	JPanel panelImageContainer; //2.2
@@ -72,6 +85,7 @@ public class StartView extends JFrame implements ActionListener {
 	JButton btnExit;
 	JButton btnRules;
 	JButton btnStart;
+	JButton btnInfo;
 	
 	JLabel lblWelcomeToHaggis;
 	JLabel lblWaitingForPlayer;
@@ -82,19 +96,18 @@ public class StartView extends JFrame implements ActionListener {
 	JTable tblLogginPlayer;
 	DefaultTableModel model; 
 	
+	
 	private static final Logger log = LogManager.getLogger( TableController.class.getName() );
-	
-    //private DefaultListModel listPlayingPlayer;
-	
+		
 	StartController controller;
 
 	public StartView(StartController controller) {
 		this.controller = controller;
 		
 		// Define Font's
-		Font title = new Font("Comic Sans MS", Font.BOLD, 20);
-		Font subtitle = new Font("Comic Sans MS", Font.BOLD, 14);
-		Font text = new Font("Comic Sans MS", Font.PLAIN, 14);
+		Font title = new Font("Comic Sans MS", Font.BOLD, 24);
+		Font subtitle = new Font("Comic Sans MS", Font.BOLD, 18);
+		Font text = new Font("Comic Sans MS", Font.PLAIN, 16);
 		Font button = new Font("Comic Sans MS", Font.PLAIN, 16);
 		
 		// Define Image Path's
@@ -103,6 +116,7 @@ public class StartView extends JFrame implements ActionListener {
 		String pathImgCard3 = "/gameContent/red/red10.jpg";
 		String pathImgExit = "/icons/exit.png";
 		String pathImgHelp = "/icons/help.png";
+		String pathImgInfo = "/icons/info.png";
 
 		frame = new JFrame("QFresh Haggis Game - Game Registration");
 		frame.setBounds(0, 0, 1000, 500); // x, y, breite, höhe
@@ -114,15 +128,36 @@ public class StartView extends JFrame implements ActionListener {
 		/**
 		 * Title (1)
 		 */
+		panelHeader = new JPanel();
+		panelHeader.setOpaque(false);
+		frame.getContentPane().add(panelHeader, BorderLayout.NORTH);
+		panelHeader.setLayout(new BorderLayout(0, 0));
+
 		panelTitle = new JPanel();
 		panelTitle.setOpaque(false);
 		panelTitle.setBorder(new EmptyBorder(20, 0, 0, 10));
-		frame.getContentPane().add(panelTitle, BorderLayout.NORTH);
+		panelTitle.setPreferredSize(new Dimension(950, 80));
+		panelHeader.add(panelTitle, BorderLayout.CENTER);
 		
 		lblWelcomeToHaggis = new JLabel("Welcome to QFresh Haggis Game!");
 		lblWelcomeToHaggis.setFont(title);
 		panelTitle.add(lblWelcomeToHaggis);
 		lblWelcomeToHaggis.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		panelInfo = new JPanel();
+		panelInfo.setOpaque(false);
+		panelInfo.setBorder(new EmptyBorder(20, 0, 0, 10));
+		panelHeader.add(panelInfo, BorderLayout.EAST);
+		
+		btnInfo = new JButton();		
+		ImageIcon imageIconInfo = new ImageIcon(StartView.class.getResource(pathImgInfo));
+		btnInfo.setIcon(new ImageIcon(imageIconInfo.getImage().getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH)));
+		btnInfo.setPreferredSize(new Dimension (25,25));
+		btnInfo.setBackground(null);
+		btnInfo.setBorder(null);
+		btnInfo.addActionListener(this);
+		panelInfo.add(btnInfo);
+		
 		
 		/**
 		 * Content (2) 
@@ -147,9 +182,7 @@ public class StartView extends JFrame implements ActionListener {
 		
 		// --- Check connected Player
 		UIManager.put("Table.font", new FontUIResource(text));
-		UIManager.put("Table.rowHeight", 30);
 		UIManager.getDefaults().put("Table.background", Color.LIGHT_GRAY);
-        UIManager.put("Table.alternateRowColor", Color.PINK);
         //UIManager.put("Table.border", BorderFactory.createLineBorder(Color.BLACK));
 		
 		joinedPlayer = new Vector<String>();
@@ -157,6 +190,11 @@ public class StartView extends JFrame implements ActionListener {
 		model = new DefaultTableModel();
 		model.addColumn(lblLogginPlayer, joinedPlayer);
 		tblLogginPlayer = new JTable(model);
+		tblLogginPlayer.setRowHeight(30);
+		tblLogginPlayer.setBorder(null);
+		tblLogginPlayer.setFocusable(false);
+		tblLogginPlayer.setCellSelectionEnabled(false);
+		tblLogginPlayer.setRowSelectionAllowed(false);
 		panelStatusPlayer.add(tblLogginPlayer, BorderLayout.CENTER);
 		
 		
@@ -214,7 +252,6 @@ public class StartView extends JFrame implements ActionListener {
 		
 		panelBtnStart = new JPanel();
 		panelBtnStart.setOpaque(false);
-		panelBtnStart.setEnabled(false);
 		FlowLayout flBtnStart = (FlowLayout) panelBtnStart.getLayout();
 		flBtnStart.setAlignment(FlowLayout.LEFT);
 		panelButton.add(panelBtnStart);
@@ -222,6 +259,7 @@ public class StartView extends JFrame implements ActionListener {
 		btnStart = new JButton("Start Game");
 		btnStart.setFont(button);
 		btnStart.setPreferredSize(new Dimension(130, 58));
+		btnStart.setEnabled(false);
 		btnStart.addActionListener(controller);
 		panelBtnStart.add(btnStart);
 		
@@ -235,13 +273,17 @@ public class StartView extends JFrame implements ActionListener {
 		btnRules = new JButton();		
 		btnRules.setIcon(new ImageIcon(StartView.class.getResource(pathImgHelp)));
 		btnRules.setPreferredSize(new Dimension (58,58));
+		btnRules.setBackground(Color.WHITE);
 		btnRules.addActionListener(this);
 		panelBtnContainer.add(btnRules);
 		
 		btnExit = new JButton();
-		btnExit.setIcon(new ImageIcon(StartView.class.getResource(pathImgExit)));
+		//btnExit.setIcon(new ImageIcon(StartView.class.getResource(pathImgExit)));
+		ImageIcon imageIconExit = new ImageIcon(StartView.class.getResource(pathImgExit));
+		btnExit.setIcon(new ImageIcon(imageIconExit.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
 		btnExit.setPreferredSize(new Dimension (58,58));
-		btnExit.addActionListener(this);
+		btnExit.setBackground(Color.WHITE);
+		btnExit.addActionListener(controller);
 		panelBtnContainer.add(btnExit);
 		
 	}
@@ -277,11 +319,22 @@ public class StartView extends JFrame implements ActionListener {
 	    frameRules.setVisible(true);
 	}
 	
+	public void displayGameInformation() {
+		
+		AuthorView frameAuthInfo = new AuthorView();
+		frameAuthInfo.pack();
+		frameAuthInfo.setVisible(true);
+	}
+	
 	
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getSource() == btnRules) {
 	    	displayRules();
-	    }	    
+	    }	   
+		if (e.getSource() == btnInfo) {
+	    	displayGameInformation();
+	    }
+	    
 	}
 
 }
