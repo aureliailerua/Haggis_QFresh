@@ -90,7 +90,7 @@ public class EndController implements ActionListener,Observer{
 		
 		view.model.fireTableDataChanged();
 		view.tblRanking.repaint();
-		view.getJFrame().repaint();
+		view.repaint();
 		
 	}
 	private void displayWinner(){
@@ -110,7 +110,7 @@ public class EndController implements ActionListener,Observer{
 	
 	private boolean IsGameEnd() {
 		for ( Player p : handler.getGameState().playerList){
-			if ( p.getPlayerPoints() > 250 ){
+			if ( p.getPlayerPoints() > 40 ){
 				return true;
 			}
 		}
@@ -142,7 +142,7 @@ public class EndController implements ActionListener,Observer{
 				}
 				System.exit(0);
 			}else{
-				view.getJFrame().dispose();
+				view.dispose();
 			}
 				
 		}

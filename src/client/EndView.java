@@ -93,7 +93,8 @@ public class EndView extends JDialog {
 	EndController controller;
 
 	public EndView(EndController controller,JFrame frame) {
-		super(frame, "text", ModalityType.APPLICATION_MODAL);
+		//super(frame, "text", ModalityType.APPLICATION_MODAL);
+		super(frame, true);
 		this.controller = controller;
 		controller.setEndView(this);
 	
@@ -120,7 +121,8 @@ public class EndView extends JDialog {
 		//dialog = new JDialog( , "QFresh Haggis Game - Game Results");
 		setBounds(0, 0, 1000, 500); // x, y, breite, höhe
 		setPreferredSize(new Dimension(1000, 500));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		getContentPane().setBackground(Color.WHITE);
 		setAlwaysOnTop (true);
@@ -265,6 +267,5 @@ public class EndView extends JDialog {
 		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1; //?
 		return name+playerNum;
 	}
-
 
 }
