@@ -320,7 +320,6 @@ public class StartView extends JFrame implements ActionListener {
 	}
 	
 	public void displayGameInformation() {
-		
 		AuthorView frameAuthInfo = new AuthorView();
 		frameAuthInfo.pack();
 		frameAuthInfo.setVisible(true);

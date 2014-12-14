@@ -42,7 +42,7 @@ public class AuthorView extends JFrame {
 	Font text = new Font("Comic Sans MS", Font.PLAIN, 16);
 
 	// Define image path
-	String pathImgBeer = "/icons/beer.png";
+	String pathImgBeer = "/icons/beer_big.png";
 	String pathImgCrown = "/icons/crown.png";
 
 	public AuthorView() {

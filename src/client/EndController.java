@@ -1,6 +1,7 @@
 package client;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
@@ -34,13 +36,26 @@ public class EndController implements ActionListener,Observer{
 		fillRankTable();
 		displayWinner();
 		if (IsGameEnd()){
-			view.btnButton.setIcon(view.iconExit);
+			view.setBounds(0, 0, 1000, 500);
+			view.setPreferredSize(new Dimension(1000, 500));
+			
+			view.btnButton.setIcon(view.iconBeer);
 			view.btnButton.setText("Beer!");
-			view.btnButton.setPreferredSize(new Dimension(130, 58));
+			view.btnButton.setPreferredSize(new Dimension(140, 58));
+			view.panelImgResult.setPreferredSize(new Dimension(300,260));
+			
+			view.panelContent.add(view.panelImgResult);
+			view.panelImgResult.add(view.imgResult);
+
 		}else{
+			view.setBounds(0, 0, 600, 500);
+			view.setPreferredSize(new Dimension(600, 500));
+			
+			ImageIcon repeat = view.iconRepeat;
+			view.btnButton.setIcon(new ImageIcon(repeat.getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH)));
 			view.btnButton.setIcon(view.iconRepeat);
 			view.btnButton.setText("Continue");
-			view.btnButton.setPreferredSize(new Dimension(130, 58));
+			view.btnButton.setPreferredSize(new Dimension(140, 58));
 		}
 	}
 	
@@ -50,11 +65,9 @@ public class EndController implements ActionListener,Observer{
 	
 	public EndController(ServerHandler handler) {
 		this.handler = handler;
-		handler.addObserver(this);
-			
+		handler.addObserver(this);			
 	}
 
-	
 	public PlayerToken getToken() {
 		return handler.getToken();
 	}
@@ -77,8 +90,6 @@ public class EndController implements ActionListener,Observer{
 	}
 
 	public void fillRankTable(){
-	
-		
 		ArrayList<Player> rankList = new ArrayList<Player>();
 		rankList = getSortedPlayerList();
 				
@@ -92,7 +103,6 @@ public class EndController implements ActionListener,Observer{
 		view.model.fireTableDataChanged();
 		view.tblRanking.repaint();
 		view.repaint();
-		
 	}
 	private ArrayList<Player> getSortedPlayerList() {
 		ArrayList<Player> rankList = new ArrayList<Player>();
@@ -107,7 +117,8 @@ public class EndController implements ActionListener,Observer{
 
 			if (getWinner()) {
 				view.lblEndGameStatusTitle.setText("Congratulation " + getPlayerName(getPlayer()) +" you're the winner!");
-				view.imgResult.setIcon(view.iconWinner);				
+				view.imgResult.setIcon(view.iconWinner);
+
 			} else {
 				view.lblEndGameStatusTitle.setText("Sorry  " + getPlayerName(getPlayer()) +" you lost!");
 				view.imgResult.setIcon(view.iconLoser);
@@ -122,7 +133,7 @@ public class EndController implements ActionListener,Observer{
 	
 	private boolean IsGameEnd() {
 		for ( Player p : handler.getGameState().playerList){
-			if ( p.getPlayerPoints() > 100 ){	//POINTS => 250
+			if ( p.getPlayerPoints() > 50 ){	//POINTS => 250
 				return true;
 			}
 		}

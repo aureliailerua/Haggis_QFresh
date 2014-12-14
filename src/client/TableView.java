@@ -24,8 +24,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -70,6 +72,9 @@ public class TableView extends JFrame implements ActionListener{
 	JPanel panelEmpty;						//3E alternative
 	JPanel panelPlayer;						//4 N
 	
+	JPanel panelPatternInfo;				//2.1
+	JPanel panelTableCards;					//2.2
+	
 	JPanel panelCardHand; 					//3.1
 	JPanel panelClientInfo; 				//3.2
 	JPanel panelPlayerKit;					//3.3
@@ -91,8 +96,8 @@ public class TableView extends JFrame implements ActionListener{
 	protected JButton btnSort;
 	protected JButton btnExit;
 	protected JButton btnRules;
-	protected JButton btnBet15;
-	protected JButton btnBet30;
+	//protected JButton btnBet15;
+	//protected JButton btnBet30;
 	protected JButton btnEmptyButton;
 	
 	JLabel lbCardCount;
@@ -102,17 +107,21 @@ public class TableView extends JFrame implements ActionListener{
 	JLabel imgLabelCrown;
 	JLabel imgLabelRules;
 	JLabel lblPlaceHolder;
-	JLabel clientInfo ;
+	//JLabel clientInfo;
 	JLabel imgLabelCardBack;
 	JLabel imgPlaceholder;
+	JLabel lblpatternInfo;
+	
+	JTextArea clientInfo;
 	
 	GridBagConstraints cTable;	
 	
-
 	Color active;
 	Color inactive;
+	Color patterninfo = new Color(255,217,102);
+	Font infotext = new Font("Comic Sans MS", Font.BOLD, 14);
 
-	
+
 	private boolean sortByID = true;
 	
 	TableController controller;
@@ -130,24 +139,25 @@ public class TableView extends JFrame implements ActionListener{
 		// Define the path of the images
 		String pathImgBackSmall = "/gameContent/back_small.jpg";
 		String pathImgCrown = "/gameContent/crown.png";
-		String pathImgExitBtn = "/icons/power53.png";
+		String pathImgExitBtn = "/icons/exit.png";
 		String pathImgSortBtn = "/icons/sort.png";
 		String pathImgRulesBtn ="/icons/rules.png";
-		String path15betInactiv = "/gameContent/15bet_inactive.png";
-		String path30betInactiv = "/gameContent/30bet_inactive.png";
+		//String path15betInactiv = "/gameContent/15bet_inactive.png";
+		//String path30betInactiv = "/gameContent/30bet_inactive.png";
 
 		
 		// Define Fonts
 		Font player = new Font("Comic Sans MS", Font.BOLD, 18);
 		Font statusbar = new Font("Comic Sans MS", Font.PLAIN, 14);
 		Font button = new Font("comic Sans MS", Font.PLAIN, 16);
+
 		
 		// Define Color
 		active = new Color(147,196,125); 	//Green
 		inactive = new Color(234,153,153);	//Red
 		
 		frame = new JFrame("QFresh Haggis Game - Gametable");
-		frame.setBounds(0, 0, 1280, 720); // x-Position, y-Position, breite und höhe des Fenster
+		frame.setBounds(0, 0, 1280, 720); 						// x-Position, y-Position, breite und höhe des Fenster
 		frame.setPreferredSize(new Dimension(1280,720));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -157,7 +167,8 @@ public class TableView extends JFrame implements ActionListener{
 		/** 
 		 * 1st Opposite Player (1.W)
 		*/
-		panel1stOpposition = new JPanelOpposition(this, "LEFT");
+		//panel1stOpposition = new JPanelOpposition(this, "LEFT");
+		panel1stOpposition = new JPanelOpposition(this);
 		panel1stOpposition.setOpaque(false);
 		panel1stOpposition.setPreferredSize(new Dimension(300, 320));
 		frame.getContentPane().add(panel1stOpposition, BorderLayout.WEST);
@@ -167,11 +178,27 @@ public class TableView extends JFrame implements ActionListener{
 		 * Table (Card Desk) (2.C)
 		 */		
 		panelTable = new JPanel();		
-		GridBagLayout gbl_panelTable = new GridBagLayout();
-		cTable = new GridBagConstraints();
-		panelTable.setLayout(gbl_panelTable); 		
 		panelTable.setOpaque(false);
+		panelTable.setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().add(panelTable, BorderLayout.CENTER);
+		
+		// -- Pattern Info (2.1.N)
+		panelPatternInfo = new JPanel();
+		panelPatternInfo = new JPanel();		
+		panelPatternInfo.setOpaque(false);
+		panelTable.add(panelPatternInfo, BorderLayout.NORTH);
+		
+		lblpatternInfo = new JLabel();
+		panelPatternInfo.add(lblpatternInfo);
+
+		// -- Card Desk (2.2.C)
+		panelTableCards = new JPanel();
+		panelTableCards.setOpaque(false);
+		panelTable.add(panelTableCards, BorderLayout.CENTER);
+
+		GridBagLayout gbl_panelTableCards = new GridBagLayout();
+		cTable = new GridBagConstraints();
+		panelTableCards.setLayout(gbl_panelTableCards); 
 		btnCardTable = new ArrayList<BtnCard>();
 		
 		/**
@@ -181,7 +208,8 @@ public class TableView extends JFrame implements ActionListener{
 		// Identify if a 3rd player is enter the game
 		if (controller.getGameState().playerList.size() == 3) {
 			log.debug("Playerlist Size: "+ controller.getGameState().playerList.size());
-			panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
+			//panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
+			panel2ndOpposition = new JPanelOpposition(this);
 		} else {
 			panel2ndOpposition = new JPanelOpposition();
 		}
@@ -252,27 +280,27 @@ public class TableView extends JFrame implements ActionListener{
 		btnPass.setBackground(Color.WHITE);
 		btnPass.setEnabled(true);
 		btnPass.setVisible(true);
-		btnPass.addActionListener(controller); //generiert Listener
+		btnPass.addActionListener(controller);
 		panelBtnPass.add(btnPass);
 		
 		// --- Status Bar (3.3.3.C)
 		panelStatusBar = new JPanel();
 		panelStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		panelStatusBar.setBackground(inactive); //!! Aktiver Spieler !!
+		panelStatusBar.setBackground(inactive);
 		panelStatusBar.setPreferredSize(new Dimension(300,120));
 		panelPlayerKit.add(panelStatusBar, BorderLayout.CENTER);
 		
 		GridBagLayout gbl_panelStatusBar = new GridBagLayout();
-		GridBagConstraints cStatusBar = new GridBagConstraints();	//GridBag Grenzen erstellen
-		panelStatusBar.setLayout(gbl_panelStatusBar); 		//Layout dem Panelzuweisen!!
+		GridBagConstraints cStatusBar = new GridBagConstraints();			//GridBag Grenzen erstellen
+		panelStatusBar.setLayout(gbl_panelStatusBar); 						//Layout dem Panelzuweisen!!
 
 		// ---- Card Icon
 		imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource(pathImgBackSmall)));
 		imgLabelCard.setPreferredSize(new Dimension(22,35));
-		cStatusBar.gridx = 0;		//x-Koordinate im Grid
-		cStatusBar.gridy = 0;		//y-Koordinate im Grid
-		cStatusBar.ipady = 10;
-		cStatusBar.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
+		cStatusBar.gridx = 0;												//x-Koordinate im Grid
+		cStatusBar.gridy = 0;												//y-Koordinate im Grid
+		cStatusBar.ipady = 10;												//Höhe der Zelle
+		cStatusBar.insets = new Insets(5,40,5,5); 							//Padding vom Displayrand (top, left, bottom, right)
 		panelStatusBar.add(imgLabelCard, cStatusBar);
 	
 		// ---- Count of Cards
@@ -280,10 +308,10 @@ public class TableView extends JFrame implements ActionListener{
 		lbCardCount.setFont(statusbar);
 		lbCardCount.setPreferredSize(new Dimension(50,30));
 		cStatusBar = new GridBagConstraints();
-		cStatusBar.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
-		cStatusBar.gridx = 1;		//x-Koordinate im Grid
-		cStatusBar.gridy = 0;		//y-Koordinate im Grid
-		cStatusBar.insets = new Insets(5,5,5,5); //Padding vom Displayrand (top, left, bottom, right)
+		cStatusBar.fill = GridBagConstraints.BOTH;							//Wie soll der constrain das feld füllen - Both (Vertikal & horizontal)
+		cStatusBar.gridx = 1;
+		cStatusBar.gridy = 0;
+		cStatusBar.insets = new Insets(5,5,5,5);
 		panelStatusBar.add(lbCardCount, cStatusBar);
 		
 		// ---- Crown Icon
@@ -291,7 +319,7 @@ public class TableView extends JFrame implements ActionListener{
 		imgLabelCrown.setPreferredSize(new Dimension(25,22));
 		cStatusBar = new GridBagConstraints();
 		cStatusBar.gridx = 2;		
-		cStatusBar.gridy = 0;		
+		cStatusBar.gridy = 0;	
 		cStatusBar.insets = new Insets(5,5,5,5);
 		panelStatusBar.add(imgLabelCrown, cStatusBar);
 		
@@ -303,7 +331,7 @@ public class TableView extends JFrame implements ActionListener{
 		cStatusBar.fill = GridBagConstraints.BOTH;
 		cStatusBar.gridx = 3;
 		cStatusBar.gridy = 0;
-		cStatusBar.insets = new Insets(5,0,0,10);
+		cStatusBar.insets = new Insets(5,5,5,5);
 		panelStatusBar.add(lbPoint, cStatusBar);
 		
 		//---- Display Player Name
@@ -314,11 +342,9 @@ public class TableView extends JFrame implements ActionListener{
 		cStatusBar = new GridBagConstraints();
 		cStatusBar.fill = GridBagConstraints.BOTH;
 		cStatusBar.ipady = 8;
-		cStatusBar.weightx = 0.0;
-		cStatusBar.gridwidth = 4;
+		cStatusBar.gridwidth = 4;										//Zellen die zusammengefasst werden
 		cStatusBar.gridx = 0;
-		cStatusBar.gridy = 1;
-		cStatusBar.insets = new Insets(5,0,0,10);
+		cStatusBar.insets = new Insets(5,5,5,10);
 		panelStatusBar.add(lbPlayerName, cStatusBar);
 		 
 		// --- Play Area (3.3.4.E)
@@ -335,7 +361,7 @@ public class TableView extends JFrame implements ActionListener{
 		btnPlay.setBackground(Color.WHITE);
 		btnPlay.setEnabled(true);
 		btnPlay.setVisible(true);
-		btnPlay.addActionListener(controller); //generiert Listener
+		btnPlay.addActionListener(controller);
 		panelBtnPlay.add(btnPlay);
 		
 		// -- Control CardContainer with Buttons (3.4.E)
@@ -344,8 +370,8 @@ public class TableView extends JFrame implements ActionListener{
 		panelControlContainer.setPreferredSize(new Dimension(300,120));
 		panelPlayer.add(panelControlContainer, BorderLayout.EAST);
 		GridBagLayout gbl_panelControlContainer = new GridBagLayout(); 
-		GridBagConstraints cContainer = new GridBagConstraints();	//GridBag Grenzen erstellen
-		panelControlContainer.setLayout(gbl_panelControlContainer); 		//Layout dem Panelzuweisen!!
+		GridBagConstraints cContainer = new GridBagConstraints();
+		panelControlContainer.setLayout(gbl_panelControlContainer);
 
 		lblPlaceHolder = new JLabel();
 		lblPlaceHolder.setPreferredSize(new Dimension (58,58));
@@ -353,20 +379,21 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.gridx = 0;
 		cContainer.gridy = 0;
 		cContainer.gridwidth = 1;
-		cContainer.insets = new Insets(5,0,0,5);; //Abstand vom Displayrand (top, left, bottom, right)
+		cContainer.insets = new Insets(5,0,0,5);
 		panelControlContainer.add(lblPlaceHolder,cContainer);
 		
 		btnSort = new JButton();
-		btnSort.setIcon(new ImageIcon(TableView.class.getResource(pathImgSortBtn)));
+		ImageIcon imgSort = new ImageIcon(TableView.class.getResource(pathImgSortBtn));
+		btnSort.setIcon(new ImageIcon(imgSort.getImage().getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH)));
 		btnSort.setPreferredSize(new Dimension(58,58));
 		btnSort.setBackground(Color.WHITE);
 		btnSort.addActionListener(this);
 		cContainer = new GridBagConstraints();
-		cContainer.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
-		cContainer.gridx = 1;		//x-Koordinate im Grid
-		cContainer.gridy = 0;		//y-Koordinate im Grid
+		cContainer.fill = GridBagConstraints.BOTH;
+		cContainer.gridx = 1;
+		cContainer.gridy = 0;
 		cContainer.gridwidth = 1;
-		cContainer.insets = new Insets(5,0,0,10); //Padding vom Displayrand (top, left, bottom, right)
+		cContainer.insets = new Insets(5,0,0,10);
 		panelControlContainer.add(btnSort, cContainer);
 		
 		btnRules = new JButton();
@@ -379,9 +406,13 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.gridx = 2;
 		cContainer.gridy = 0;
 		cContainer.gridwidth = 1;
-		cContainer.insets = new Insets(5,0,0,5);; //Abstand vom Displayrand (top, left, bottom, right)
+		cContainer.insets = new Insets(5,0,0,5);
 		panelControlContainer.add(btnRules,cContainer);
-
+		
+		/**
+		 * Bet buttons
+		 * Not in use because bet feature is not implemented
+		 *
 		panelBet = new JPanel();
 		panelBet.setOpaque(false);
 		TitledBorder betPlayerTitle = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Bet");
@@ -395,9 +426,6 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.insets = new Insets(5,0,0,10); // top, left, bottom, right
 		panelControlContainer.add(panelBet, cContainer);
 		
-		/**
-		 * Optinal Bet funciton
-		 */
 		btnBet30 = new JButton();
 		ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource(path30betInactiv));
 		btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
@@ -413,7 +441,7 @@ public class TableView extends JFrame implements ActionListener{
 		btnBet15.setBorder(null);
 		btnBet15.addActionListener(controller);
 		panelBet.add(btnBet15);
-		/****/
+		****/
 		
 		btnExit = new JButton();
 		ImageIcon imageIconExit = new ImageIcon(TableView.class.getResource(pathImgExitBtn));
@@ -427,12 +455,12 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.gridy = 1;
 		cContainer.gridwidth = 1;
 		cContainer.gridwidth = 1;
-		cContainer.insets = new Insets(12,0,5,5); //Abstand vom Displayrand (top, left, bottom, right)
+		cContainer.insets = new Insets(12,0,5,5);
 		panelControlContainer.add(btnExit,cContainer);
-		
-		//displayBorder();
-
 	}
+	
+	
+	
 	
 	/**
 	 * Method for the communication between controller and view
@@ -455,10 +483,11 @@ public class TableView extends JFrame implements ActionListener{
 		updateTable(gameState);
 		updatePlayers();
 		displayClientInfo(gameState.getClientInfo());
+		displayPatternInfo(gameState.getPatternInfo());
 	}
 	public void updateTable(GameState gameState){
 		
-		panelTable.removeAll();
+		panelTableCards.removeAll();
 		
 		if (gameState.roundList.size() > 0){
 			int gridy = 0;
@@ -471,8 +500,8 @@ public class TableView extends JFrame implements ActionListener{
 				cTable.gridx = i - gridx;
 				cTable.gridy = gridy;
 				cTable.ipady = 10;
-				cTable.insets = new Insets(0,0,0,0); //Padding top, left, bottom, right
-				panelTable.add(btnCard,cTable);
+				cTable.insets = new Insets(0,0,0,0);
+				panelTableCards.add(btnCard,cTable);
 			}
 		}
 		frame.getContentPane().revalidate();
@@ -501,7 +530,7 @@ public class TableView extends JFrame implements ActionListener{
 		for( Card card : player.getPlayerCards()){
 			BtnCard btnCard = new BtnCard(card);
 			btnCard.addActionListener(controller);
-			btnCardHand.add(btnCard); //Add to ArrayList
+			btnCardHand.add(btnCard); 				//Add to ArrayList
 			panelCardHand.add(btnCard);	    	
     	}
 		
@@ -515,7 +544,6 @@ public class TableView extends JFrame implements ActionListener{
 		}
 		frame.getContentPane().revalidate();
 		frame.getContentPane().repaint();
-		
 	}
 	
 	/**
@@ -558,7 +586,7 @@ public class TableView extends JFrame implements ActionListener{
 	}
 
 	public int getPlayerCardCount(Player player){
-		int cardCount = player.getPlayerCards().size() + player.getPlayerJokers().size();	
+		int cardCount = player.getPlayerCards().size();	
 		return cardCount;
 	}
 	
@@ -573,7 +601,7 @@ public class TableView extends JFrame implements ActionListener{
 	 */
 	public void displayRules(){
     	JFrame frameRules = new JFrame ("Haggis Rules");
-    	frameRules.setBounds(200, 200, 510, 326); // x-Position, y-Position, breite und höhe des Fenster
+    	frameRules.setBounds(200, 200, 510, 326); 							// x-Position, y-Position, breite und höhe des Fenster
         frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
         ImageIcon combinationCard = new ImageIcon(TableView.class.getResource("/gameContent/rules/combination.jpg"));
         JLabel imgLabelRules = new JLabel(new ImageIcon(combinationCard.getImage().getScaledInstance(510, 326,  java.awt.Image.SCALE_SMOOTH)));
@@ -595,40 +623,38 @@ public class TableView extends JFrame implements ActionListener{
 
 
 		if (!message.isEmpty()) {
-			StyleContext context = new StyleContext();
-		    StyledDocument document = new DefaultStyledDocument(context);
-	
-		    Style style = context.getStyle(StyleContext.DEFAULT_STYLE);
-		    // All about the style configuration
-		    StyleConstants.setAlignment(style, StyleConstants.ALIGN_LEFT);
-		    //StyleConstants.setIcon(style, new ImageIcon(TableView.class.getResource("/gameContent/icons/exclamation.png")));
-		    StyleConstants.setFontSize(style, 13);
-		    StyleConstants.setFontFamily(style, "Comic Sans MS");
-		    StyleConstants.setBold(style, true);
-		    StyleConstants.setSpaceAbove(style, 3);
-		    StyleConstants.setSpaceBelow(style, 10);
-		    StyleConstants.setRightIndent(style, 10);
-		    StyleConstants.setLeftIndent(style, 10);
-		    StyleConstants.setForeground(style, Color.WHITE);
-		    
-		    //Exception for not working insert
-		    try {
-		        document.insertString(document.getLength(), message, style);
-		      } catch (BadLocationException badLocationException) {
-		        System.err.println("Could not display information message!");
-		      }
-		    
-		    //Generate textPane
-		    JTextPane textPane = new JTextPane(document);
-		    textPane.setPreferredSize(new Dimension(250, 100));
-		    textPane.setBackground(new Color(118, 165, 175));
-		    textPane.setBorder(BorderFactory.createLineBorder(new Color(19, 79, 92), 2, true));
-		    textPane.setEditable(false);
-		    panelClientInfo.add(textPane);
+			clientInfo = new JTextArea();
+			clientInfo.setText("Player Information:\n" + message);
+			clientInfo.setFont(infotext);
+			clientInfo.setForeground(Color.WHITE);
+			clientInfo.setBackground(new Color(118, 165, 175));
+			Border border = BorderFactory.createLineBorder(new Color(19, 79, 92), 2, true);
+			clientInfo.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+			clientInfo.setPreferredSize(new Dimension(250, 100));
+			clientInfo.setLineWrap(true);
+			clientInfo.setWrapStyleWord(true);
+			clientInfo.setEditable(false);
+			panelClientInfo.add(clientInfo);
 		} 
-		    
 		panelClientInfo.repaint();
-
+	}
+	/**
+	 * Method show the Information for the laying cards (patterns)
+	 * @param pattern
+	 */
+	public void displayPatternInfo(String pattern) {
+		if (!pattern.isEmpty()) {
+			lblpatternInfo.setText(pattern);
+			lblpatternInfo.setFont(infotext);
+			lblpatternInfo.setForeground(Color.BLACK);
+			lblpatternInfo.setOpaque(true);
+			lblpatternInfo.setBackground(new Color(255,229,153));
+			lblpatternInfo.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+			panelPatternInfo.add(lblpatternInfo);
+		} else {
+			lblpatternInfo.setText("");
+			lblpatternInfo.setOpaque(false);
+		}
 	}
 	
 	/**
@@ -645,11 +671,12 @@ public class TableView extends JFrame implements ActionListener{
 	    		sortByID = true;
 	    	updatePlayerHand(controller.getPlayer());
 	    }
-	    //Optional
+	    /**Optional
+	     * Not in use because bet feature not implemented
 	    if (e.getSource() == btnBet30 ){
 	    	ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/30bet_active.png"));
 	    	btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
-	    }
+	    }*/
 	}
 	
 	/**

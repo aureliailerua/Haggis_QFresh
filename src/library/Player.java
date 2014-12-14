@@ -117,7 +117,7 @@ public class Player implements Serializable, Comparable {
 	}
 	
 	/**
-	 * ACHTUNG ist neu!!
+	 * compare for points (felicita.acklin)
 	 */
 	@Override
 	public int compareTo(Object o) {

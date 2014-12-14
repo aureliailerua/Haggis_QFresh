@@ -70,21 +70,19 @@ public class JPanelOpposition extends JPanel{
 	
 	private static final Logger log = LogManager.getLogger( JPanelOpposition.class.getName() );
 	
-	public JPanelOpposition() {
-		
-	}
+	public JPanelOpposition() {	}
 	
-	public JPanelOpposition(TableView view, String oppositionSide)  {
+	public JPanelOpposition(TableView view)  {
 
 		this.view = view;
-		gameFildSide = oppositionSide;
+		// Not in use because the bet function is not implemented
+		//gameFildSide = oppositionSide;
 		
 		// Initial Color
 		active = new Color(147,196,125); 	//Green
 		inactive = new Color(234,153,153);	//Red
 		
 		// Initial path of the Image
-		//String pathImgBack = "/gameContent/back.jpg";
 		String pathImgBackSmall = "/gameContent/back_small.jpg";
 		String pathImgCrown = "/gameContent/crown.png";
 
@@ -98,11 +96,11 @@ public class JPanelOpposition extends JPanel{
 		Font statusbar = new Font("Comic Sans MS", Font.PLAIN, 14);
 		
 		// Initial joker array
-
 		imgLabelJoker[0] = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathJoker[0])));
 		imgLabelJoker[1] = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathJoker[1])));
 		imgLabelJoker[2] = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathJoker[2])));
-		// Set panel setup
+		
+		// Set panel layout
 		setLayout(new BorderLayout(0, 0));
 		
 		// - Opposition Info (1.1.N)
@@ -110,11 +108,16 @@ public class JPanelOpposition extends JPanel{
 		panelOppInfo.setOpaque(false);
 		add(panelOppInfo, BorderLayout.NORTH);
 		
-		// -- Bet (1.1.1.w) for Player in at the left side
+
+		/**
+		 * -- Bet (1.1.1.w) for Player in at the left side
+		 * Check not in use, because bets are not implemented
+		 
 		if (gameFildSide == "LEFT") {
 			setBetPanel();
 			panelOppInfo.add(panelOppBet, BorderLayout.WEST);
 		}
+		**/
 				
 		// -- StatusBar (1.1.2.C)
 		panelOppStatusBar = new JPanel();
@@ -133,13 +136,12 @@ public class JPanelOpposition extends JPanel{
 		lbPlayerName.setFont(player);
 		lbPlayerName.setPreferredSize(new Dimension(50,50));
 		lbPlayerName.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
-		cOppInfo.fill = GridBagConstraints.BOTH;
-		cOppInfo.ipady = 10;
-		cOppInfo.weightx = 0.0;
-		cOppInfo.gridwidth = 5;
-		cOppInfo.gridx = 0;
-		cOppInfo.gridy = 0;
-		cOppInfo.insets = new Insets(0,10,5,0);
+		cOppInfo.fill = GridBagConstraints.BOTH;			//Zellenausfüllungsgrad
+		cOppInfo.ipady = 10;								//Höhe
+		cOppInfo.gridwidth = 5;								//Zusammengefasste Zellen
+		cOppInfo.gridx = 0;									//x-Koordinate im Grid
+		cOppInfo.gridy = 0;									//z-Koordinate im Grid
+		cOppInfo.insets = new Insets(0,0,0,0);				//Padding top, left, bottom, right
 		panelOppStatusBar.add(lbPlayerName, cOppInfo);
 				
 		// --- Count of Cards
@@ -147,15 +149,14 @@ public class JPanelOpposition extends JPanel{
 		JLabel imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource(pathImgBackSmall)));
 		imgLabelCard.setPreferredSize(new Dimension(22,35));
 		cOppInfo = new GridBagConstraints();
-		cOppInfo.fill = GridBagConstraints.BOTH;		//Legt fest, wie die zelle durch Comp ausgefüllt werden soll - Both (Vertikal & horizontal)
-		cOppInfo.gridx = 0;		//x-Koordinate im Grid
-		cOppInfo.gridy = 1;		//y-Koordinate im Grid
+		cOppInfo.fill = GridBagConstraints.BOTH;
+		cOppInfo.gridx = 0;		
+		cOppInfo.gridy = 1;	
 		cOppInfo.ipady = 10;
-		cOppInfo.insets = new Insets(5,1,5,5); //Padding top, left, bottom, right
+		cOppInfo.insets = new Insets(5,1,5,5); 
 		panelOppStatusBar.add(imgLabelCard, cOppInfo);
 		
 		// ---- Number of Cards
-		//lbCardCount= new JLabel(Integer.toString(cardCount)); //!! Anpassen!!
 		lbCardCount= new JLabel("0");
 		lbCardCount.setFont(statusbar);
 		lbCardCount.setPreferredSize(new Dimension(50,50));
@@ -163,7 +164,7 @@ public class JPanelOpposition extends JPanel{
 		cOppInfo.fill = GridBagConstraints.BOTH;
 		cOppInfo.gridx = 1;		
 		cOppInfo.gridy = 1;		
-		cOppInfo.insets = new Insets(5,5,5,5); //Padding top, left, bottom, right
+		cOppInfo.insets = new Insets(5,5,5,5);
 		panelOppStatusBar.add(lbCardCount, cOppInfo);
 				
 		// --- Points
@@ -178,7 +179,6 @@ public class JPanelOpposition extends JPanel{
 		panelOppStatusBar.add(imgLabelCrown, cOppInfo);
 		
 		// ---- Number of Points
-		//lbPoint= new JLabel(Integer.toString(points));
 		lbPoint= new JLabel("0");
 		lbPoint.setFont(statusbar);
 		lbPoint.setPreferredSize(new Dimension(50,50));
@@ -186,14 +186,16 @@ public class JPanelOpposition extends JPanel{
 		cOppInfo.fill = GridBagConstraints.BOTH;
 		cOppInfo.gridx = 3;
 		cOppInfo.gridy = 1;
-		cOppInfo.insets = new Insets(5,0,0,1);
+		cOppInfo.insets = new Insets(5,5,5,1);
 		panelOppStatusBar.add(lbPoint, cOppInfo);
 		
-		// -- Bet (1.1.1.E) for Player in at the right side
+		/**
+		 * -- Bet (1.1.1.E) for Player in at the right side
+		 * Check is not in use because bet are not implemented
 		if (gameFildSide == "RIGHT") {
-			setBetPanel();
+			// setBetPanel();
 			panelOppInfo.add(panelOppBet, BorderLayout.EAST);
-		}
+		} */
 		
 		
 		// - Opposition Cards (1.2.C)
@@ -208,7 +210,6 @@ public class JPanelOpposition extends JPanel{
 		
 		panelCardBack = new JPanel();
 		panelOppCards.add(panelCardBack, BorderLayout.NORTH);
-		//panelCardBack.setPreferredSize(new Dimension(200,80));
 		panelCardBack.setOpaque(false);
 		panelCardBack.setBorder(null);
 		FlowLayout fl_panelCardBack = (FlowLayout) panelCardBack.getLayout();
@@ -234,51 +235,9 @@ public class JPanelOpposition extends JPanel{
 		panelOppSpacer.setOpaque(false);
 		panelOppSpacer.setPreferredSize(new Dimension(210,80));
 		add(panelOppSpacer, BorderLayout.SOUTH);
-		
-		//displayBorder();	
 }
 	
-	/**
-	 * NOT IN USE AT THE MOMENT!!!
-	 */
-	public void setBetPanel() {
-		// -- Bet (1.1.1.W)
-		panelOppBet = new JPanel();
-		panelOppBet.setOpaque(false);
-		FlowLayout fl_panelOppositeBet = (FlowLayout) panelOppBet.getLayout();
-		fl_panelOppositeBet.setAlignment(FlowLayout.RIGHT);
-		panelOppBet.setBackground(Color.WHITE);
-
-				
-		if(bet!=0){
-			TitledBorder betTitle = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black,2), "Bet");
-			betTitle.setTitleJustification(TitledBorder.LEFT);
-			panelOppBet.setBorder( betTitle);	
-				
-			switch(bet) {
-				case 15:
-					btnBet15 = new JButton();
-					ImageIcon imageIcon15 = new ImageIcon(TableView.class.getResource("/gameContent/15bet_active.png"));
-					btnBet15.setIcon(new ImageIcon(imageIcon15.getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH)));
-					btnBet15.setBorder(null);
-					btnBet15.setPreferredSize(new Dimension(30,30));
-					btnBet15.setVisible(true);
-					panelOppBet.add(btnBet15);
-					break;
-				case 30:
-					btnBet30 = new JButton();
-					ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/30bet_active.png"));
-					btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH)));
-					btnBet30.setBorder(null);
-					btnBet30.setPreferredSize(new Dimension(30,30));
-					btnBet30.setVisible(true);
-					panelOppBet.add(btnBet30);
-					break;
-			}
-		} else {
-			panelOppBet.setPreferredSize(new Dimension(45,78));
-		}
-	}
+	
 	
 
 	/**
@@ -287,7 +246,7 @@ public class JPanelOpposition extends JPanel{
 	 * @param activePlayer
 	 */
 	public void updatePlayer(Player player, PlayerToken activePlayer) {
-		cardCount = player.getPlayerCards().size() + player.getPlayerJokers().size();
+		cardCount = player.getPlayerCards().size();
 		points = player.getPlayerPoints();
 		
 		// Update StatusBar
@@ -306,7 +265,6 @@ public class JPanelOpposition extends JPanel{
 		else{
 			panelOppStatusBar.setBackground(inactive);
 		}
-		
 	}
 	
 	public void updateJoker(ArrayList<Card> joker) {
@@ -377,8 +335,9 @@ public class JPanelOpposition extends JPanel{
 		panelCardBack.repaint();
 	}
 	
+	
 	/**
-	 * TestLayoutManager Method
+	 * Method to test the LayoutManager
 	 */
 	public void displayBorder() {
 		panelOppInfo.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
@@ -386,5 +345,48 @@ public class JPanelOpposition extends JPanel{
 		panelOppBet.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelOppStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 	}
+	
+	/**
+	 * Method for setting bets
+	 * Is not in use, because feature was not implemented on the server
+	
+	public void setBetPanel() {
+		// -- Bet (1.1.1.W)
+		panelOppBet = new JPanel();
+		panelOppBet.setOpaque(false);
+		FlowLayout fl_panelOppositeBet = (FlowLayout) panelOppBet.getLayout();
+		fl_panelOppositeBet.setAlignment(FlowLayout.RIGHT);
+		panelOppBet.setBackground(Color.WHITE);
+
+				
+		if(bet!=0){
+			TitledBorder betTitle = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black,2), "Bet");
+			betTitle.setTitleJustification(TitledBorder.LEFT);
+			panelOppBet.setBorder( betTitle);	
+				
+			switch(bet) {
+				case 15:
+					btnBet15 = new JButton();
+					ImageIcon imageIcon15 = new ImageIcon(TableView.class.getResource("/gameContent/15bet_active.png"));
+					btnBet15.setIcon(new ImageIcon(imageIcon15.getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH)));
+					btnBet15.setBorder(null);
+					btnBet15.setPreferredSize(new Dimension(30,30));
+					btnBet15.setVisible(true);
+					panelOppBet.add(btnBet15);
+					break;
+				case 30:
+					btnBet30 = new JButton();
+					ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/30bet_active.png"));
+					btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH)));
+					btnBet30.setBorder(null);
+					btnBet30.setPreferredSize(new Dimension(30,30));
+					btnBet30.setVisible(true);
+					panelOppBet.add(btnBet30);
+					break;
+			}
+		} else {
+			panelOppBet.setPreferredSize(new Dimension(45,78));
+		}
+	} */
 	
 }
