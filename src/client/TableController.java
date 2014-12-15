@@ -61,13 +61,13 @@ public class TableController implements ActionListener,Observer{
 			handler.send(container);
 		} else {
 			log.debug("play emtpy card");
-			view.displayClientInfo("Please select a card." );
+			view.panelPlayer.displayClientInfo("Please select a card." );
 		}
 	}
 	private ArrayList<BtnCard> playerCards(){
 		ArrayList<BtnCard> cards = new ArrayList<BtnCard>();
-		cards.addAll(view.btnCardHand);
-		cards.addAll(view.btnJocker);
+		cards.addAll(view.panelPlayer.btnCardHand);
+		cards.addAll(view.panelPlayer.btnJocker);
 		return cards;
 	}
 	
@@ -88,7 +88,7 @@ public class TableController implements ActionListener,Observer{
         		}
 	        }
 		}
-        if( e.getSource () ==  view.btnPlay){
+        if( e.getSource () ==  view.panelPlayer.btnPlay){
            	ArrayList<Card> cards = new ArrayList<Card>();
           	
         	for (BtnCard btnCard : playerCards()) {
@@ -99,22 +99,18 @@ public class TableController implements ActionListener,Observer{
     		playCards(cards, "Play");
         }
         
-        if(e.getSource() == view.btnPass){
+        if(e.getSource() == view.panelPlayer.btnPass){
         	ArrayList<Card> emtpyCards = new ArrayList<Card>();
         	for (BtnCard btnCards : playerCards()) {
         		btnCards.setUnselected();
         	}
-        	playCards(emtpyCards, "Pass");	//play a emtpy ArrayList, Class Move will check if list is empty or not.
-        	
+        	playCards(emtpyCards, "Pass");	//play a emtpy ArrayList, Class Move will check if list is empty or not.	
         }
         
-        if(e.getSource() == view.btnExit) {
+        if(e.getSource() == view.panelPlayer.btnExit) {
     		System.exit(0);
         }
-        
-        if (e.getSource() == view.btnRules) {
-        	view.displayRules();
-        }
+  
 	}
 	
 	@Override
@@ -125,7 +121,8 @@ public class TableController implements ActionListener,Observer{
 	}
 	private void checkNewRound() {
 		if (handler.getGameState().isNewRound()) {
-			view.displayClientInfo("");		//Clean clientInfo
+			//view.displayClientInfo("");		//Clean clientInfo
+			view.panelPlayer.displayClientInfo("");
 			EndController endController = new EndController(handler);
 			EndView endView = new EndView(endController,view.getJFrame());
 			endController.updateView();

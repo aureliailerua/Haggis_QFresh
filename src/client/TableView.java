@@ -62,68 +62,36 @@ import library.Player;
  * TableView is responsible for the hole game table.
  */
 
-public class TableView extends JFrame implements ActionListener{
+//public class TableView extends JFrame implements ActionListener{
+
+public class TableView extends JFrame {
 
 	private JFrame frame;
 											//Layer
 	JPanelOpposition panel1stOpposition;	//1W
-	JPanel panelTable;						//2 C
+	JPanelTable panelTable;						//2 C
 	JPanelOpposition panel2ndOpposition; 	//3E
 	JPanel panelEmpty;						//3E alternative
-	JPanel panelPlayer;						//4 N
-	
-	JPanel panelPatternInfo;				//2.1
-	JPanel panelTableCards;					//2.2
-	
-	JPanel panelCardHand; 					//3.1
-	JPanel panelClientInfo; 				//3.2
-	JPanel panelPlayerKit;					//3.3
-	JPanel panelControlContainer;			//3.4
-	
-	JPanel panelJoker;						//3.2.1
-	JPanel panelBtnPass;					//3.2.2
-	JPanel panelStatusBar;					//3.2.3
-	JPanel panelBtnPlay;					//3.2.4
+	JPanelPlayer panelPlayer;						//4 N
 
-	JPanel panelBet;						//3.4.1
 	
-	ArrayList<BtnCard> btnCardHand;
-	ArrayList<BtnCard> btnJocker;
-	ArrayList<BtnCard> btnCardTable;
-	
-	protected JButton btnPlay;
-	protected JButton btnPass; 
-	protected JButton btnSort;
-	protected JButton btnExit;
-	protected JButton btnRules;
-	//protected JButton btnBet15;
-	//protected JButton btnBet30;
-	protected JButton btnEmptyButton;
-	
-	JLabel lbCardCount;
-	JLabel lbPoint;
-	JLabel lbPlayerName;
-	JLabel imgLabelCard;
-	JLabel imgLabelCrown;
-	JLabel imgLabelRules;
-	JLabel lblPlaceHolder;
-	//JLabel clientInfo;
-	JLabel imgLabelCardBack;
-	JLabel imgPlaceholder;
-	JLabel lblpatternInfo;
-	
-	JTextArea clientInfo;
-	
-	GridBagConstraints cTable;	
-	
-	Color active;
-	Color inactive;
-	Color patterninfo = new Color(255,217,102);
-	Font infotext = new Font("Comic Sans MS", Font.BOLD, 14);
-
-
-	private boolean sortByID = true;
-	
+//	JPanel panelPatternInfo;				//2.1
+//	JPanel panelTableCards;					//2.2
+//
+//	
+//
+//	ArrayList<BtnCard> btnCardTable;
+//	
+//
+//	JLabel lblpatternInfo;
+//	
+//	
+//	GridBagConstraints cTable;	
+//	
+//
+//	Color patterninfo = new Color(255,217,102);
+//	Font infotext = new Font("Comic Sans MS", Font.BOLD, 14);
+//	
 	TableController controller;
 
 	private static final Logger log = LogManager.getLogger( TableView.class.getName() );
@@ -136,26 +104,6 @@ public class TableView extends JFrame implements ActionListener{
 
 		this.controller = controller;
 		
-		// Define the path of the images
-		String pathImgBackSmall = "/gameContent/back_small.jpg";
-		String pathImgCrown = "/gameContent/crown.png";
-		String pathImgExitBtn = "/icons/exit.png";
-		String pathImgSortBtn = "/icons/sort.png";
-		String pathImgRulesBtn ="/icons/rules.png";
-		//String path15betInactiv = "/gameContent/15bet_inactive.png";
-		//String path30betInactiv = "/gameContent/30bet_inactive.png";
-
-		
-		// Define Fonts
-		Font player = new Font("Comic Sans MS", Font.BOLD, 18);
-		Font statusbar = new Font("Comic Sans MS", Font.PLAIN, 14);
-		Font button = new Font("comic Sans MS", Font.PLAIN, 16);
-
-		
-		// Define Color
-		active = new Color(147,196,125); 	//Green
-		inactive = new Color(234,153,153);	//Red
-		
 		frame = new JFrame("QFresh Haggis Game - Gametable");
 		frame.setBounds(0, 0, 1280, 720); 						// x-Position, y-Position, breite und höhe des Fenster
 		frame.setPreferredSize(new Dimension(1280,720));
@@ -167,7 +115,6 @@ public class TableView extends JFrame implements ActionListener{
 		/** 
 		 * 1st Opposite Player (1.W)
 		*/
-		//panel1stOpposition = new JPanelOpposition(this, "LEFT");
 		panel1stOpposition = new JPanelOpposition(this);
 		panel1stOpposition.setOpaque(false);
 		panel1stOpposition.setPreferredSize(new Dimension(300, 320));
@@ -177,288 +124,52 @@ public class TableView extends JFrame implements ActionListener{
 		/**
 		 * Table (Card Desk) (2.C)
 		 */		
-		panelTable = new JPanel();		
+		//panelTable = new JPanel();
+		panelTable = new JPanelTable(this);	
 		panelTable.setOpaque(false);
-		panelTable.setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().add(panelTable, BorderLayout.CENTER);
 		
 		// -- Pattern Info (2.1.N)
-		panelPatternInfo = new JPanel();
-		panelPatternInfo = new JPanel();		
-		panelPatternInfo.setOpaque(false);
-		panelTable.add(panelPatternInfo, BorderLayout.NORTH);
-		
-		lblpatternInfo = new JLabel();
-		panelPatternInfo.add(lblpatternInfo);
-
-		// -- Card Desk (2.2.C)
-		panelTableCards = new JPanel();
-		panelTableCards.setOpaque(false);
-		panelTable.add(panelTableCards, BorderLayout.CENTER);
-
-		GridBagLayout gbl_panelTableCards = new GridBagLayout();
-		cTable = new GridBagConstraints();
-		panelTableCards.setLayout(gbl_panelTableCards); 
-		btnCardTable = new ArrayList<BtnCard>();
+//		panelPatternInfo = new JPanel();
+//		panelPatternInfo = new JPanel();		
+//		panelPatternInfo.setOpaque(false);
+//		panelTable.add(panelPatternInfo, BorderLayout.NORTH);
+//		
+//		lblpatternInfo = new JLabel();
+//		panelPatternInfo.add(lblpatternInfo);
+//
+//		// -- Card Desk (2.2.C)
+//		panelTableCards = new JPanel();
+//		panelTableCards.setOpaque(false);
+//		panelTable.add(panelTableCards, BorderLayout.CENTER);
+//
+//		GridBagLayout gbl_panelTableCards = new GridBagLayout();
+//		cTable = new GridBagConstraints();
+//		panelTableCards.setLayout(gbl_panelTableCards); 
+//		btnCardTable = new ArrayList<BtnCard>();
 		
 		/**
 		 * 2nd Opposition Player (3.E)
 		*/
-		
 		// Identify if a 3rd player is enter the game
 		if (controller.getGameState().playerList.size() == 3) {
 			log.debug("Playerlist Size: "+ controller.getGameState().playerList.size());
-			//panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
 			panel2ndOpposition = new JPanelOpposition(this);
 		} else {
 			panel2ndOpposition = new JPanelOpposition();
 		}
-		
 		panel2ndOpposition.setPreferredSize(new Dimension(300, 320));
 		panel2ndOpposition.setOpaque(false);
 		frame.getContentPane().add(panel2ndOpposition, BorderLayout.EAST);
 		
-
-		
 		/**
 		 * Player (4.N)
 		 */
-		panelPlayer = new JPanel();
+		panelPlayer = new JPanelPlayer(this, controller);
 		panelPlayer.setPreferredSize(new Dimension(1280,380));		//to fix the size of the player panel - joker/cards of opposit stay in placer
 		panelPlayer.setOpaque(false);
-		panelPlayer.setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().add(panelPlayer, BorderLayout.SOUTH);
-		
-		// - Card Hand (3.1.N)
-		panelCardHand = new JPanel();
-		panelCardHand.setPreferredSize(new Dimension(1280, 135));
-		panelCardHand.setOpaque(false);
-		FlowLayout fl_panelCardHand = (FlowLayout) panelCardHand.getLayout();
-		fl_panelCardHand.setHgap(0);
-		fl_panelCardHand.setVgap(0);
-		btnCardHand = new ArrayList<BtnCard>();
-		panelPlayer.add(panelCardHand, BorderLayout.NORTH);
-		
-		// - ClientInfo Left (3.2.W)
-		panelClientInfo = new JPanel();
-		panelClientInfo.setOpaque(false);
-		FlowLayout fl_panelClientInfo = (FlowLayout) panelClientInfo.getLayout();
-		fl_panelClientInfo.setAlignment(FlowLayout.CENTER);
-		fl_panelClientInfo.setVgap(65);
-		panelClientInfo.setPreferredSize(new Dimension(300, 120));
-		displayClientInfo("");
-		panelPlayer.add(panelClientInfo, BorderLayout.WEST);
-
-		// - Player's Kit (3.3.C)
-		panelPlayerKit = new JPanel();
-		panelPlayerKit.setOpaque(false);
-		panelPlayer.add(panelPlayerKit, BorderLayout.CENTER);
-		panelPlayerKit.setLayout(new BorderLayout(0, 0));
-		
-		
-		// -- Jocker's (3.3.1.C)
-		panelJoker = new JPanel();
-		panelJoker.setPreferredSize(new Dimension(640, 135));
-		panelJoker.setOpaque(false);
-		FlowLayout fl_panelJoker = (FlowLayout) panelJoker.getLayout();
-		fl_panelJoker.setVgap(0);
-		fl_panelJoker.setHgap(0);
-		btnJocker	= new ArrayList<BtnCard>();
-		panelPlayerKit.add(panelJoker, BorderLayout.NORTH);
-		
-		// --- Pass Area (3.3.2.W)
-		panelBtnPass = new JPanel();
-		panelBtnPass.setOpaque(false);
-		FlowLayout fl_panelBtnPass = (FlowLayout) panelBtnPass.getLayout();
-		fl_panelBtnPass.setAlignment(FlowLayout.RIGHT);
-		panelPlayerKit.add(panelBtnPass, BorderLayout.WEST);
-		panelBtnPass.setPreferredSize(new Dimension(180,50));
-		btnPass = new JButton();
-		btnPass.setText("Pass");
-		btnPass.setFont(button);
-		btnPass.setPreferredSize(new Dimension(130, 58));
-		btnPass.setBackground(Color.WHITE);
-		btnPass.setEnabled(true);
-		btnPass.setVisible(true);
-		btnPass.addActionListener(controller);
-		panelBtnPass.add(btnPass);
-		
-		// --- Status Bar (3.3.3.C)
-		panelStatusBar = new JPanel();
-		panelStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		panelStatusBar.setBackground(inactive);
-		panelStatusBar.setPreferredSize(new Dimension(300,120));
-		panelPlayerKit.add(panelStatusBar, BorderLayout.CENTER);
-		
-		GridBagLayout gbl_panelStatusBar = new GridBagLayout();
-		GridBagConstraints cStatusBar = new GridBagConstraints();			//GridBag Grenzen erstellen
-		panelStatusBar.setLayout(gbl_panelStatusBar); 						//Layout dem Panelzuweisen!!
-
-		// ---- Card Icon
-		imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource(pathImgBackSmall)));
-		imgLabelCard.setPreferredSize(new Dimension(22,35));
-		cStatusBar.gridx = 0;												//x-Koordinate im Grid
-		cStatusBar.gridy = 0;												//y-Koordinate im Grid
-		cStatusBar.ipady = 10;												//Höhe der Zelle
-		cStatusBar.insets = new Insets(5,40,5,5); 							//Padding vom Displayrand (top, left, bottom, right)
-		panelStatusBar.add(imgLabelCard, cStatusBar);
-	
-		// ---- Count of Cards
-		lbCardCount= new JLabel("0");
-		lbCardCount.setFont(statusbar);
-		lbCardCount.setPreferredSize(new Dimension(50,30));
-		cStatusBar = new GridBagConstraints();
-		cStatusBar.fill = GridBagConstraints.BOTH;							//Wie soll der constrain das feld füllen - Both (Vertikal & horizontal)
-		cStatusBar.gridx = 1;
-		cStatusBar.gridy = 0;
-		cStatusBar.insets = new Insets(5,5,5,5);
-		panelStatusBar.add(lbCardCount, cStatusBar);
-		
-		// ---- Crown Icon
-		imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource(pathImgCrown)));
-		imgLabelCrown.setPreferredSize(new Dimension(25,22));
-		cStatusBar = new GridBagConstraints();
-		cStatusBar.gridx = 2;		
-		cStatusBar.gridy = 0;	
-		cStatusBar.insets = new Insets(5,5,5,5);
-		panelStatusBar.add(imgLabelCrown, cStatusBar);
-		
-		//---- Display count of points
-		lbPoint= new JLabel("0");
-		lbPoint.setFont(statusbar);
-		lbPoint.setPreferredSize(new Dimension(50,30));
-		cStatusBar = new GridBagConstraints();
-		cStatusBar.fill = GridBagConstraints.BOTH;
-		cStatusBar.gridx = 3;
-		cStatusBar.gridy = 0;
-		cStatusBar.insets = new Insets(5,5,5,5);
-		panelStatusBar.add(lbPoint, cStatusBar);
-		
-		//---- Display Player Name
-		lbPlayerName= new JLabel("", JLabel.CENTER);
-		lbPlayerName.setFont(player);
-		lbPlayerName.setPreferredSize(new Dimension(50,30));
-		lbPlayerName.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Color.BLACK));
-		cStatusBar = new GridBagConstraints();
-		cStatusBar.fill = GridBagConstraints.BOTH;
-		cStatusBar.ipady = 8;
-		cStatusBar.gridwidth = 4;										//Zellen die zusammengefasst werden
-		cStatusBar.gridx = 0;
-		cStatusBar.insets = new Insets(5,5,5,10);
-		panelStatusBar.add(lbPlayerName, cStatusBar);
-		 
-		// --- Play Area (3.3.4.E)
-		panelBtnPlay = new JPanel();
-		panelBtnPlay.setOpaque(false);
-		FlowLayout fl_panelBtnPlay = (FlowLayout) panelBtnPlay.getLayout();
-		fl_panelBtnPlay.setAlignment(FlowLayout.LEFT);
-		panelPlayerKit.add(panelBtnPlay, BorderLayout.EAST);
-		panelBtnPlay.setPreferredSize(new Dimension(180,50));
-		btnPlay = new JButton();
-		btnPlay.setText("Play");
-		btnPlay.setFont(button);
-		btnPlay.setPreferredSize(new Dimension(130, 58));
-		btnPlay.setBackground(Color.WHITE);
-		btnPlay.setEnabled(true);
-		btnPlay.setVisible(true);
-		btnPlay.addActionListener(controller);
-		panelBtnPlay.add(btnPlay);
-		
-		// -- Control CardContainer with Buttons (3.4.E)
-		panelControlContainer = new JPanel();
-		panelControlContainer.setOpaque(false);
-		panelControlContainer.setPreferredSize(new Dimension(300,120));
-		panelPlayer.add(panelControlContainer, BorderLayout.EAST);
-		GridBagLayout gbl_panelControlContainer = new GridBagLayout(); 
-		GridBagConstraints cContainer = new GridBagConstraints();
-		panelControlContainer.setLayout(gbl_panelControlContainer);
-
-		lblPlaceHolder = new JLabel();
-		lblPlaceHolder.setPreferredSize(new Dimension (58,58));
-		cContainer.fill = GridBagConstraints.HORIZONTAL;
-		cContainer.gridx = 0;
-		cContainer.gridy = 0;
-		cContainer.gridwidth = 1;
-		cContainer.insets = new Insets(5,0,0,5);
-		panelControlContainer.add(lblPlaceHolder,cContainer);
-		
-		btnSort = new JButton();
-		ImageIcon imgSort = new ImageIcon(TableView.class.getResource(pathImgSortBtn));
-		btnSort.setIcon(new ImageIcon(imgSort.getImage().getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH)));
-		btnSort.setPreferredSize(new Dimension(58,58));
-		btnSort.setBackground(Color.WHITE);
-		btnSort.addActionListener(this);
-		cContainer = new GridBagConstraints();
-		cContainer.fill = GridBagConstraints.BOTH;
-		cContainer.gridx = 1;
-		cContainer.gridy = 0;
-		cContainer.gridwidth = 1;
-		cContainer.insets = new Insets(5,0,0,10);
-		panelControlContainer.add(btnSort, cContainer);
-		
-		btnRules = new JButton();
-		btnRules.setIcon(new ImageIcon(TableView.class.getResource(pathImgRulesBtn)));
-		btnRules.setPreferredSize(new Dimension (58,58));
-		btnRules.setBackground(Color.WHITE);
-		btnRules.addActionListener(this);
-		cContainer = new GridBagConstraints();
-		cContainer.fill = GridBagConstraints.HORIZONTAL;
-		cContainer.gridx = 2;
-		cContainer.gridy = 0;
-		cContainer.gridwidth = 1;
-		cContainer.insets = new Insets(5,0,0,5);
-		panelControlContainer.add(btnRules,cContainer);
-		
-		/**
-		 * Bet buttons
-		 * Not in use because bet feature is not implemented
-		 *
-		panelBet = new JPanel();
-		panelBet.setOpaque(false);
-		TitledBorder betPlayerTitle = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Bet");
-		betPlayerTitle.setTitleJustification(TitledBorder.LEFT);
-		panelBet.setBorder( betPlayerTitle);
-		cContainer = new GridBagConstraints();
-		cContainer.gridx = 0;
-		cContainer.gridy = 1;
-		cContainer.gridwidth = 2;
-		cContainer.anchor = GridBagConstraints.LINE_END;
-		cContainer.insets = new Insets(5,0,0,10); // top, left, bottom, right
-		panelControlContainer.add(panelBet, cContainer);
-		
-		btnBet30 = new JButton();
-		ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource(path30betInactiv));
-		btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
-		btnBet30.setPreferredSize(new Dimension(35,35));
-		btnBet30.setBorder(null);
-		btnBet30.addActionListener(controller);
-		panelBet.add(btnBet30);
-
-		btnBet15 = new JButton();
-		ImageIcon imageIcon = new ImageIcon(TableView.class.getResource(path15betInactiv));
-		btnBet15.setIcon(new ImageIcon(imageIcon.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
-		btnBet15.setPreferredSize(new Dimension(35,35));
-		btnBet15.setBorder(null);
-		btnBet15.addActionListener(controller);
-		panelBet.add(btnBet15);
-		****/
-		
-		btnExit = new JButton();
-		ImageIcon imageIconExit = new ImageIcon(TableView.class.getResource(pathImgExitBtn));
-		btnExit.setIcon(new ImageIcon(imageIconExit.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
-		btnExit.setPreferredSize(new Dimension(58,58));
-		btnExit.setBackground(Color.WHITE);
-		btnExit.addActionListener(controller);
-		cContainer = new GridBagConstraints();
-		cContainer.fill = GridBagConstraints.HORIZONTAL;
-		cContainer.gridx = 2;
-		cContainer.gridy = 1;
-		cContainer.gridwidth = 1;
-		cContainer.gridwidth = 1;
-		cContainer.insets = new Insets(12,0,5,5);
-		panelControlContainer.add(btnExit,cContainer);
 	}
-	
 	
 	
 	
@@ -479,99 +190,55 @@ public class TableView extends JFrame implements ActionListener{
 	 */
 	public void drawGameState(GameState gameState) {
 		log.debug("rendering player " + controller.getToken());
-		updatePlayerHand(controller.getPlayer());
-		updateTable(gameState);
+		//updatePlayerHand(controller.getPlayer());
+		//updateTable(gameState);
 		updatePlayers();
-		displayClientInfo(gameState.getClientInfo());
-		displayPatternInfo(gameState.getPatternInfo());
+		panelTable.updateTable(gameState);
+		panelPlayer.displayClientInfo(gameState.getClientInfo());
+		panelTable.displayPatternInfo(gameState.getPatternInfo());
 	}
-	public void updateTable(GameState gameState){
-		
-		panelTableCards.removeAll();
-		
-		if (gameState.roundList.size() > 0){
-			int gridy = 0;
-			int gridx = 0;
-			for (int i = 0; i < gameState.getTopCards().size(); i++) {
-				BtnCard btnCard = new BtnCard(gameState.getTopCards().get(i));
+//	public void updateTable(GameState gameState){
+//		
+//		panelTableCards.removeAll();
+//		
+//		if (gameState.roundList.size() > 0){
+//			int gridy = 0;
+//			int gridx = 0;
+//			for (int i = 0; i < gameState.getTopCards().size(); i++) {
+//				BtnCard btnCard = new BtnCard(gameState.getTopCards().get(i));
+//
+//				if (i >=8) { gridy = 1; gridx= 8; }
+//				btnCardTable.add(btnCard);
+//				cTable.gridx = i - gridx;
+//				cTable.gridy = gridy;
+//				cTable.ipady = 10;
+//				cTable.insets = new Insets(0,0,0,0);
+//				panelTableCards.add(btnCard,cTable);
+//			}
+//		}
+//		frame.getContentPane().revalidate();
+//		frame.getContentPane().repaint();
+//	}
 
-				if (i >=8) { gridy = 1; gridx= 8; }
-				btnCardTable.add(btnCard);
-				cTable.gridx = i - gridx;
-				cTable.gridy = gridy;
-				cTable.ipady = 10;
-				cTable.insets = new Insets(0,0,0,0);
-				panelTableCards.add(btnCard,cTable);
-			}
-		}
-		frame.getContentPane().revalidate();
-		frame.getContentPane().repaint();
-	}
-	
-	/**
-	 * Method to get the existing card in my hand after the a trick
-	 * @param player
-	 */
-	public void updatePlayerHand(Player player){
-		panelCardHand.removeAll();
-		panelJoker.removeAll();
-		panelCardHand.revalidate();
-		panelJoker.revalidate();
-		frame.getContentPane().revalidate();
-		
-		// Initial & Sort Cards
-		btnCardHand = new ArrayList<BtnCard>();
-		btnJocker = new ArrayList<BtnCard>();
-		if (sortByID) {
-			Collections.sort(player.getPlayerCards());
-		} else {
-			Collections.sort(player.getPlayerCards(), Card.CardSuitComparator);
-		}
-		for( Card card : player.getPlayerCards()){
-			BtnCard btnCard = new BtnCard(card);
-			btnCard.addActionListener(controller);
-			btnCardHand.add(btnCard); 				//Add to ArrayList
-			panelCardHand.add(btnCard);	    	
-    	}
-		
-		Collections.sort(player.getPlayerJokers());
-		
-		for( Card jocker : player.getPlayerJokers()) {
-			BtnCard btnCard = new BtnCard(jocker);
-			btnCard.addActionListener(controller);
-			btnJocker.add(btnCard); 				//Add to ArrayList
-			panelJoker.add(btnCard);
-		}
-		frame.getContentPane().revalidate();
-		frame.getContentPane().repaint();
-	}
 	
 	/**
 	 * Method to set player name and how is the active player
 	 */
 	public void updatePlayers(){
-		lbPlayerName.setText(getPlayerName(controller.getPlayer()));
 		GameState.PlayerToken activePlayerToken = controller.getGameState().getActivePlayer();
+
+		Player player1 = controller.getPlayer();
+		panelPlayer.updatePlayer(player1, activePlayerToken);
 		
-		if ( activePlayerToken == controller.getToken()){
-			panelStatusBar.setBackground(active);
-		}
-		else{
-			panelStatusBar.setBackground(inactive);
-		}
 		Player player2 = controller.getNextPlayer(controller.getPlayer());
 		panel1stOpposition.updatePlayer(player2,activePlayerToken);				//invoke updatePlayer of Opposition
 		log.debug("Player 1 = "+ controller.getPlayer().getToken() + " Player 2 = " +player2.getToken());
+		
 		//Update 3rd player only if he exist
 		if ( controller.getGameState().playerList.size() == 3){
 			Player player3 = controller.getNextPlayer(player2);
 			panel2ndOpposition.updatePlayer(player3,activePlayerToken);			//invoke updatePlayer of Opposition
 		}
-		
-		// Set playername, cardcount and points
-		getPlayerName(controller.getPlayer());
-		lbCardCount.setText(Integer.toString(getPlayerCardCount(controller.getPlayer())));
-		lbPoint.setText(Integer.toString(getPlayerPoints(controller.getPlayer())));
 	}
 	
 	/**
@@ -585,99 +252,22 @@ public class TableView extends JFrame implements ActionListener{
 		return name+playerNum;
 	}
 
-	public int getPlayerCardCount(Player player){
-		int cardCount = player.getPlayerCards().size();	
-		return cardCount;
-	}
+//	public void displayPatternInfo(String pattern) {
+//		if (!pattern.isEmpty()) {
+//			lblpatternInfo.setText(pattern);
+//			lblpatternInfo.setFont(infotext);
+//			lblpatternInfo.setForeground(Color.BLACK);
+//			lblpatternInfo.setOpaque(true);
+//			lblpatternInfo.setBackground(new Color(255,229,153));
+//			lblpatternInfo.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+//			panelPatternInfo.add(lblpatternInfo);
+//		} else {
+//			lblpatternInfo.setText("");
+//			lblpatternInfo.setOpaque(false);
+//		}
+//	}
 	
-	public int getPlayerPoints(Player player){
-		int points = player.getPlayerPoints();		
-		return points;
-	}
-	
-	
-	/**
-	 * Method to open the combination rule card
-	 */
-	public void displayRules(){
-    	JFrame frameRules = new JFrame ("Haggis Rules");
-    	frameRules.setBounds(200, 200, 510, 326); 							// x-Position, y-Position, breite und höhe des Fenster
-        frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
-        ImageIcon combinationCard = new ImageIcon(TableView.class.getResource("/gameContent/rules/combination.jpg"));
-        JLabel imgLabelRules = new JLabel(new ImageIcon(combinationCard.getImage().getScaledInstance(510, 326,  java.awt.Image.SCALE_SMOOTH)));
-		imgLabelRules.setPreferredSize(new Dimension(510,326));
-        frameRules.getContentPane().add(imgLabelRules);
-        frameRules.pack();
-        frameRules.setVisible(true);
-	}
-	
-	/**
-	 * Method for displaying reached client informations
-	 * @param message
-	 */
-	public void displayClientInfo(String message) {
-			
-		panelClientInfo.removeAll();
-		panelClientInfo.revalidate();
-		frame.getContentPane().revalidate();
 
-
-		if (!message.isEmpty()) {
-			clientInfo = new JTextArea();
-			clientInfo.setText("Player Information:\n" + message);
-			clientInfo.setFont(infotext);
-			clientInfo.setForeground(Color.WHITE);
-			clientInfo.setBackground(new Color(118, 165, 175));
-			Border border = BorderFactory.createLineBorder(new Color(19, 79, 92), 2, true);
-			clientInfo.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-			clientInfo.setPreferredSize(new Dimension(250, 100));
-			clientInfo.setLineWrap(true);
-			clientInfo.setWrapStyleWord(true);
-			clientInfo.setEditable(false);
-			panelClientInfo.add(clientInfo);
-		} 
-		panelClientInfo.repaint();
-	}
-	/**
-	 * Method show the Information for the laying cards (patterns)
-	 * @param pattern
-	 */
-	public void displayPatternInfo(String pattern) {
-		if (!pattern.isEmpty()) {
-			lblpatternInfo.setText(pattern);
-			lblpatternInfo.setFont(infotext);
-			lblpatternInfo.setForeground(Color.BLACK);
-			lblpatternInfo.setOpaque(true);
-			lblpatternInfo.setBackground(new Color(255,229,153));
-			lblpatternInfo.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
-			panelPatternInfo.add(lblpatternInfo);
-		} else {
-			lblpatternInfo.setText("");
-			lblpatternInfo.setOpaque(false);
-		}
-	}
-	
-	/**
-	 * Action Performer (Rule and Sort Button)
-	 */
-	public void actionPerformed(ActionEvent e) {
-	    if (e.getSource() == btnRules) {
-	    	displayRules();
-	    }
-	    if (e.getSource() == btnSort ){
-	    	if (sortByID)
-	    		sortByID = false;
-	    	else
-	    		sortByID = true;
-	    	updatePlayerHand(controller.getPlayer());
-	    }
-	    /**Optional
-	     * Not in use because bet feature not implemented
-	    if (e.getSource() == btnBet30 ){
-	    	ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/30bet_active.png"));
-	    	btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
-	    }*/
-	}
 	
 	/**
 	 * Method to test the LayoutManager
@@ -687,18 +277,6 @@ public class TableView extends JFrame implements ActionListener{
 		panelTable.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panel2ndOpposition.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelPlayer.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		
-		panelCardHand.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelClientInfo.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelPlayerKit.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelControlContainer.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		
-		panelJoker.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelBtnPass.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelBtnPlay.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-
-		panelBet.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 	}
 	
 	

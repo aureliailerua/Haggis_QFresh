@@ -100,7 +100,7 @@ public class JPanelOpposition extends JPanel{
 		imgLabelJoker[1] = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathJoker[1])));
 		imgLabelJoker[2] = new JLabel(new ImageIcon(JPanelOpposition.class.getResource(pathJoker[2])));
 		
-		// Set panel layout
+		// Setup panel layout
 		setLayout(new BorderLayout(0, 0));
 		
 		// - Opposition Info (1.1.N)
