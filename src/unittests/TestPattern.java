@@ -29,7 +29,7 @@ import server.Server;
  * Created by Riya on 24.11.2014
  */
     public class TestPattern {
-    private static final Logger log = LogManager.getLogger(Server.class.getName());
+    private static final Logger log = LogManager.getLogger(TestPattern.class.getName());
 
     @BeforeClass
     public static void setupBeforeClass() throws Exception {
@@ -38,6 +38,48 @@ import server.Server;
     @Test
     public void testComparePattern() throws IOException, MaxPlayerException {
         CardDeck lvCardDeck = new CardDeck(3);
+        
+        //______ bomb comparing______
+        ArrayList<Card> four = new ArrayList<Card>();                        
+        four.add(lvCardDeck.getCardById(115));
+        four.add(lvCardDeck.getCardById(135));
+        Pattern singlePattern = new Pattern (four);
+        String singPat_result  =   singlePattern.analyzePattern();
+
+        log.debug("4 results in: "+singPat_result);
+
+
+        ArrayList<Card> bombSequenceCards = new ArrayList<Card>();
+        bombSequenceCards.add(lvCardDeck.getCardById(30));
+        bombSequenceCards.add(lvCardDeck.getCardById(50));
+        bombSequenceCards.add(lvCardDeck.getCardById(70));
+        bombSequenceCards.add(lvCardDeck.getCardById(90));
+
+        Pattern tablePattern = new Pattern (bombSequenceCards);
+        String tablePatternName  =   tablePattern.analyzePattern();
+        log.debug("table Pattern  results in: " + tablePatternName);
+        
+        int check = tablePattern.lowestRank;
+         log.debug(check+" lowest Rank on table Pattern");
+
+
+        log.debug("4 results in: "+singPat_result);
+        boolean four_King = singlePattern.comparePattern(tablePattern);
+        log.debug("match OK ? "+four_King);
+
+
+        ArrayList<Card> fourKing = new ArrayList<Card>();
+       // fourKing.add(lvCardDeck.getCardById(41));
+        fourKing.add(lvCardDeck.getCardById(135));
+        int i = Collections.min(fourKing).getCardRank();
+        int j = Collections.max(fourKing).getCardRank();
+        log.debug(i+" " +j);
+
+        //______ J vs 4
+
+
+
+
 
         //____________Compare 7777 with 8JJJ _____
         ArrayList<Card> fourSeven = new ArrayList<Card>();                        // Standard patterns
@@ -45,8 +87,8 @@ import server.Server;
         fourSeven.add(lvCardDeck.getCardById(73));
         fourSeven.add(lvCardDeck.getCardById(72));
         fourSeven.add(lvCardDeck.getCardById(71));
-        Pattern tablePattern = new Pattern (fourSeven);
-        String basePat_result  =   tablePattern.analyzePattern();
+        Pattern tablePattern3 = new Pattern (fourSeven);
+        String basePat_result  =   tablePattern3.analyzePattern();
         log.debug("table Pattern results in: "+basePat_result);
 
         ArrayList<Card> jjj8 = new ArrayList<Card>();
@@ -55,7 +97,7 @@ import server.Server;
         jjj8.add(lvCardDeck.getCardById(125));
         jjj8.add(lvCardDeck.getCardById(135));
         Pattern incomingPattern = new Pattern(jjj8);
-        boolean matchOK = incomingPattern.comparePattern(tablePattern);
+        boolean matchOK = incomingPattern.comparePattern(tablePattern3);
         log.debug("match OK ? "+matchOK);
         //______________________________________________________
         assertTrue("7777 vs. 78JJ ", matchOK == false);
@@ -116,17 +158,17 @@ import server.Server;
         runOfThree.add(lvCardDeck.getCardById(72));
         runOfThree.add(lvCardDeck.getCardById(82));
         runOfThree.add(lvCardDeck.getCardById(92));
-            Pattern j = new Pattern(runOfThree);
-            String j_result = j.analyzePattern();
-            log.debug("_________compare 789 suited with 8JJ first pattern :"+j_result);
+            Pattern x = new Pattern(runOfThree);
+            String x_result = x.analyzePattern();
+            log.debug("_________compare 789 suited with 8JJ first pattern :"+x_result);
         ArrayList<Card> twoJoker8 = new ArrayList<Card>();
         twoJoker8.add(lvCardDeck.getCardById(115));
         twoJoker8.add(lvCardDeck.getCardById(125));
         twoJoker8.add(lvCardDeck.getCardById(81));
-            Pattern i = new Pattern(twoJoker8);
-            String i_result = i.analyzePattern();
-            log.debug("_________compare 789 suited with 8JJ second pattern :"+i_result);
-            boolean result = i.comparePattern(j);
+            Pattern y = new Pattern(twoJoker8);
+            String y_result = y.analyzePattern();
+            log.debug("_________compare 789 suited with 8JJ second pattern :"+y_result);
+            boolean result = y.comparePattern(x);
             log.debug("result of compare 789 with 8JJ" +result);
         //______________________________________________________
         assertTrue("777888 vs 7788JJ ", result == true);

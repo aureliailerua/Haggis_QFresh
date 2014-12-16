@@ -3,10 +3,8 @@ package server;
  * Created by Riya on 17.11.2014.
  */
 import library.Card;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,25 +80,30 @@ public class Pattern implements Serializable{
         }
     }
 
+    /**
+     * This method compares the incoming cards with the pattern on the table and accepts or declines the new move
+     * @param Pattern tablePattern
+     * @return boolean patternMatch
+     */
     public boolean comparePattern (Pattern tablePattern ){
         boolean levelingOK = (tablePattern.lowestRank < this.lowestRank);
-        log.debug("tablePaTTERN lowest Rank"+ tablePattern.lowestRank+" this lowest Rank "+ this.lowestRank);
+        log.debug("tablePaTTERN lowest Rank is: "+ tablePattern.lowestRank+" this lowest Rank is: "+ this.lowestRank);
         boolean patternMatch = false;
         this.analyzePattern();
+
         //__catch bombs___
-        if(this.isBomb() && ( tablePattern.bombIndex < this.bombIndex) ) {
-            levelingOK = (tablePattern.bombIndex < this.bombIndex); log.debug("leveling of bombs" +levelingOK+" tablepattern bombindex"+tablePattern.bombIndex+" this bombindex "+this.bombIndex);
-            //this.setBomb();
-            patternMatch = true;
+        if(this.isBomb() ){
+            levelingOK = (tablePattern.bombIndex < this.bombIndex);             log.debug("leveling of bombs is: " +levelingOK+" tablepattern has bombindex: "+tablePattern.bombIndex+" this has bombindex: "+this.bombIndex);
+            this.setBomb();
+            if (levelingOK){
+                patternMatch = true;
+            }                                                                   log.debug("pattern match is: "+patternMatch);
             return patternMatch;
         }
 
         //__naturally matching patterns are detected here__
-
-        log.debug("incoming Cards naturally is"+this.patternName+" while tablePattern is "+tablePattern.patternName+" while leveling is "+levelingOK);
-        if(this.patternName.equals(tablePattern.patternName) && levelingOK ){
-            patternMatch = true;
-                log.debug("natural matching pattern "+patternMatch);
+        if(this.patternName.equals(tablePattern.patternName) && levelingOK ){   log.debug("incoming Cards naturally is: "+this.patternName+" while tablePattern is: "+tablePattern.patternName+" while leveling is: "+levelingOK);
+            patternMatch = true;                                                log.debug("natural matching pattern: "+patternMatch);
             return patternMatch;
         }
 
@@ -108,46 +111,47 @@ public class Pattern implements Serializable{
         if(this.jokerCards.size() > 1 && levelingOK) {
             int playedSequenceDepth = this.isRunOfSequence(tablePattern.builtSequenceLength);
             boolean deepeningOK = (this.deepeningJokers == tablePattern.builtSequenceLength);
-
-                log.debug("deep jokers "+this.deepeningJokers +" deepeningOK is "+deepeningOK +" tablePatterns Length: "+tablePattern.builtSequenceLength);
-                log.debug("tablePattern built SequenceLength: "+tablePattern.builtSequenceLength);
-                log.debug("tablePattern.SequenceDepth :"+ tablePattern.builtSequenceDepth+" table Card Count"+tablePattern.cardCount);
-                log.debug("playedPattern built SequenceLength: "+this.builtSequenceLength);
-                log.debug("playedSequenceDepth "+playedSequenceDepth);
-
+                                                                                log.debug("deep jokers "+this.deepeningJokers +" deepeningOK is "+deepeningOK +" tablePatterns Length: "+tablePattern.builtSequenceLength);
+                                                                                log.debug("tablePattern built SequenceLength: "+tablePattern.builtSequenceLength);
+                                                                                log.debug("tablePattern.SequenceDepth :"+ tablePattern.builtSequenceDepth+" table Card Count"+tablePattern.cardCount);
+                                                                                log.debug("playedPattern built SequenceLength: "+this.builtSequenceLength);
+                                                                                log.debug("playedSequenceDepth "+playedSequenceDepth);
             if(playedSequenceDepth == tablePattern.builtSequenceDepth) {
                     log.debug("match is OK without deepening jokers");
-                patternMatch = true;        log.debug("matching pattern without deepening Jokers"+patternMatch);
+                patternMatch = true;                                            log.debug("match of alternative pattern without deepening Jokers is : "+patternMatch);
                 this.setSequence(playedSequenceDepth);
                 return patternMatch;
             }
             if(deepeningOK && ((playedSequenceDepth +1 ) == tablePattern.builtSequenceDepth) ){
-                log.debug("deepening Jokers used - match is ok ");
+                                                                                log.debug("deepening Jokers used - match of alternative pattern is ok ");
                 this.setSequence(tablePattern.builtSequenceDepth);
                 patternMatch = true;
                 return patternMatch;
             }
-        }
-        log.debug("compare has not found a valid option pattern match is "+ patternMatch);
+        }                                                                       log.debug("compare has not found a valid option pattern match is "+ patternMatch);
         return patternMatch;
     }
-
+    /**
+     * This method analyzes the incoming Pattern-Object and defines what kind of Pattern it is.
+     * @return patternName
+     */
     public String analyzePattern() {
         this.setBomb();
-        int naturalSequenceDepth = this.isRunOfSequence(this.maxSequenceLength); log.debug("maxSequenceLength "+this.maxSequenceLength);
+        int naturalSequenceDepth = this.isRunOfSequence(this.maxSequenceLength);
         this.setSequence(naturalSequenceDepth);
         return this.patternName;
     }
 
+    /**
+     * This method sets the Pattern as bomb and writes the strength in the bombIndex
+     */
     public void setBomb(){
         if(this.isBomb() && this.jokerCards.size()>0){
-            //log.debug("is bomb ok - nr. of joker cards "+this.jokerCards.size());
-            int calculateIndex = 0;
+            int calculatedIndex = 0;
             for (Card c : this.jokerCards) {
-                calculateIndex += c.getCardID();
-                //log.debug(bombIndex+" BI ..incremented ");
+                calculatedIndex += c.getCardID();
             }
-            this.bombIndex = calculateIndex;
+            this.bombIndex = calculatedIndex;
 
             switch (this.bombIndex) {
                 case 240 : this.setPatternName("JQBomb");         break;
@@ -167,24 +171,12 @@ public class Pattern implements Serializable{
             }
         }
     }
-/*
-    public void setSet(){
-        if (this.rankCount == 1 || ( this.jokerCards.size()==1 && this.normalCards.size()==0 )) {
-            this.builtSequenceDepth = this.cardCount;
-            this.builtSequenceLength = 1;
-            switch (this.cardCount) {
-                case 1 : this.setPatternName("single");         break;
-                case 2 : this.setPatternName("pair");           break;
-                case 3 : this.setPatternName("threeOfAKind");   break;
-                case 4 : this.setPatternName("fourOfAKind");    break;
-                case 5 : this.setPatternName("fiveOfAKind");    break;
-                case 6 : this.setPatternName("SixOfAKind");     break;
-                case 7 : this.setPatternName("SevenOfAKind");   break;
-            }
-        }
-    }
-*/
-    public void setSequence(int sequenceDepth){  // when the sequenceDepth <=0 the Sequence is not valid, else it corresponds to the suitCount
+
+    /**
+     * This method sets the Patter as Sequence or Set
+     * @param sequenceDepth
+     */
+    public void setSequence(int sequenceDepth){                         // when the sequenceDepth <=0 the Sequence is not valid, else it corresponds to the suitCount
         if( this.jokerCards.size() == 1 && this.normalCards.size()==0 ){ this.setPatternName("single");  }
         //__set Sets__
         if (this.rankCount == 1 ) {
@@ -221,7 +213,7 @@ public class Pattern implements Serializable{
             }
         }
 
-        //__Run of Pairs____when suitCount (indicatorROS) result = 2
+        //__Run of Pairs____when suitCount resulting from inSequence is 2
         if (sequenceDepth == 2  && this.rankCount >1 ) {
             this.builtSequenceDepth = 2;
             this.builtSequenceLength = (this.cardCount / this.builtSequenceDepth);
@@ -235,7 +227,7 @@ public class Pattern implements Serializable{
             }
         }
 
-        //__Run of 3 of a Kind  ____when suitCount (indicatorROS) result = 3
+        //__Run of 3 of a Kind  ____when suitCount resulting from inSequence is 3
         if (sequenceDepth == 3 && this.rankCount >1 ) {
             this.builtSequenceDepth = 3;
             this.builtSequenceLength = (this.cardCount / this.builtSequenceDepth);
@@ -246,7 +238,7 @@ public class Pattern implements Serializable{
             }
         }
 
-        //__Run of 4 of a Kind  ____when suitCount (indicatorRun of Sequence) result = 4
+        //__Run of 4 of a Kind  ____when suitCount resulting from inSequence is 4
         if (sequenceDepth == 4 && this.rankCount >1 ) {
             this.builtSequenceDepth = 4;
             this.builtSequenceLength = (this.cardCount / this.builtSequenceDepth);
@@ -257,12 +249,16 @@ public class Pattern implements Serializable{
         }
     }
 
-    /**____ IS RUN OF SEQUENCE____
-     * checking for sequences, returning an int meaning 0 = no sequence, 1=Run of Singles,
-     * 2= Run of Pairs, 3=Run of 3ofAKind, 4= 4oAKind (including jokerCards)
-     */
-    public int isRunOfSequence (int lvMaxSequenceLength) {                  // when the indicatorRunOfSequence <=0 the Sequence is not valid, else it corresponds to the suitCount
-        int isRunOfSequence ;
+    /**
+     * This method checks if the Pattern is a Sequence or Set.
+     * The return value sequenceDepth corresponds to the number of different suits in parallel sequence
+     * 0 = no valid sequence, 1=Run of Singles, 2=Run of Pairs, 3=Run of 3ofAKind, 4=Run of 4oAKind
+     * It sets the remaining jokers at the end of all checks to the variable deepeningJoker (required for the ambivalent Pattern check)
+     * @param lvMaxSequenceLength
+     * @return sequenceDepth
+     **/
+    public int isRunOfSequence (int lvMaxSequenceLength) {
+        int sequenceDepth ;
         int remainingJokers = this.jokerCards.size();
         int lvSequenceDepth =0;
         //__Sequence check for each suited List
@@ -270,19 +266,20 @@ public class Pattern implements Serializable{
             remainingJokers = this.inSequence(suitedCards, remainingJokers, this.lowestRank, lvMaxSequenceLength);
             lvSequenceDepth ++;
         }
-        if (remainingJokers >= 2 ){                                          //clumsy to pass the information, if ambivalent patterns are possible
+        if (remainingJokers >= 2 ){
             this.deepeningJokers = remainingJokers;
         }
-        isRunOfSequence = lvSequenceDepth;
+        sequenceDepth = lvSequenceDepth;
         if (remainingJokers < 0) {
-            isRunOfSequence = remainingJokers;
+            sequenceDepth = remainingJokers;
         }
-        return isRunOfSequence;
+        return sequenceDepth;
     }
 
-    /**____IN SEQUENCE ?____
-     * int return Check : returns 2, 1, 0 or -1, depending on how many jokers are left at the end of the function (-1 -> false sequence)
-     * all in Sequence checks if a regular Sequence is possible including the use of 1 or 2 jokers
+    /**
+     * This method is called by isRunOfSequence for each suited List, it checks if the cards in the list are in a sequence and achieving the required sequence length.
+     * Jokers are consumed at gaps and at differences between target length and actual length.
+     * @return errorTolerance of 2, 1, 0 indicating the remaining jokers or-1 for an invalid sequence
      */
     public static int inSequence (ArrayList<Card> cards, int jokerCount, int lowestRank, int lvMaxSequenceLength) {
         int lengthController = 0;
@@ -292,8 +289,6 @@ public class Pattern implements Serializable{
                 if (c.getCardRank() != lowestRank + i) {
                     errorTolerance -= 1;
                     i++;
-                    //log.debug("gap at Card Nr. " + c.getCardID() + " remaining error Tolerance is " + errorTolerance);
-                   // log.debug("error Tolerance reduced by one _ now remaining : " + errorTolerance);
                 }
                 lengthController ++;
                 i++;
@@ -306,8 +301,8 @@ public class Pattern implements Serializable{
     }
 
     /**____IS BOMB ?____
-     * Boolean Check :
-     * checks for sequence 3-5-7-9 (suited or 4suits) and 2 or 3 jokers played
+     * This method checks if the Pattern is a bomb of 3-5-7-9 (suited or 4suits) or of 3 jokers and returns a boolean.
+     * @return isBomb
      */
     public boolean isBomb () {
         boolean isBomb = true;
