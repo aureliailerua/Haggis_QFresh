@@ -121,8 +121,8 @@ public class TableController implements ActionListener,Observer{
 	}
 	private void checkNewRound() {
 		if (handler.getGameState().isNewRound()) {
-			//view.displayClientInfo("");		//Clean clientInfo
-			view.panelPlayer.displayClientInfo("");
+			drawGameState();	// NEU
+			//view.panelPlayer.displayClientInfo("");
 			EndController endController = new EndController(handler);
 			EndView endView = new EndView(endController,view.getJFrame());
 			endController.updateView();
@@ -139,10 +139,4 @@ public class TableController implements ActionListener,Observer{
 		}
 		return getGameState().playerList.get(index+1);
 	}
-	
-
-	
-
-	
-
 }
