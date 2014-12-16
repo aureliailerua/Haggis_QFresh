@@ -125,7 +125,7 @@ public class TableController implements ActionListener,Observer{
 	}
 	private void checkNewRound() {
 		if (handler.getGameState().isNewRound()) {
-			view.displayClientInfo("");		//Clean clientInfo
+			drawGameState();
 			EndController endController = new EndController(handler);
 			EndView endView = new EndView(endController,view.getJFrame());
 			endController.updateView();
