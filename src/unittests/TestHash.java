@@ -6,8 +6,10 @@ import server.GameHandler;
 import server.Pattern;
 
 import javax.print.DocFlavor;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -15,9 +17,10 @@ import java.util.HashMap;
  */
 public class TestHash {
 
-    public static boolean isRunOfSequence (ArrayList<Card> normalCards, ArrayList<Card> jokerCards) {
+    @SuppressWarnings("unchecked")
+	public static boolean isRunOfSequence (ArrayList<Card> normalCards, ArrayList<Card> jokerCards) {
         boolean isRunOfSequence = false;
-        GameHandler.bubbleSort(normalCards);
+        Collections.sort(normalCards);
 
         HashMap<String, ArrayList<Card>> cardSuits = new HashMap<String, ArrayList<Card>>(5);
 

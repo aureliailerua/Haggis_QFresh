@@ -199,24 +199,4 @@ public class GameHandler {
 		}
 		return lvReturn;
 	}
-	
-	/**
-	 * This method sorts an array by CardID using bubbleSort
-	 * @param ArrayList<Card> unsorted Cards
-	 * @return ArrayList<Card> sorted by cardID
-	 */
-	public static ArrayList<Card> bubbleSort( ArrayList<Card> cards ) {
-		boolean swapFlag = true; 
-		while (swapFlag) {
-			swapFlag= false;   
-			for( int j=0;  j < cards.size()-1;  j++ ){
-				if ( cards.get(j).getCardID() > cards.get(j+1).getCardID() ) {
-					Collections.swap(cards, j, j+1);
-					swapFlag = true;
-				}
-			} 
-		} 
-		return cards;
-	}
-
 }

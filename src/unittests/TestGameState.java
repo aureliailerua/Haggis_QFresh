@@ -4,9 +4,11 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import library.*;
 import library.GameState.PlayerToken;
 import server.MaxPlayerException;
@@ -24,6 +26,7 @@ public class TestGameState {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testPlayerCreation() throws IOException, MaxPlayerException {
 		//init
@@ -44,7 +47,8 @@ public class TestGameState {
 		}
 		
 		//sort Player cards
-		ArrayList<Card> sortedCards = GameHandler.bubbleSort(gameState.playerList.get(0).getPlayerCards());
+		ArrayList<Card> sortedCards = gameState.playerList.get(0).getPlayerCards();
+		Collections.sort(sortedCards);
 		int lastID = 0;
 		for (Card card : sortedCards){
 			assertTrue("Mistake in Sort-by-ID operation", card.getCardID()>lastID);
