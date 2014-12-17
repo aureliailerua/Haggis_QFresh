@@ -62,36 +62,16 @@ import library.Player;
  * TableView is responsible for the hole game table.
  */
 
-//public class TableView extends JFrame implements ActionListener{
-
 public class TableView extends JFrame {
 
 	private JFrame frame;
 											//Layer
 	JPanelOpposition panel1stOpposition;	//1W
-	JPanelTable panelTable;						//2 C
+	JPanelTable panelTable;					//2 C
 	JPanelOpposition panel2ndOpposition; 	//3E
 	JPanel panelEmpty;						//3E alternative
-	JPanelPlayer panelPlayer;						//4 N
-
+	JPanelPlayer panelPlayer;				//4 N
 	
-//	JPanel panelPatternInfo;				//2.1
-//	JPanel panelTableCards;					//2.2
-//
-//	
-//
-//	ArrayList<BtnCard> btnCardTable;
-//	
-//
-//	JLabel lblpatternInfo;
-//	
-//	
-//	GridBagConstraints cTable;	
-//	
-//
-//	Color patterninfo = new Color(255,217,102);
-//	Font infotext = new Font("Comic Sans MS", Font.BOLD, 14);
-//	
 	TableController controller;
 
 	private static final Logger log = LogManager.getLogger( TableView.class.getName() );
@@ -124,29 +104,9 @@ public class TableView extends JFrame {
 		/**
 		 * Table (Card Desk) (2.C)
 		 */		
-		//panelTable = new JPanel();
 		panelTable = new JPanelTable(this);	
 		panelTable.setOpaque(false);
 		frame.getContentPane().add(panelTable, BorderLayout.CENTER);
-		
-		// -- Pattern Info (2.1.N)
-//		panelPatternInfo = new JPanel();
-//		panelPatternInfo = new JPanel();		
-//		panelPatternInfo.setOpaque(false);
-//		panelTable.add(panelPatternInfo, BorderLayout.NORTH);
-//		
-//		lblpatternInfo = new JLabel();
-//		panelPatternInfo.add(lblpatternInfo);
-//
-//		// -- Card Desk (2.2.C)
-//		panelTableCards = new JPanel();
-//		panelTableCards.setOpaque(false);
-//		panelTable.add(panelTableCards, BorderLayout.CENTER);
-//
-//		GridBagLayout gbl_panelTableCards = new GridBagLayout();
-//		cTable = new GridBagConstraints();
-//		panelTableCards.setLayout(gbl_panelTableCards); 
-//		btnCardTable = new ArrayList<BtnCard>();
 		
 		/**
 		 * 2nd Opposition Player (3.E)
@@ -190,35 +150,12 @@ public class TableView extends JFrame {
 	 */
 	public void drawGameState(GameState gameState) {
 		log.debug("rendering player " + controller.getToken());
-		//updatePlayerHand(controller.getPlayer());
-		//updateTable(gameState);
 		updatePlayers();
 		panelTable.updateTable(gameState);
 		panelPlayer.displayClientInfo(gameState.getClientInfo());
 		panelTable.displayPatternInfo(gameState.getPatternInfo());
 	}
-//	public void updateTable(GameState gameState){
-//		
-//		panelTableCards.removeAll();
-//		
-//		if (gameState.roundList.size() > 0){
-//			int gridy = 0;
-//			int gridx = 0;
-//			for (int i = 0; i < gameState.getTopCards().size(); i++) {
-//				BtnCard btnCard = new BtnCard(gameState.getTopCards().get(i));
-//
-//				if (i >=8) { gridy = 1; gridx= 8; }
-//				btnCardTable.add(btnCard);
-//				cTable.gridx = i - gridx;
-//				cTable.gridy = gridy;
-//				cTable.ipady = 10;
-//				cTable.insets = new Insets(0,0,0,0);
-//				panelTableCards.add(btnCard,cTable);
-//			}
-//		}
-//		frame.getContentPane().revalidate();
-//		frame.getContentPane().repaint();
-//	}
+
 
 	
 	/**
@@ -251,21 +188,6 @@ public class TableView extends JFrame {
 		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1; //?
 		return name+playerNum;
 	}
-
-//	public void displayPatternInfo(String pattern) {
-//		if (!pattern.isEmpty()) {
-//			lblpatternInfo.setText(pattern);
-//			lblpatternInfo.setFont(infotext);
-//			lblpatternInfo.setForeground(Color.BLACK);
-//			lblpatternInfo.setOpaque(true);
-//			lblpatternInfo.setBackground(new Color(255,229,153));
-//			lblpatternInfo.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
-//			panelPatternInfo.add(lblpatternInfo);
-//		} else {
-//			lblpatternInfo.setText("");
-//			lblpatternInfo.setOpaque(false);
-//		}
-//	}
 	
 
 	
