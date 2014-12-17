@@ -1,16 +1,13 @@
 package client;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.net.URL;  
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.awt.Dimension;  
 
 import javax.swing.JFrame;
@@ -25,31 +22,15 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import server.Move;
-import server.Round;
-import server.Server;
-import server.Tick;
-
-import java.awt.event.ActionListener.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.GridLayout;
 
 import library.Card;
 import library.GameState;
@@ -59,73 +40,74 @@ import library.Player;
 /**
  * 
  * @author felicita.acklin
- * TableView is responsible for the hole game table.
+ * Klasse enthält alle GUI-Elemente für den Spieltisch und stellt das ganze Spiel dar.
+ * Hauptpanels sind: panelTable, panelOpposition (Gegenspieler) und panelPlayer.
+ * 
+ * Verbesserungsmöglichkeit: Die Hauptpanel panelTable und panelPlayer hätten in eine separate Klasse
+ * verschoben werden sollen, so wäre die Lesbarkeit und Struktur der Klasse erhöht. Konnte aber aus 
+ * Zeitgründen nicht realisiert werden.
  */
 
 public class TableView extends JFrame implements ActionListener{
 
 	private JFrame frame;
 											//Layer
-	JPanelOpposition panel1stOpposition;	//1W
-	JPanel panelTable;						//2 C
-	JPanelOpposition panel2ndOpposition; 	//3E
-	JPanel panelEmpty;						//3E alternative
-	JPanel panelPlayer;						//4 N
+	JPanelOpposition panel1stOpposition;	//1
+	JPanel panelTable;						//2
+	JPanelOpposition panel2ndOpposition; 	//3
+	JPanel panelEmpty;						//3 alternative
+	JPanel panelPlayer;						//4
 	
 	JPanel panelPatternInfo;				//2.1
 	JPanel panelTableCards;					//2.2
 	
-	JPanel panelCardHand; 					//3.1
-	JPanel panelClientInfo; 				//3.2
-	JPanel panelPlayerKit;					//3.3
-	JPanel panelControlContainer;			//3.4
+	JPanel panelCardHand; 					//4.1
+	JPanel paneClientInfo; 					//4.2
+	JPanel panelPlayerKit;					//4.3
+	JPanel panelButtonContainer;			//4.4
 	
-	JPanel panelJoker;						//3.2.1
-	JPanel panelBtnPass;					//3.2.2
-	JPanel panelStatusBar;					//3.2.3
-	JPanel panelBtnPlay;					//3.2.4
-
-	JPanel panelBet;						//3.4.1
+	JPanel panelJoker;						//4.2.1
+	JPanel panelBtnPass;					//4.2.2
+	JPanel panelStatusBar;					//4.2.3
+	JPanel panelBtnPlay;					//4.2.4
 	
 	ArrayList<BtnCard> btnCardHand;
 	ArrayList<BtnCard> btnJocker;
 	ArrayList<BtnCard> btnCardTable;
 	
-	protected JButton btnPlay;
+	// Components of panelBtnPlay and panelBtnPlay
 	protected JButton btnPass; 
+	protected JButton btnPlay;
+
+	// Components of panelButtonContainer
 	protected JButton btnSort;
-	protected JButton btnExit;
-	protected JButton btnRules;
-	//protected JButton btnBet15;
-	//protected JButton btnBet30;
-	protected JButton btnEmptyButton;
-	
+	protected JButton btnExit;	
+	protected JButton btnRules;	
+	JLabel lblPlaceHolder;
+
+	// Components of panelPlayerInfo
+	JLabel imgLabelCard;
 	JLabel lbCardCount;
+	JLabel imgLabelCrown;
 	JLabel lbPoint;
 	JLabel lbPlayerName;
-	JLabel imgLabelCard;
-	JLabel imgLabelCrown;
+	
+	// Components or variables for separate frame or class methods
 	JLabel imgLabelRules;
-	JLabel lblPlaceHolder;
-	//JLabel clientInfo;
-	JLabel imgLabelCardBack;
-	JLabel imgPlaceholder;
-	JLabel lblpatternInfo;
-	
+	JLabel lbPatternInfo;
 	JTextArea clientInfo;
-	
 	GridBagConstraints cTable;	
 	
 	Color active;
 	Color inactive;
 	Color patterninfo = new Color(255,217,102);
+	
 	Font infotext = new Font("Comic Sans MS", Font.BOLD, 14);
-
-
 	private boolean sortByID = true;
 	
+	// Controller
 	TableController controller;
-
+	// Logger
 	private static final Logger log = LogManager.getLogger( TableView.class.getName() );
 
 
@@ -133,7 +115,6 @@ public class TableView extends JFrame implements ActionListener{
 	 * Create the application.
 	 */
 	public TableView(TableController controller) {
-
 		this.controller = controller;
 		
 		// Define the path of the images
@@ -142,11 +123,8 @@ public class TableView extends JFrame implements ActionListener{
 		String pathImgExitBtn = "/icons/exit.png";
 		String pathImgSortBtn = "/icons/sort.png";
 		String pathImgRulesBtn ="/icons/rules.png";
-		//String path15betInactiv = "/gameContent/15bet_inactive.png";
-		//String path30betInactiv = "/gameContent/30bet_inactive.png";
-
 		
-		// Define Fonts
+		// Define Fonts (only use in this classe)
 		Font player = new Font("Comic Sans MS", Font.BOLD, 18);
 		Font statusbar = new Font("Comic Sans MS", Font.PLAIN, 14);
 		Font button = new Font("comic Sans MS", Font.PLAIN, 16);
@@ -156,42 +134,42 @@ public class TableView extends JFrame implements ActionListener{
 		active = new Color(147,196,125); 	//Green
 		inactive = new Color(234,153,153);	//Red
 		
+		// Define Frame
 		frame = new JFrame("QFresh Haggis Game - Gametable");
-		frame.setBounds(0, 0, 1280, 720); 						// x-Position, y-Position, breite und höhe des Fenster
+		frame.setBounds(0, 0, 1280, 720); 						// x-Position, y-Position, width, height
 		frame.setPreferredSize(new Dimension(1280,720));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().setBackground(Color.WHITE);
 		
 		
-		/** 
-		 * 1st Opposite Player (1.W)
-		*/
-		//panel1stOpposition = new JPanelOpposition(this, "LEFT");
+		 // ** 1st Opposite Player (1) **
+		 // * Class JPanelOpposition create the hole Opposition Player
+
 		panel1stOpposition = new JPanelOpposition(this);
 		panel1stOpposition.setOpaque(false);
 		panel1stOpposition.setPreferredSize(new Dimension(300, 320));
 		frame.getContentPane().add(panel1stOpposition, BorderLayout.WEST);
 
 		
-		/**
-		 * Table (Card Desk) (2.C)
-		 */		
+
+		 // ** Table (Card Desk) (2) **	
 		panelTable = new JPanel();		
 		panelTable.setOpaque(false);
 		panelTable.setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().add(panelTable, BorderLayout.CENTER);
 		
-		// -- Pattern Info (2.1.N)
+		// -- Pattern Info (2.1) --
+		// Shows what kind of card combination are on the table
 		panelPatternInfo = new JPanel();
 		panelPatternInfo = new JPanel();		
 		panelPatternInfo.setOpaque(false);
 		panelTable.add(panelPatternInfo, BorderLayout.NORTH);
 		
-		lblpatternInfo = new JLabel();
-		panelPatternInfo.add(lblpatternInfo);
+		lbPatternInfo = new JLabel();
+		panelPatternInfo.add(lbPatternInfo);
 
-		// -- Card Desk (2.2.C)
+		// -- Cards on the tabel (2.2) --
 		panelTableCards = new JPanel();
 		panelTableCards.setOpaque(false);
 		panelTable.add(panelTableCards, BorderLayout.CENTER);
@@ -201,35 +179,32 @@ public class TableView extends JFrame implements ActionListener{
 		panelTableCards.setLayout(gbl_panelTableCards); 
 		btnCardTable = new ArrayList<BtnCard>();
 		
-		/**
-		 * 2nd Opposition Player (3.E)
-		*/
+
+		// ** 2nd Opposition Player (3) **
+		// * Class JPanelOpposition create the hole Opposition Player
 		
 		// Identify if a 3rd player is enter the game
 		if (controller.getGameState().playerList.size() == 3) {
 			log.debug("Playerlist Size: "+ controller.getGameState().playerList.size());
-			//panel2ndOpposition = new JPanelOpposition(this, "RIGHT");
 			panel2ndOpposition = new JPanelOpposition(this);
 		} else {
 			panel2ndOpposition = new JPanelOpposition();
 		}
-		
 		panel2ndOpposition.setPreferredSize(new Dimension(300, 320));
 		panel2ndOpposition.setOpaque(false);
 		frame.getContentPane().add(panel2ndOpposition, BorderLayout.EAST);
 		
 
 		
-		/**
-		 * Player (4.N)
-		 */
+		// ** Player (4) **
+		// * Create the main player of the frame in center bottom
 		panelPlayer = new JPanel();
 		panelPlayer.setPreferredSize(new Dimension(1280,380));		//to fix the size of the player panel - joker/cards of opposit stay in placer
 		panelPlayer.setOpaque(false);
 		panelPlayer.setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().add(panelPlayer, BorderLayout.SOUTH);
 		
-		// - Card Hand (3.1.N)
+		// -- Card Hand (4.1) --
 		panelCardHand = new JPanel();
 		panelCardHand.setPreferredSize(new Dimension(1280, 135));
 		panelCardHand.setOpaque(false);
@@ -239,24 +214,26 @@ public class TableView extends JFrame implements ActionListener{
 		btnCardHand = new ArrayList<BtnCard>();
 		panelPlayer.add(panelCardHand, BorderLayout.NORTH);
 		
-		// - ClientInfo Left (3.2.W)
-		panelClientInfo = new JPanel();
-		panelClientInfo.setOpaque(false);
-		FlowLayout fl_panelClientInfo = (FlowLayout) panelClientInfo.getLayout();
+		// -- ClientInfo Left (4.2) --
+		// Shows information about the game for the main player
+		paneClientInfo = new JPanel();
+		paneClientInfo.setOpaque(false);
+		FlowLayout fl_panelClientInfo = (FlowLayout) paneClientInfo.getLayout();
 		fl_panelClientInfo.setAlignment(FlowLayout.CENTER);
 		fl_panelClientInfo.setVgap(65);
-		panelClientInfo.setPreferredSize(new Dimension(300, 120));
+		paneClientInfo.setPreferredSize(new Dimension(300, 120));
 		displayClientInfo("");
-		panelPlayer.add(panelClientInfo, BorderLayout.WEST);
+		panelPlayer.add(paneClientInfo, BorderLayout.WEST);
 
-		// - Player's Kit (3.3.C)
+		// -- Player's Kit (4.3) --
+		// Contains panels for joker cards, play and pass button and status board
 		panelPlayerKit = new JPanel();
 		panelPlayerKit.setOpaque(false);
 		panelPlayer.add(panelPlayerKit, BorderLayout.CENTER);
 		panelPlayerKit.setLayout(new BorderLayout(0, 0));
 		
 		
-		// -- Jocker's (3.3.1.C)
+		// --- Jocker's (4.3.1) ---
 		panelJoker = new JPanel();
 		panelJoker.setPreferredSize(new Dimension(640, 135));
 		panelJoker.setOpaque(false);
@@ -266,7 +243,7 @@ public class TableView extends JFrame implements ActionListener{
 		btnJocker	= new ArrayList<BtnCard>();
 		panelPlayerKit.add(panelJoker, BorderLayout.NORTH);
 		
-		// --- Pass Area (3.3.2.W)
+		// --- Pass Area (4.3.2) ---
 		panelBtnPass = new JPanel();
 		panelBtnPass.setOpaque(false);
 		FlowLayout fl_panelBtnPass = (FlowLayout) panelBtnPass.getLayout();
@@ -283,7 +260,8 @@ public class TableView extends JFrame implements ActionListener{
 		btnPass.addActionListener(controller);
 		panelBtnPass.add(btnPass);
 		
-		// --- Status Bar (3.3.3.C)
+		// --- Status Bar (3.3.3) ---
+		// Contains player name, count of cards (and icon) and points (and icon)
 		panelStatusBar = new JPanel();
 		panelStatusBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		panelStatusBar.setBackground(inactive);
@@ -291,30 +269,30 @@ public class TableView extends JFrame implements ActionListener{
 		panelPlayerKit.add(panelStatusBar, BorderLayout.CENTER);
 		
 		GridBagLayout gbl_panelStatusBar = new GridBagLayout();
-		GridBagConstraints cStatusBar = new GridBagConstraints();			//GridBag Grenzen erstellen
-		panelStatusBar.setLayout(gbl_panelStatusBar); 						//Layout dem Panelzuweisen!!
+		GridBagConstraints cStatusBar = new GridBagConstraints();
+		panelStatusBar.setLayout(gbl_panelStatusBar);
 
-		// ---- Card Icon
+		// ---- Card Icon ----
 		imgLabelCard = new JLabel(new ImageIcon(TableView.class.getResource(pathImgBackSmall)));
 		imgLabelCard.setPreferredSize(new Dimension(22,35));
-		cStatusBar.gridx = 0;												//x-Koordinate im Grid
-		cStatusBar.gridy = 0;												//y-Koordinate im Grid
-		cStatusBar.ipady = 10;												//Höhe der Zelle
-		cStatusBar.insets = new Insets(5,40,5,5); 							//Padding vom Displayrand (top, left, bottom, right)
+		cStatusBar.gridx = 0;												//x-Coordination in grid
+		cStatusBar.gridy = 0;												//y-Coordination in grid
+		cStatusBar.ipady = 10;												//height of the cell
+		cStatusBar.insets = new Insets(5,40,5,5); 							//Padding from border (top, left, bottom, right)
 		panelStatusBar.add(imgLabelCard, cStatusBar);
 	
-		// ---- Count of Cards
+		// ---- Count of cards ----
 		lbCardCount= new JLabel("0");
 		lbCardCount.setFont(statusbar);
 		lbCardCount.setPreferredSize(new Dimension(50,30));
 		cStatusBar = new GridBagConstraints();
-		cStatusBar.fill = GridBagConstraints.BOTH;							//Wie soll der constrain das feld füllen - Both (Vertikal & horizontal)
+		cStatusBar.fill = GridBagConstraints.BOTH;							//how tho fill the cell: Both (Vertikal & horizontal)
 		cStatusBar.gridx = 1;
 		cStatusBar.gridy = 0;
 		cStatusBar.insets = new Insets(5,5,5,5);
 		panelStatusBar.add(lbCardCount, cStatusBar);
 		
-		// ---- Crown Icon
+		// ---- Crown icon ----
 		imgLabelCrown = new JLabel(new ImageIcon(TableView.class.getResource(pathImgCrown)));
 		imgLabelCrown.setPreferredSize(new Dimension(25,22));
 		cStatusBar = new GridBagConstraints();
@@ -323,7 +301,7 @@ public class TableView extends JFrame implements ActionListener{
 		cStatusBar.insets = new Insets(5,5,5,5);
 		panelStatusBar.add(imgLabelCrown, cStatusBar);
 		
-		//---- Display count of points
+		// ---- Amount of points ----
 		lbPoint= new JLabel("0");
 		lbPoint.setFont(statusbar);
 		lbPoint.setPreferredSize(new Dimension(50,30));
@@ -334,7 +312,7 @@ public class TableView extends JFrame implements ActionListener{
 		cStatusBar.insets = new Insets(5,5,5,5);
 		panelStatusBar.add(lbPoint, cStatusBar);
 		
-		//---- Display Player Name
+		//---- Display Player Name ----
 		lbPlayerName= new JLabel("", JLabel.CENTER);
 		lbPlayerName.setFont(player);
 		lbPlayerName.setPreferredSize(new Dimension(50,30));
@@ -342,12 +320,12 @@ public class TableView extends JFrame implements ActionListener{
 		cStatusBar = new GridBagConstraints();
 		cStatusBar.fill = GridBagConstraints.BOTH;
 		cStatusBar.ipady = 8;
-		cStatusBar.gridwidth = 4;										//Zellen die zusammengefasst werden
+		cStatusBar.gridwidth = 4;										//summary 4 cells to one
 		cStatusBar.gridx = 0;
 		cStatusBar.insets = new Insets(5,5,5,10);
 		panelStatusBar.add(lbPlayerName, cStatusBar);
 		 
-		// --- Play Area (3.3.4.E)
+		// --- Play Area (3.3.4) ---
 		panelBtnPlay = new JPanel();
 		panelBtnPlay.setOpaque(false);
 		FlowLayout fl_panelBtnPlay = (FlowLayout) panelBtnPlay.getLayout();
@@ -364,14 +342,15 @@ public class TableView extends JFrame implements ActionListener{
 		btnPlay.addActionListener(controller);
 		panelBtnPlay.add(btnPlay);
 		
-		// -- Control CardContainer with Buttons (3.4.E)
-		panelControlContainer = new JPanel();
-		panelControlContainer.setOpaque(false);
-		panelControlContainer.setPreferredSize(new Dimension(300,120));
-		panelPlayer.add(panelControlContainer, BorderLayout.EAST);
+		// -- Button container (3.4) --
+		// Button to sort cards, show rules and exit the game
+		panelButtonContainer = new JPanel();
+		panelButtonContainer.setOpaque(false);
+		panelButtonContainer.setPreferredSize(new Dimension(300,120));
+		panelPlayer.add(panelButtonContainer, BorderLayout.EAST);
 		GridBagLayout gbl_panelControlContainer = new GridBagLayout(); 
 		GridBagConstraints cContainer = new GridBagConstraints();
-		panelControlContainer.setLayout(gbl_panelControlContainer);
+		panelButtonContainer.setLayout(gbl_panelControlContainer);
 
 		lblPlaceHolder = new JLabel();
 		lblPlaceHolder.setPreferredSize(new Dimension (58,58));
@@ -380,7 +359,7 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.gridy = 0;
 		cContainer.gridwidth = 1;
 		cContainer.insets = new Insets(5,0,0,5);
-		panelControlContainer.add(lblPlaceHolder,cContainer);
+		panelButtonContainer.add(lblPlaceHolder,cContainer);
 		
 		btnSort = new JButton();
 		ImageIcon imgSort = new ImageIcon(TableView.class.getResource(pathImgSortBtn));
@@ -394,7 +373,7 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.gridy = 0;
 		cContainer.gridwidth = 1;
 		cContainer.insets = new Insets(5,0,0,10);
-		panelControlContainer.add(btnSort, cContainer);
+		panelButtonContainer.add(btnSort, cContainer);
 		
 		btnRules = new JButton();
 		btnRules.setIcon(new ImageIcon(TableView.class.getResource(pathImgRulesBtn)));
@@ -407,41 +386,7 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.gridy = 0;
 		cContainer.gridwidth = 1;
 		cContainer.insets = new Insets(5,0,0,5);
-		panelControlContainer.add(btnRules,cContainer);
-		
-		/**
-		 * Bet buttons
-		 * Not in use because bet feature is not implemented
-		 *
-		panelBet = new JPanel();
-		panelBet.setOpaque(false);
-		TitledBorder betPlayerTitle = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Bet");
-		betPlayerTitle.setTitleJustification(TitledBorder.LEFT);
-		panelBet.setBorder( betPlayerTitle);
-		cContainer = new GridBagConstraints();
-		cContainer.gridx = 0;
-		cContainer.gridy = 1;
-		cContainer.gridwidth = 2;
-		cContainer.anchor = GridBagConstraints.LINE_END;
-		cContainer.insets = new Insets(5,0,0,10); // top, left, bottom, right
-		panelControlContainer.add(panelBet, cContainer);
-		
-		btnBet30 = new JButton();
-		ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource(path30betInactiv));
-		btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
-		btnBet30.setPreferredSize(new Dimension(35,35));
-		btnBet30.setBorder(null);
-		btnBet30.addActionListener(controller);
-		panelBet.add(btnBet30);
-
-		btnBet15 = new JButton();
-		ImageIcon imageIcon = new ImageIcon(TableView.class.getResource(path15betInactiv));
-		btnBet15.setIcon(new ImageIcon(imageIcon.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
-		btnBet15.setPreferredSize(new Dimension(35,35));
-		btnBet15.setBorder(null);
-		btnBet15.addActionListener(controller);
-		panelBet.add(btnBet15);
-		****/
+		panelButtonContainer.add(btnRules,cContainer);
 		
 		btnExit = new JButton();
 		ImageIcon imageIconExit = new ImageIcon(TableView.class.getResource(pathImgExitBtn));
@@ -456,15 +401,14 @@ public class TableView extends JFrame implements ActionListener{
 		cContainer.gridwidth = 1;
 		cContainer.gridwidth = 1;
 		cContainer.insets = new Insets(12,0,5,5);
-		panelControlContainer.add(btnExit,cContainer);
+		panelButtonContainer.add(btnExit,cContainer);
 	}
 	
 	
 	
 	
 	/**
-	 * Method for the communication between controller and view
-	 * 
+	 * Set communication between controller and view
 	 */
 	public void setController(TableController controller){
 		this.controller = controller;	
@@ -474,7 +418,7 @@ public class TableView extends JFrame implements ActionListener{
 	}
 	
 	/**
-	 * Method to (re-)draw the game field
+	 * Draw and update the game field
 	 * @param gameState
 	 */
 	public void drawGameState(GameState gameState) {
@@ -485,6 +429,43 @@ public class TableView extends JFrame implements ActionListener{
 		displayClientInfo(gameState.getClientInfo());
 		displayPatternInfo(gameState.getPatternInfo());
 	}
+	
+	/**
+	 * Update all components and informations of the players (inkl. opposition player)
+	 */
+	public void updatePlayers(){
+		// Get active player
+		GameState.PlayerToken activePlayerToken = controller.getGameState().getActivePlayer();
+		
+		// set and update main player
+		lbPlayerName.setText(getPlayerName(controller.getPlayer()));
+		lbCardCount.setText(Integer.toString(getPlayerCardCount(controller.getPlayer())));
+		lbPoint.setText(Integer.toString(getPlayerPoints(controller.getPlayer())));
+		
+		if ( activePlayerToken == controller.getToken()){
+			panelStatusBar.setBackground(active);
+		}
+		else{
+			panelStatusBar.setBackground(inactive);
+		}
+		
+		// set and update opposition player
+		Player player2 = controller.getNextPlayer(controller.getPlayer());
+		panel1stOpposition.updatePlayer(player2,activePlayerToken);				//invoke updatePlayer of Opposition
+		log.debug("Player 1 = "+ controller.getPlayer().getToken() + " Player 2 = " +player2.getToken());
+			//Update 3rd player only if he exist
+		if ( controller.getGameState().playerList.size() == 3){
+			Player player3 = controller.getNextPlayer(player2);
+			panel2ndOpposition.updatePlayer(player3,activePlayerToken);			//invoke updatePlayer of Opposition
+		}
+
+	}
+	
+	
+	/**
+	 * Update components on the panelTable
+	 * @param gameState
+	 */
 	public void updateTable(GameState gameState){
 		
 		panelTableCards.removeAll();
@@ -509,7 +490,58 @@ public class TableView extends JFrame implements ActionListener{
 	}
 	
 	/**
-	 * Method to get the existing card in my hand after the a trick
+	 * Show the pattern name of the cards panelTable
+	 * @param pattern
+	 */
+	public void displayPatternInfo(String pattern) {
+		if (!pattern.isEmpty()) {
+			lbPatternInfo.setText(pattern);
+			lbPatternInfo.setFont(infotext);
+			lbPatternInfo.setForeground(Color.BLACK);
+			lbPatternInfo.setOpaque(true);
+			lbPatternInfo.setBackground(new Color(255,229,153));
+			lbPatternInfo.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+			panelPatternInfo.add(lbPatternInfo);
+		} else {
+			lbPatternInfo.setText("");
+			lbPatternInfo.setOpaque(false);
+		}
+	}
+
+	
+	/**
+	 * Get player name
+	 * @param player
+	 * @return Player + playerNumber
+	 */
+	public String getPlayerName(Player player){
+		String name = "Player ";
+		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1; //?
+		return name+playerNum;
+	}
+
+	/**
+	 * Get player's card count
+	 * @param player
+	 * @return
+	 */
+	public int getPlayerCardCount(Player player){
+		int cardCount = player.getPlayerCards().size();	
+		return cardCount;
+	}
+
+	/**
+	 * 	Get player's points
+	 * @param player
+	 * @return
+	 */
+	public int getPlayerPoints(Player player){
+		int points = player.getPlayerPoints();		
+		return points;
+	}
+	
+	/**
+	 * Update and sort all cards of the main player (joker and normal cards)
 	 * @param player
 	 */
 	public void updatePlayerHand(Player player){
@@ -522,7 +554,7 @@ public class TableView extends JFrame implements ActionListener{
 		// Initial & Sort Cards
 		btnCardHand = new ArrayList<BtnCard>();
 		btnJocker = new ArrayList<BtnCard>();
-		if (sortByID) {
+		if (sortByID) {								//Sort cards
 			Collections.sort(player.getPlayerCards());
 		} else {
 			Collections.sort(player.getPlayerCards(), Card.CardSuitComparator);
@@ -547,78 +579,13 @@ public class TableView extends JFrame implements ActionListener{
 	}
 	
 	/**
-	 * Method to set player name and how is the active player
-	 */
-	public void updatePlayers(){
-		lbPlayerName.setText(getPlayerName(controller.getPlayer()));
-		GameState.PlayerToken activePlayerToken = controller.getGameState().getActivePlayer();
-		
-		if ( activePlayerToken == controller.getToken()){
-			panelStatusBar.setBackground(active);
-		}
-		else{
-			panelStatusBar.setBackground(inactive);
-		}
-		Player player2 = controller.getNextPlayer(controller.getPlayer());
-		panel1stOpposition.updatePlayer(player2,activePlayerToken);				//invoke updatePlayer of Opposition
-		log.debug("Player 1 = "+ controller.getPlayer().getToken() + " Player 2 = " +player2.getToken());
-		//Update 3rd player only if he exist
-		if ( controller.getGameState().playerList.size() == 3){
-			Player player3 = controller.getNextPlayer(player2);
-			panel2ndOpposition.updatePlayer(player3,activePlayerToken);			//invoke updatePlayer of Opposition
-		}
-		
-		// Set playername, cardcount and points
-		getPlayerName(controller.getPlayer());
-		lbCardCount.setText(Integer.toString(getPlayerCardCount(controller.getPlayer())));
-		lbPoint.setText(Integer.toString(getPlayerPoints(controller.getPlayer())));
-	}
-	
-	/**
-	 * Method to define player name
-	 * @param player
-	 * @return Player + playerNumber
-	 */
-	public String getPlayerName(Player player){
-		String name = "Player ";
-		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1; //?
-		return name+playerNum;
-	}
-
-	public int getPlayerCardCount(Player player){
-		int cardCount = player.getPlayerCards().size();	
-		return cardCount;
-	}
-	
-	public int getPlayerPoints(Player player){
-		int points = player.getPlayerPoints();		
-		return points;
-	}
-	
-	
-	/**
-	 * Method to open the combination rule card
-	 */
-	public void displayRules(){
-    	JFrame frameRules = new JFrame ("Haggis Rules");
-    	frameRules.setBounds(200, 200, 510, 326); 							// x-Position, y-Position, breite und höhe des Fenster
-        frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
-        ImageIcon combinationCard = new ImageIcon(TableView.class.getResource("/gameContent/rules/combination.jpg"));
-        JLabel imgLabelRules = new JLabel(new ImageIcon(combinationCard.getImage().getScaledInstance(510, 326,  java.awt.Image.SCALE_SMOOTH)));
-		imgLabelRules.setPreferredSize(new Dimension(510,326));
-        frameRules.getContentPane().add(imgLabelRules);
-        frameRules.pack();
-        frameRules.setVisible(true);
-	}
-	
-	/**
-	 * Method for displaying reached client informations
+	 * Shows information form the game state for each main player
 	 * @param message
 	 */
 	public void displayClientInfo(String message) {
 			
-		panelClientInfo.removeAll();
-		panelClientInfo.revalidate();
+		paneClientInfo.removeAll();
+		paneClientInfo.revalidate();
 		frame.getContentPane().revalidate();
 
 
@@ -634,31 +601,30 @@ public class TableView extends JFrame implements ActionListener{
 			clientInfo.setLineWrap(true);
 			clientInfo.setWrapStyleWord(true);
 			clientInfo.setEditable(false);
-			panelClientInfo.add(clientInfo);
+			paneClientInfo.add(clientInfo);
 		} 
-		panelClientInfo.repaint();
-	}
-	/**
-	 * Method show the Information for the laying cards (patterns)
-	 * @param pattern
-	 */
-	public void displayPatternInfo(String pattern) {
-		if (!pattern.isEmpty()) {
-			lblpatternInfo.setText(pattern);
-			lblpatternInfo.setFont(infotext);
-			lblpatternInfo.setForeground(Color.BLACK);
-			lblpatternInfo.setOpaque(true);
-			lblpatternInfo.setBackground(new Color(255,229,153));
-			lblpatternInfo.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
-			panelPatternInfo.add(lblpatternInfo);
-		} else {
-			lblpatternInfo.setText("");
-			lblpatternInfo.setOpaque(false);
-		}
+		paneClientInfo.repaint();
 	}
 	
+	
 	/**
-	 * Action Performer (Rule and Sort Button)
+	 * Open frame for combination card
+	 */
+	public void displayRules(){
+    	JFrame frameRules = new JFrame ("Haggis Rules");
+    	frameRules.setBounds(200, 200, 510, 326); 							// x-Position, y-Position, breite und höhe des Fenster
+        frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+        ImageIcon combinationCard = new ImageIcon(TableView.class.getResource("/gameContent/rules/combination.jpg"));
+        JLabel imgLabelRules = new JLabel(new ImageIcon(combinationCard.getImage().getScaledInstance(510, 326,  java.awt.Image.SCALE_SMOOTH)));
+		imgLabelRules.setPreferredSize(new Dimension(510,326));
+        frameRules.getContentPane().add(imgLabelRules);
+        frameRules.pack();
+        frameRules.setVisible(true);
+	}
+
+	
+	/**
+	 * Action Performer for Rule and Sort Button
 	 */
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getSource() == btnRules) {
@@ -671,35 +637,5 @@ public class TableView extends JFrame implements ActionListener{
 	    		sortByID = true;
 	    	updatePlayerHand(controller.getPlayer());
 	    }
-	    /**Optional
-	     * Not in use because bet feature not implemented
-	    if (e.getSource() == btnBet30 ){
-	    	ImageIcon imageIcon30 = new ImageIcon(TableView.class.getResource("/gameContent/30bet_active.png"));
-	    	btnBet30.setIcon(new ImageIcon(imageIcon30.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
-	    }*/
 	}
-	
-	/**
-	 * Method to test the LayoutManager
-	 */
-	public void displayBorder() {
-		panel1stOpposition.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelTable.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panel2ndOpposition.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelPlayer.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		
-		panelCardHand.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelClientInfo.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelPlayerKit.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelControlContainer.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		
-		panelJoker.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelBtnPass.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelStatusBar.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		panelBtnPlay.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-
-		panelBet.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-	}
-	
-	
 }

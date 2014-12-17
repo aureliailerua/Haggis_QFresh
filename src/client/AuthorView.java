@@ -3,7 +3,6 @@ package client;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Insets;
 
@@ -11,25 +10,25 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import java.awt.GridBagLayout;
-
 import javax.swing.JLabel;
-
-import java.awt.GridBagConstraints;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
-import javax.swing.JTextField;
 import javax.swing.JTextArea;
 
+/**
+ * Klasse stellt das "about us" dar.
+ * @author felicita.acklin
+ *
+ */
 public class AuthorView extends JFrame {
 
 	private JPanel contentPane;
-	
-	private JPanel panelTitle;
-	private JPanel panelBeerIcon;
-	private JPanel panelText;
-	private JPanel panelCrwon;
+									//Layer
+	private JPanel panelTitle;		//1
+	private JPanel panelBeerIcon;	//2
+	private JPanel panelText;		//3
+	private JPanel panelCrwon;		//4
 	
 	private JLabel lbAuthTitle;
 	private JLabel lblBeer;
@@ -57,6 +56,7 @@ public class AuthorView extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
+		// * Titel(1) *
 		panelTitle = new JPanel();
 		contentPane.add(panelTitle, BorderLayout.NORTH);
 		panelTitle.setOpaque(false);
@@ -67,6 +67,7 @@ public class AuthorView extends JFrame {
 		lbAuthTitle.setFont(subtitle);
 		panelTitle.add(lbAuthTitle);
 		
+		// * BeerIcon (2) *
 		panelBeerIcon = new JPanel();
 		panelBeerIcon.setOpaque(false);
 		ImageIcon beer = new ImageIcon(AuthorView.class.getResource(pathImgBeer));
@@ -74,6 +75,7 @@ public class AuthorView extends JFrame {
 		panelBeerIcon.add(lblBeer);		
 		contentPane.add(panelBeerIcon, BorderLayout.WEST);
 		
+		// * About us Text (3) *
 		panelText = new JPanel();
 		panelText.setOpaque(false);
 		contentPane.add(panelText, BorderLayout.CENTER);
@@ -103,6 +105,7 @@ public class AuthorView extends JFrame {
 		authText.setMargin(new Insets(5,5,5,5));
 		panelText.add(authText, BorderLayout.NORTH);
 		
+		// * Crwon Icon (4) *
 		panelCrwon = new JPanel();
 		panelCrwon.setOpaque(false);
 		contentPane.add(panelCrwon, BorderLayout.EAST);

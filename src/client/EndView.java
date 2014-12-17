@@ -1,19 +1,13 @@
 package client;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Insets;
 import java.awt.BorderLayout;
-import java.awt.Dimension;  
+
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 
@@ -32,30 +26,25 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextPane;
-import javax.swing.JTextArea;
-import javax.swing.JList;
-import javax.swing.AbstractListModel;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.BoxLayout;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-import com.sun.java.swing.plaf.nimbus.*;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import java.awt.FlowLayout;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
 import library.Player;
 import library.GameState.PlayerToken;
 
+/**
+ * @author felicita.acklin
+ * Klasse stellt die Zwischenresultate und Endresultate nach einer Rounde
+ * und nach eine Spiel dar.
+ *
+ */
 public class EndView extends JDialog {
-	
+
+								//Layer
 	JPanel panelTitle;			//1
 	JPanel panelContent;		//2
 	JPanel panelButton;			//3
@@ -65,27 +54,31 @@ public class EndView extends JDialog {
 	
 	JPanel panelBtnContainer;	//3.1
 	
+	// Components of panelBtncontainer
 	JButton btnExit;
 	JButton btnButton;
-	
-	JLabel lblEndGameStatusTitle;
-	JLabel imgResult;
-	
-	protected ImageIcon iconWinner;
-	protected ImageIcon iconLoser;
-	protected ImageIcon iconExit;
 	protected ImageIcon iconBeer;
 	protected ImageIcon iconRepeat;
+	
+	// Components of panelTitle
+	JLabel lbEndGameStatusTitle;
+	
+	// Components of panelImgResult
+	JLabel imgResult;
+	protected ImageIcon iconWinner;
+	protected ImageIcon iconLoser;
 
+	// Components of panelGameResults
 	Vector<Vector> rowData;
 	Vector<String> columnNames;
 	JTable tblRanking;
 	DefaultTableModel model; 
 		
+	// Controller
 	EndController controller;
 
 	public EndView(EndController controller,JFrame frame) {
-		super(frame, true);
+		super(frame, true);							//JDialog
 		this.controller = controller;
 		controller.setEndView(this);
 	
@@ -97,38 +90,34 @@ public class EndView extends JDialog {
 		
 		// Define Image Path's
 		String pathImgBeer = "/icons/beer.png";
-		String pathImgExit = "/icons/exit.png";
 		String pathImgWinner = "/icons/winner.png";
 		String pathImgLoser = "/icons/loser.png";
 		String pathImgRepeat = "/icons/repeat.png";
 		
+		// Define ImageIcon's
 		iconWinner = new ImageIcon(EndView.class.getResource(pathImgWinner));
 		iconLoser = new ImageIcon(EndView.class.getResource(pathImgLoser));
-		iconExit = new ImageIcon(EndView.class.getResource(pathImgExit));
 		iconBeer = new ImageIcon(EndView.class.getResource(pathImgBeer));
 		iconRepeat = new ImageIcon(EndView.class.getResource(pathImgRepeat));
 
-		
+		// Setup Window (JDialog)
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		getContentPane().setBackground(Color.WHITE);
 		setAlwaysOnTop (true);
 
-		/**
-		 * Title (1)
-		 */
+		// * Title (1) *
 		panelTitle = new JPanel();
 		panelTitle.setOpaque(false);
 		panelTitle.setBorder(new EmptyBorder(20, 0, 0, 10));
 		getContentPane().add(panelTitle, BorderLayout.NORTH);
-		lblEndGameStatusTitle = new JLabel();
-		lblEndGameStatusTitle.setFont(title);
-		panelTitle.add(lblEndGameStatusTitle);
+		lbEndGameStatusTitle = new JLabel();
+		lbEndGameStatusTitle.setFont(title);
+		panelTitle.add(lbEndGameStatusTitle);
 
 
-		/**
-		 * Content (2) 
-		 */
+		
+		// * Content (2) *
 		panelContent = new JPanel();
 		panelContent.setOpaque(false);
 		getContentPane().add(panelContent, BorderLayout.CENTER);
@@ -136,14 +125,15 @@ public class EndView extends JDialog {
 		panelContent.setBorder(new EmptyBorder(10, 20, 20, 20) ); 	//top, left, bottom, right
 		
 		
-		// -- Game Result (2.1)
+		// -- Game Result (2.1) --
+		// Show the result table
 		panelGameResults = new JPanel();
 		panelGameResults.setOpaque(false);
 		panelContent.add(panelGameResults);
 		panelGameResults.setLayout(new BorderLayout(0, 0));
 	
 		
-		// --- Game result table
+		// --- Game result table ---
 		UIManager.put("Table.font", new FontUIResource(text));
 		UIManager.put("TableHeader.font", new FontUIResource(text));
 		UIManager.put(" Table.gridColor", Color.WHITE);
@@ -174,7 +164,8 @@ public class EndView extends JDialog {
 		panelGameResults.add(scrollePane);
 
 		
-		// -- Result Image (2.2)
+		// -- Result Image (2.2) --
+		// Show the result image (one for loser and one for the winner)
 		panelImgResult = new JPanel();
 		panelImgResult.setOpaque(false);
 		panelImgResult.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -182,9 +173,9 @@ public class EndView extends JDialog {
 		imgResult = new JLabel();
 		imgResult.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		/**
-		 * Button CardContainer (3)
-		 */
+		
+		// * Button Container (3) *
+		// Contains dynamically button (continue or exit)
 		panelButton = new JPanel();
 		panelButton.setOpaque(false);
 		getContentPane().add(panelButton, BorderLayout.SOUTH);
@@ -199,11 +190,19 @@ public class EndView extends JDialog {
 		panelButton.add(btnButton);
 	}
 	
+	/**
+	 * Set controller
+	 * @param controller
+	 */
 	public void setController(EndController controller){
 		this.controller = controller;	
 	}
 
-	
+	/**
+	 * Get the player name
+	 * @param player
+	 * @return
+	 */
 	public String getPlayerName(Player player){
 		String name = "Player ";
 		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1;

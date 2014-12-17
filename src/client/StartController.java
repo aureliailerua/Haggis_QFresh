@@ -19,11 +19,17 @@ import library.Player;
 import library.StartContainer;
 import client.StartView;
 
+/**
+ * @author felicita.acklin / benjamin.indermuehle
+ * Klasse verarbeitet Informationen der Client Klasse und überprüft wie viele Player sich eingeloggt haben.
+ * Startet das Game, wenn genügend Player angemeldet sind.
+ *
+ */
 public class StartController implements ActionListener,Observer{
 
 	StartView view;
 	ServerHandler handler;
-	boolean mockup;
+	boolean mockup;						//Boolean for Mockup and simple GUI Tests
 	Client client;
 	private static final Logger log = LogManager.getLogger( TableController.class.getName() );
 	
@@ -33,21 +39,41 @@ public class StartController implements ActionListener,Observer{
 		handler.addObserver(this);
 	}
 	
+	/**
+	 * Set View 
+	 * @param view
+	 */
 	public void setView(StartView view){
 		this.view = view;
 	}
 	
+	/**
+	 * Get all information of the players
+	 * @return playerToken
+	 */
 	public PlayerToken getToken() {
 		return handler.getToken();
 	}
+	/**
+	 * Get all information about the game
+	 * @return gameState
+	 */
 	public GameState getGameState(){
 		return handler.gameState;
 	}
-	
+	/**
+	 * Get all informations of dedicated player
+	 * @return
+	 */
 	public Player getPlayer(){
 		return getGameState().getPlayer(getToken());
 	}
 	
+	/**
+	 * Observe count of player that are join in the game
+	 * Display joined player in joinedPlayer table
+	 * Enable start button if min. 2 players have joined
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		if (handler.gameState.getState() == GameState.State.running){
@@ -71,11 +97,20 @@ public class StartController implements ActionListener,Observer{
 		view.getJFrame().repaint();
 			
 	}
+	/**
+	 * Get name of player
+	 * @param player
+	 * @return Player + Number (eg. Player 1)
+	 */
 	public String getPlayerName(Player player){
 		String name = "Player ";
 		int playerNum = Arrays.asList(PlayerToken.values()).indexOf(player.getToken())+1; //?
 		return name+playerNum;
 	}
+	
+	/**
+	 * Action Performance for start and exit button
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == view.btnStart ){

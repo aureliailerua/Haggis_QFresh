@@ -9,6 +9,11 @@ import javax.swing.BorderFactory;
 
 import library.Card;
 
+/**
+ * @author felicita.acklin
+ * Klasste stellt Karten in Buttons dar.
+ *
+ */
 public class BtnCard extends JButton{
 
 	private Card card;
@@ -16,7 +21,6 @@ public class BtnCard extends JButton{
 	private String pathImgCard;
 	
 	public BtnCard(Card card) {
-		//super(card.getCardName()); 
 		super();
 		pathImgCard = "/gameContent/"+ card.getCardSuit() + "/" + card.getCardName() + ".jpg";
 		setIcon(new ImageIcon(BtnCard.class.getResource(pathImgCard)));
@@ -24,9 +28,15 @@ public class BtnCard extends JButton{
 		drawUnselected();	
 	}
 	
+	/**
+	 * Check if card is selected
+	 */
 	public boolean isSelected() {
 		return selected;
 	}
+	/**
+	 * Set Card as selected or as unselected
+	 */
 	public void setSelected() {
 		this.selected = true;
 		drawSelected();
@@ -35,10 +45,17 @@ public class BtnCard extends JButton{
 		this.selected = false;
 		drawUnselected();
 	}
+	/**
+	 * Get Card
+	 * @return card
+	 */
 	public Card getCard(){
 		return card;
 	}
 
+	/**
+	 * Draw unselected or seleted Cards
+	 */
 	private void drawUnselected() {
 		setPreferredSize(new Dimension(80,127));
 		setOpaque(false);
@@ -46,8 +63,6 @@ public class BtnCard extends JButton{
 		setContentAreaFilled(false);
 		setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 		setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, Color.BLACK, Color.GRAY));
-		// ! myIcon[i] = new ImageIcon(TableView.class.getResource("/gameContent/gruen03.jpg"));
-		// ! btnCardHand[i].setIcon(myIcon[i]);
 	}
 	
 	private void drawSelected() {

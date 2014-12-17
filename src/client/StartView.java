@@ -1,23 +1,15 @@
 package client;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Insets;
 import java.awt.BorderLayout;
-import java.awt.Dimension;  
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -38,12 +30,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.JTextArea;
-import javax.swing.JList;
-import javax.swing.AbstractListModel;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.BoxLayout;
 import javax.swing.SwingConstants;
 
@@ -61,14 +47,14 @@ import library.StartContainer;
 
 
 /**
- * 
  * @author felicita.acklin
- * StartView is responsible for starting the game, show all logged in player and game rules
+ * Klasse stellt alle GUI-Komponenten für den Startbildschirm dar.
+ * Tabelle mit "connected" Player, popup mit Spielregeln und ein About us
  */
 public class StartView extends JFrame implements ActionListener {
 
 	private JFrame frame;
-	
+								//Layer
 	JPanel panelHeader;			//1
 	JPanel panelContent;		//2
 	JPanel panelButton;			//3
@@ -82,23 +68,28 @@ public class StartView extends JFrame implements ActionListener {
 	JPanel panelBtnStart;		//3.1
 	JPanel panelBtnContainer;	//3.2
 	
+	// Component of panelTitle and panelInfo
+	JLabel lblWelcomeToHaggis;
+	JButton btnInfo;
+	
+	// Component of panelButton
 	JButton btnExit;
 	JButton btnRules;
 	JButton btnStart;
-	JButton btnInfo;
-	
-	JLabel lblWelcomeToHaggis;
+
+	// Component of panelStatusPlayer
 	JLabel lblWaitingForPlayer;
-	JLabel lblLogginPlayer;
-	JLabel imgLableCard;
-	
+	JLabel lblLogginPlayer;	
 	Vector<String> joinedPlayer;
 	JTable tblLogginPlayer;
 	DefaultTableModel model; 
 	
-	
+	// Component of panelImageContainer
+	JLabel imgLableCard;
+
+	// Looger
 	private static final Logger log = LogManager.getLogger( TableController.class.getName() );
-		
+	// Controller
 	StartController controller;
 
 	public StartView(StartController controller) {
@@ -125,9 +116,8 @@ public class StartView extends JFrame implements ActionListener {
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().setBackground(Color.WHITE);
 
-		/**
-		 * Title (1)
-		 */
+
+		 // * Header (1) *
 		panelHeader = new JPanel();
 		panelHeader.setOpaque(false);
 		frame.getContentPane().add(panelHeader, BorderLayout.NORTH);
@@ -139,11 +129,13 @@ public class StartView extends JFrame implements ActionListener {
 		panelTitle.setPreferredSize(new Dimension(950, 80));
 		panelHeader.add(panelTitle, BorderLayout.CENTER);
 		
+		// -- Title (1.1) --
 		lblWelcomeToHaggis = new JLabel("Welcome to QFresh Haggis Game!");
 		lblWelcomeToHaggis.setFont(title);
 		panelTitle.add(lblWelcomeToHaggis);
 		lblWelcomeToHaggis.setHorizontalAlignment(SwingConstants.CENTER);
 		
+		// -- Info (1.2.) --
 		panelInfo = new JPanel();
 		panelInfo.setOpaque(false);
 		panelInfo.setBorder(new EmptyBorder(20, 0, 0, 10));
@@ -159,18 +151,15 @@ public class StartView extends JFrame implements ActionListener {
 		panelInfo.add(btnInfo);
 		
 		
-		/**
-		 * Content (2) 
-		 * Connected Player and card img
-		 */
+		// * Content (2) * 
 		panelContent = new JPanel();
 		panelContent.setOpaque(false);
 		frame.getContentPane().add(panelContent, BorderLayout.CENTER);
 		panelContent.setLayout(new GridLayout(1, 2, 0, 0));
 		panelContent.setBorder(new EmptyBorder(10, 20, 20, 20) ); 	//top, left, bottom, right
 		
-		
-		// -- Connected Player (2.1)
+		// -- Connected Player (2.1) --
+		// Contain tabel for connected player's
 		panelStatusPlayer = new JPanel();
 		panelStatusPlayer.setOpaque(false);
 		panelContent.add(panelStatusPlayer);
@@ -180,13 +169,15 @@ public class StartView extends JFrame implements ActionListener {
 		lblLogginPlayer.setFont(subtitle);
 		panelStatusPlayer.add(lblLogginPlayer, BorderLayout.NORTH);
 		
-		// --- Check connected Player
+		// --- Joined player table ---
 		UIManager.put("Table.font", new FontUIResource(text));
 		UIManager.getDefaults().put("Table.background", Color.LIGHT_GRAY);
-        //UIManager.put("Table.border", BorderFactory.createLineBorder(Color.BLACK));
 		
+		// Create Vector for table
 		joinedPlayer = new Vector<String>();
 		joinedPlayer.add("Waiting for Players...");
+		
+		// Create table
 		model = new DefaultTableModel();
 		model.addColumn(lblLogginPlayer, joinedPlayer);
 		tblLogginPlayer = new JTable(model);
@@ -197,18 +188,15 @@ public class StartView extends JFrame implements ActionListener {
 		tblLogginPlayer.setRowSelectionAllowed(false);
 		panelStatusPlayer.add(tblLogginPlayer, BorderLayout.CENTER);
 		
-		
-		// -- Card Image (2.2)
+		// -- Card Image (2.2) --
 		panelImageContainer = new JPanel();
 		panelImageContainer.setOpaque(false);
 		panelContent.add(panelImageContainer);
-		
-		
 		GridBagLayout gblCard = new GridBagLayout();
 		GridBagConstraints cCard = new GridBagConstraints();	
 		panelImageContainer.setLayout(gblCard);
 		
-		// --CardBack
+		// --- Card Images ---
 		imgLableCard = new JLabel(new ImageIcon(StartView.class.getResource(pathImgCard1)));
 		imgLableCard.setPreferredSize(new Dimension(48,132));
 		imgLableCard.setHorizontalAlignment(SwingConstants.LEFT);
@@ -240,16 +228,16 @@ public class StartView extends JFrame implements ActionListener {
 		cCard.gridy = 0;
 		panelImageContainer.add(imgLableCard, cCard);
 		
-
-		/**
-		 * Button CardContainer (3)
-		 */
+		
+		// * Button CardContainer (3) *
+		// Contain start, rule and exit button
 		panelButton = new JPanel();
 		panelButton.setOpaque(false);
 		frame.getContentPane().add(panelButton, BorderLayout.SOUTH);
 		panelButton.setLayout(new GridLayout(1, 2, 0, 0));
 		panelButton.setBorder(new EmptyBorder(20, 20, 20, 10) ); 
 		
+		// -- Button Start (3.1) --
 		panelBtnStart = new JPanel();
 		panelBtnStart.setOpaque(false);
 		FlowLayout flBtnStart = (FlowLayout) panelBtnStart.getLayout();
@@ -263,7 +251,7 @@ public class StartView extends JFrame implements ActionListener {
 		btnStart.addActionListener(controller);
 		panelBtnStart.add(btnStart);
 		
-		// -- Button CardContainer (3.2)
+		// -- Button CardContainer (3.2) --
 		panelBtnContainer = new JPanel();
 		panelBtnContainer.setOpaque(false);
 		FlowLayout flBtnContainer = (FlowLayout) panelBtnContainer.getLayout();
@@ -278,7 +266,6 @@ public class StartView extends JFrame implements ActionListener {
 		panelBtnContainer.add(btnRules);
 		
 		btnExit = new JButton();
-		//btnExit.setIcon(new ImageIcon(StartView.class.getResource(pathImgExit)));
 		ImageIcon imageIconExit = new ImageIcon(StartView.class.getResource(pathImgExit));
 		btnExit.setIcon(new ImageIcon(imageIconExit.getImage().getScaledInstance(35, 35,  java.awt.Image.SCALE_SMOOTH)));
 		btnExit.setPreferredSize(new Dimension (58,58));
@@ -288,15 +275,15 @@ public class StartView extends JFrame implements ActionListener {
 		
 	}
 	/**
-	 * Method to get the frame
-	 * @return
+	 * Get Frame
+	 * @return frame
 	 */
 	public JFrame getJFrame(){
 		return frame;
 	}
 		
 	/**
-	 * Method to display Rules with scrollbar
+	 * Display frame with rules and scrollbar
 	 */
 	public void displayRules() {
 		JFrame frameRules = new JFrame ("Haggis Rules");
@@ -319,21 +306,24 @@ public class StartView extends JFrame implements ActionListener {
 	    frameRules.setVisible(true);
 	}
 	
-	public void displayGameInformation() {
+	/**
+	 * Display Author Information
+	 */
+	public void displayAboutUs() {
 		AuthorView frameAuthInfo = new AuthorView();
 		frameAuthInfo.pack();
 		frameAuthInfo.setVisible(true);
 	}
 	
-	
+	/**
+	 * Action Performance for Rule, Information 
+	 */
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getSource() == btnRules) {
 	    	displayRules();
 	    }	   
 		if (e.getSource() == btnInfo) {
-	    	displayGameInformation();
-	    }
-	    
+	    	displayAboutUs();
+	    } 
 	}
-
 }
