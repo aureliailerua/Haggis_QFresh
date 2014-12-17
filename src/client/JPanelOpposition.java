@@ -47,7 +47,6 @@ public class JPanelOpposition extends JPanel{
 	int cardCount;
 	int points;
 	int bet;
-	boolean noneCards;
 
 
 	protected JButton btnBet15;
@@ -207,7 +206,6 @@ public class JPanelOpposition extends JPanel{
 
 				
 		// --CardBack (1.2.1.N)
-		
 		panelCardBack = new JPanel();
 		panelOppCards.add(panelCardBack, BorderLayout.NORTH);
 		panelCardBack.setOpaque(false);
@@ -255,7 +253,7 @@ public class JPanelOpposition extends JPanel{
 		lbCardCount.setText(Integer.toString(cardCount));
 		lbPoint.setText(Integer.toString(points));
 		// Update Joker
-		updateJoker(player.getPlayerJokers());
+		updateJoker(player.getPlayerJokers(), player.getPlayerCards().size());
 		updateCards(player.getPlayerCards().size());
 		
 		// Set active Player
@@ -267,7 +265,7 @@ public class JPanelOpposition extends JPanel{
 		}
 	}
 	
-	public void updateJoker(ArrayList<Card> joker) {
+	public void updateJoker(ArrayList<Card> joker, int cardCounts) {
 		log.debug("Repaint Joker Cards");
 
 		panelJoker.removeAll();
@@ -275,9 +273,8 @@ public class JPanelOpposition extends JPanel{
 		revalidate();
 		
 		jJoker = new ArrayList<JLabel>();
-		// FUNKTIONIERT NOCH NICHT!
 		int cardHight = 40;
-		if (noneCards) { cardHight = 79; }
+		if (cardCounts == 0) { cardHight = 79; }
 		
 		for(int i=0; i < joker.size(); i++) {
 			String pathJoker = "/gameContent/joker/opp_joker"+ joker.get(i).getCardRank()+".jpg";
@@ -304,15 +301,11 @@ public class JPanelOpposition extends JPanel{
 		panelCardBack.revalidate();
 		revalidate();
 		
-		noneCards = false;
 		int displayCardCount = 0;
 		String pathImgBack = "/gameContent/back.jpg";
 		jBack = new ArrayList<JLabel>();
 		
-		// FUNKTIONIERT NOCH NICHT
-		if (cardCount == 0){
-			noneCards = true;
-		} else {
+		if (cardCount > 0){
 			if (cardCount >=7) {
 				displayCardCount = 7;
 			} else if (cardCount < 7) {
