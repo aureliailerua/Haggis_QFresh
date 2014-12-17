@@ -119,7 +119,7 @@ public class StartView extends JFrame implements ActionListener {
 		String pathImgInfo = "/icons/info.png";
 
 		frame = new JFrame("QFresh Haggis Game - Game Registration");
-		frame.setBounds(0, 0, 1000, 500); // x, y, breite, höhe
+		frame.setBounds(50, 50, 1000, 500); // x, y, breite, höhe
 		frame.setPreferredSize(new Dimension(1000, 500));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -300,7 +300,7 @@ public class StartView extends JFrame implements ActionListener {
 	 */
 	public void displayRules() {
 		JFrame frameRules = new JFrame ("Haggis Rules");
-		frameRules.setBounds(10, 10, 800, 750); 						// x-Position, y-Position, breite und höhe des Fenster
+		frameRules.setBounds(100, 100, 800, 750); 						// x-Position, y-Position, breite und höhe des Fenster
 	    frameRules.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
 	    JPanel panelRules = new JPanel();
 	    panelRules.setLayout(new BoxLayout(panelRules, BoxLayout.Y_AXIS));

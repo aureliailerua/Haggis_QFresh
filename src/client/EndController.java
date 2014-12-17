@@ -36,7 +36,7 @@ public class EndController implements ActionListener,Observer{
 		fillRankTable();
 		displayWinner();
 		if (IsGameEnd()){
-			view.setBounds(0, 0, 1000, 500);
+			view.setBounds(50, 50, 1000, 500);
 			view.setPreferredSize(new Dimension(1000, 500));
 			
 			view.btnButton.setIcon(view.iconBeer);
@@ -48,7 +48,7 @@ public class EndController implements ActionListener,Observer{
 			view.panelImgResult.add(view.imgResult);
 
 		}else{
-			view.setBounds(0, 0, 600, 500);
+			view.setBounds(50, 50, 600, 500);
 			view.setPreferredSize(new Dimension(600, 500));
 			
 			ImageIcon repeat = view.iconRepeat;
