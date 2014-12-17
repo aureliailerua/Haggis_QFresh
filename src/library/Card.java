@@ -6,8 +6,8 @@ import java.util.Comparator;
 
 /**
  * @author andreas.denger
- * This class provides the structure for all cards and will eventually
- * provide some helper-methods to aid in validating moves and comparing Cards
+ * This class provides the structure for all cards and 
+ * helper-methods to aid in validating moves and comparing Cards
  */
 public class Card implements Serializable, Comparable {
 
@@ -44,7 +44,7 @@ public class Card implements Serializable, Comparable {
 	}
 	
 	/**
-	 * Set the Suit of a card, provided it is in SUITS[].  
+	 * Set the Suit of a card, provided it is in Card.SUITS[].  
 	 * @param suit in lowercase-String {"green", "yellow", "grey", "black", "orange", "joker"}
 	 * @throws IllegalArgumentException 
 	 */
@@ -57,8 +57,6 @@ public class Card implements Serializable, Comparable {
 		}
 		throw new IllegalArgumentException("illegal cardSuit ... not in SUITS[]");
 	}
-	
-	
 	
 	@Override
 	public boolean equals(Object obj){
@@ -73,6 +71,7 @@ public class Card implements Serializable, Comparable {
 			return true;
 	return false;
 	}
+	
 	@Override
 	public int compareTo(Object o) {
 		Card card = (Card)o;

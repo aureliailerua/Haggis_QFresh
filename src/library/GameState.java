@@ -15,7 +15,9 @@ import server.Tick;
 
 /**
  * @author benjamin.indermuehle / andreas.denger
- * 
+ * Holds all information necessary to display the state of the game
+ * to the client/GUI. This object is shiped over the network when
+ * the state changes
  */
 public class GameState extends Observable implements Serializable {
 
@@ -139,6 +141,12 @@ public class GameState extends Observable implements Serializable {
 		setChanged();
 	}
 	
+	/**
+	 * Checks if the round should end after the current trick. Total number of players
+	 * as well as number of players who are out of cards are considered.
+	 * @return boolean (true=round is finished)
+	 * @throws MaxPlayerException 
+	 */
 	public boolean checkEndRound(){
 		if (numPlayers == 2){
 			log.debug("Check for PLAYER being finished - "
@@ -165,6 +173,11 @@ public class GameState extends Observable implements Serializable {
 		return false;
 	}
 	
+	/**
+	 * Performs necessary actions to finish the current round:
+	 * - takes Cards of the last player to empty their hand and awards those cards to the roundWinner
+	 * - takes the Haggis-Cards and awards those cards to the roundWinner
+	 */
 	public void endActiveRound(){
 		//extracting remaining Cards of the "losing" Player and add the Points to the roundWinner
 		for (Player lvPlayer : playerList){
@@ -194,9 +207,13 @@ public class GameState extends Observable implements Serializable {
 		log.debug("ROUND - Points of Player "+getActiveRound().getRoundWinner()+" after Haggis: "+ getPlayerObject(getActiveRound().getRoundWinner()).getPlayerPoints());
 	}
 	
+	/**
+	 * Performs necessary actions to setup a new round
+	 * - builds the new CardDeck
+	 * - distributes cards to players
+	 */
 	public void newRound(){
 		roundList.add(new Round());
-//TODO RESET ACTIVE PATTERN???
 		activeCardDeck = new CardDeck(getNumPlayers());
 		
 		for (Player player : playerList){
@@ -205,6 +222,12 @@ public class GameState extends Observable implements Serializable {
 		}
 	}
 	
+	/**
+	 * Checks if the trick should end after the current move. Takes into consideration of a player 
+	 * already won the round (i.e. is out of cards).
+	 * 
+	 * @return boolean (true=trick is finished)
+	 */
 	public boolean checkEndTick(){
 		if (getActiveRound().getRoundWinner()!=null){
 			return (getActiveRound().getActiveTick().checkPass(playerList.size()-1));
@@ -212,6 +235,12 @@ public class GameState extends Observable implements Serializable {
 		return (getActiveRound().getActiveTick().checkPass(playerList.size()));
 	}
 	
+	/**
+	 * Performs necessary actions to finish the current trick:
+	 * - works out and sets the tickwinner
+	 * - adds points of the trick to tickwinner
+	 * - reset String PatternInfo (only for GUI) 
+	 */
 	public void endActiveTick(){
 		//work out tickwinner
 		ArrayList<Move> lvMoveList = getActiveRound().getActiveTick().moveList;
@@ -242,6 +271,18 @@ public class GameState extends Observable implements Serializable {
 		getActiveRound().addNewTick();
 	}
 
+	/**
+	 * controls the checking of play cards using Pattern class
+	 * 
+	 * on first move of the tick:
+	 * - analyzePattern
+	 * - set PatternInfo string for GUI-display
+	 * on any subsequent moves of the tick:
+	 * - comparePattern against activePattern to check validity of the move
+	 * 
+	 * also:
+	 * - set activePattern if Cards are valid
+	 */
 	public boolean checkMove(ArrayList<Card> lvCards) {
 
 		for (Card c : lvCards){
@@ -277,6 +318,12 @@ public class GameState extends Observable implements Serializable {
 		}
 	}
 
+	/**
+	 * method provides the top Cards on the table. Takes into consideration if trick is finished,
+	 * meaning the table is cleard if a player wins the trick.
+	 * 
+	 * @return ArrayList<Card> to be display in GUI (may be empty on new trick)
+	 */
 	public ArrayList<Card> getTopCards(){
 		ArrayList<Move> lvMoveList = getActiveRound().getActiveTick().moveList;
 		for (int i =  lvMoveList.size()-1; i >=0; i--){
@@ -286,6 +333,14 @@ public class GameState extends Observable implements Serializable {
 		}
 		return new ArrayList<Card>();
 	}
+	
+	/**
+	 * Check if provided PlayerToken is finished, meaning is out of cards
+	 * Also sets Player.playerIsFinished flag true.
+	 * 
+	 * @param PlayerToken
+	 * @return boolean (true=player out of cards)
+	 */
 	public boolean checkIsPlayerFinished(PlayerToken lvToken){
 		for (Player p : playerList){
 			if (p.getToken().equals(lvToken)){
@@ -344,16 +399,10 @@ public class GameState extends Observable implements Serializable {
 		this.newRound = newRound;
 	}
 
-	/**
-	 * @return the patternInfo
-	 */
 	public String getPatternInfo() {
 		return patternInfo;
 	}
 
-	/**
-	 * @param patternInfo the patternInfo to set
-	 */
 	public void setPatternInfo(String patternInfo) {
 		this.patternInfo = patternInfo;
 	}

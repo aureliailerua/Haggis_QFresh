@@ -14,7 +14,7 @@ import library.GameState;
 import library.GameState.PlayerToken;
 
 /**
- * @author aurelia.erhardt
+ * @author aurelia.erhardt, andreas.denger
  *
  */
 public class Tick implements Serializable {
@@ -31,6 +31,12 @@ public class Tick implements Serializable {
 		return moveList.get(moveList.size()-1);
 	}
 	
+	/**
+	 * checks if enough players have passed for the tick to be over.
+	 * Takes into consideration the number of players in the game.
+	 * @param numPlayers
+	 * @return boolean (true = trick is over)
+	 */
 	public boolean checkPass(int numPlayers){
 		if (numPlayers==3 && moveList.size() < 2){
 			return false;
@@ -50,16 +56,10 @@ public class Tick implements Serializable {
 		log.debug("TICK - move added  -  moveList.size() = "+moveList.size());
 	}
 
-	/**
-	 * @return the tickWinner
-	 */
 	public PlayerToken getTickWinner() {
 		return tickWinner;
 	}
 
-	/**
-	 * @param tickWinner the tickWinner to set
-	 */
 	public void setTickWinner(PlayerToken tickWinner) {
 		this.tickWinner = tickWinner;
 	}

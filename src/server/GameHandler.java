@@ -28,10 +28,6 @@ public class GameHandler {
 		this.gameState = new GameState();
 	}
 
-    /**
-	 * FIXME some more logic will be needed here to start the game when enough players are connected. 
-	 * 
-	 */
 	public PlayerToken addPlayer(ClientHandler client) throws MaxPlayerException{ 
 		PlayerToken token = gameState.addPlayer();
 		gameState.addObserver(client);
@@ -40,7 +36,8 @@ public class GameHandler {
 
 	/**
 	 * checks if enough players are joined and starts the game.
-	 * #FIXME this function should be renamed
+	 * Also calls methods to build CardDeck, distribute cards to players
+	 * and initiates new round / new tick
 	 */
 	public void startGame() {
 		if (gameState.getNumPlayers() >=2) {
@@ -64,8 +61,15 @@ public class GameHandler {
 	}
 	
 	/**
-	 * @param move
-	 * Applies move Object to the GameState Object
+	 * This method receives a CardContainer from a client and
+	 * - checks if player is allowed to move
+	 * - check if player passes
+	 * - calls gameState.checkMove for cards to be evaluated
+	 * - checks if round needs to be ended and does so if true
+	 * - checks if tick needs to be ended and does so if true
+	 * - triggers redistribution of new gameState
+	 * 
+	 * @param CardContainer
 	 */
 	public synchronized void newMove(CardContainer lvContainer) {
 		if ( lvContainer.getToken() == gameState.getActivePlayer() &&
@@ -125,6 +129,12 @@ public class GameHandler {
 		}
 	}
 
+	/**
+	 * Sets next player to be active. Takes into consideration:
+	 * - total number of players in the game
+	 * - players who are finished (out of cards)
+	 * - RoundWinners
+	 */
     private void setNextActivePlayer() {
     	log.debug("old activePlayer: " +gameState.getActivePlayer());
     	if (gameState.getNumPlayers() == 2){

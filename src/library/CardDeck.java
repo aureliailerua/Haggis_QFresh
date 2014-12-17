@@ -48,11 +48,11 @@ public class CardDeck implements Serializable {
 			}
 		}
 		return lvCardList;
-	}
+	}//getCardListById
 
 	/**
 	 * Since all Haggis-Players get 14 numbered cards, regardless of numPlayer,
-	 * this method does exaclty that.
+	 * this method does exactly that.
 	 * Because buildDeck() puts the numbered Cards in the front of the array, 
 	 * the first 14 cards can be extracted and returned.
 	 * @return ArrayList<Card> with 14 random numbered Cards 
@@ -129,7 +129,6 @@ public class CardDeck implements Serializable {
 			}
 		}
 
-		// I realise now, that the cardID is utterly useless. And Beni knew it.
 		return lvNewCardDeck;
 	}//buildDeck
 }//CardDeck
