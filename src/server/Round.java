@@ -13,7 +13,7 @@ import library.Card;
 import library.GameState.PlayerToken;
 
 /**
- * @author aurelia.erhardt
+ * @author aurelia.erhardt, andreas.denger
  *
  */
 public class Round implements Serializable {
@@ -34,16 +34,10 @@ public class Round implements Serializable {
 		tickList = new ArrayList<Tick>();
 	}
 
-	/**
-	 * @return the roundWinner
-	 */
 	public PlayerToken getRoundWinner() {
 		return roundWinner;
 	}
 
-	/**
-	 * @param roundWinner the roundWinner to set
-	 */
 	public void setRoundWinner(PlayerToken roundWinner) {
 		this.roundWinner = roundWinner;
 	}

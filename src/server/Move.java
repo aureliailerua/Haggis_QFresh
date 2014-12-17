@@ -17,7 +17,7 @@ import library.GameState.PlayerToken;
 
 
 /**
- * @author aurelia.erhardt
+ * @author aurelia.erhardt, andreas.denger
  *
  */
 public class Move implements Serializable {

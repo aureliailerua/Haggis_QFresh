@@ -6,9 +6,9 @@ import library.GameState.PlayerToken;
 
 
 /**
- * @author benjamin.indermuehle
- * Simple prototype of a implementation.  
- *
+ * @author benjamin.indermuehle, andreas.denger
+ * used to ship player actions from client to server
+ * ArrayList<Card> is empty when player passes
  */
 public class CardContainer extends Container{
 	
